@@ -1,0 +1,59 @@
+:author: 趙惟倫
+:revdate: {docdate}
+:revnumber: 1.0
+:email: bluebat@member.fsf.org
+:copyright: CC-BY-SA 3.0
+:doctype: book
+:doctitle: Linux 硬測筆記
+:producer: 趙惟倫
+:creator: 趙惟倫
+:description: A guide to survive in this world
+:keywords: linux, compatibility
+:front-cover-image: data/cover.png
+:title-logo-image: data/logo.png[Logo,100,100]
+:lang: cmn
+:toc: left
+:toclevels: 2
+:sectnumlevels: 2
+:numbered:
+:icons: font
+:icon-set: fi
+:imagesdir: {docdir}/data
+:source-language: bash
+:codedir: {docdir}/data
+:datadir: {docdir}/data
+:experimental:
+:stem: latexmath
+:hide-uri-scheme:
+:chapter-label: 章節
+:appendix-caption: 附錄
+:listing-caption: Listing
+
+:media: prepress
+:pdf-stylesdir: /usr/local/share/gems/gems/asciidoctor-pdf-cjk-kai_gen_gothic-0.1.1/data/themes
+:pdf-fontsdir: /usr/local/share/gems/gems/asciidoctor-pdf-cjk-kai_gen_gothic-0.1.1/data/fonts
+:pdf-style: KaiGenGothicTW
+:pdf-page-size: A4
+:mathematical-format: svg
+
+= {doctitle}
+
+:sectnums!:
+
+include::head/colophon.adoc[]
+include::head/dedication.adoc[]
+include::head/preface.adoc[]
+
+:sectnums:
+
+include::body/chapter_01.adoc[]
+include::body/chapter_02.adoc[]
+
+include::tail/epigraph.adoc[]
+include::tail/appendix.adoc[]
+include::tail/shortcuts.adoc[]
+include::tail/glossary.adoc[]
+include::tail/qanda.adoc[]
+include::tail/bibliography.adoc[]
+include::tail/index.adoc[]
+include::tail/test.adoc[]

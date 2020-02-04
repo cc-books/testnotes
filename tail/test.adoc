@@ -1,0 +1,32 @@
+A simple http://asciidoc.org[AsciiDoc] document.
+
+== 簡介
+
+A **paragraph** followed by a _simple_ list with #square bullets#.
+
+[square]
+* 測試**中文粗體字**
+* 測試__中文斜體字__
+* 測試 [underline]#文字加底線#
+* 測試 [line-through]#刪除線#
+
+IMPORTANT: `[underline]` 和 `[line-through]` 前面必須有一個空格，否則無效。
+
+=== Hello, World!
+
+底下是一個以 C# 撰寫的 ``Hello, World!`` 函式：
+
+.Create a basic PDF document using Prawn
+[source,c#]
+----
+public void Hello()   <1>
+{
+    Console.WriteLine("Hello, World!");   <2>
+}
+----
+<1> 函式宣告
+<2> 輸出文字
+
+NOTE: 這只是一個簡單範例。點一下 btn:[OK] 按鈕結束。 icon:[heart]
+
+WARNING: 版權沒有，藏私必究。
