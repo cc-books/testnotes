@@ -2,7 +2,7 @@
 :revdate: {docdate}
 :revnumber: 1.0
 :email: bluebat@member.fsf.org
-:copyright: CC-BY-SA 3.0
+:copyright: CC0
 :doctype: book
 :doctitle: Linux 硬測筆記
 :producer: 趙惟倫
@@ -27,33 +27,11 @@
 :hide-uri-scheme:
 :chapter-label: 章節
 :appendix-caption: 附錄
-:listing-caption: Listing
+:listing-caption: 列表
 
 :media: prepress
-:pdf-stylesdir: /usr/local/share/gems/gems/asciidoctor-pdf-cjk-kai_gen_gothic-0.1.1/data/themes
-:pdf-fontsdir: /usr/local/share/gems/gems/asciidoctor-pdf-cjk-kai_gen_gothic-0.1.1/data/fonts
+:pdf-stylesdir: {docdir}/face
+:pdf-fontsdir: {docdir}/face
 :pdf-style: KaiGenGothicTW
 :pdf-page-size: A4
 :mathematical-format: svg
-
-= {doctitle}
-
-:sectnums!:
-
-include::head/colophon.adoc[]
-include::head/dedication.adoc[]
-include::head/preface.adoc[]
-
-:sectnums:
-
-include::body/chapter_01.adoc[]
-include::body/chapter_02.adoc[]
-
-include::tail/epigraph.adoc[]
-include::tail/appendix.adoc[]
-include::tail/shortcuts.adoc[]
-include::tail/glossary.adoc[]
-include::tail/qanda.adoc[]
-include::tail/bibliography.adoc[]
-include::tail/index.adoc[]
-include::tail/test.adoc[]
