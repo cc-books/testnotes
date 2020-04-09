@@ -14,6 +14,7 @@
 :lang: cmn
 :toc: left
 :toclevels: 2
+:toc-title: 目次
 :sectnumlevels: 2
 :numbered:
 :icons: font
@@ -25,7 +26,7 @@
 :experimental:
 :stem: latexmath
 :hide-uri-scheme:
-:chapter-label: 章節
+:chapter-label:
 :appendix-caption: 附錄
 :listing-caption: 列表
 
@@ -33,5 +34,5 @@
 :pdf-stylesdir: {docdir}/face
 :pdf-fontsdir: {docdir}/face
 :pdf-style: KaiGenGothicTW
-:pdf-page-size: A4
+:pdf-page-size: B5
 :mathematical-format: svg

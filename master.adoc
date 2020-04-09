@@ -1,22 +1,25 @@
-include::face/local.adoc[]
+include::head/local.adoc[]
 
 = {doctitle}
 
 :sectnums!:
 
-include::head/colophon.adoc[]
+toc::[]
 
-include::head/dedication.adoc[]
+// include::tail/epigraph.adoc[]
 
-include::head/preface.adoc[]
+include::head/foreword.adoc[]
+
+include::head/preamble.adoc[]
+include::head/acknowledgments.adoc[]
 
 :sectnums:
 
-include::body/chapter_01.adoc[]
+include::body/install.adoc[]
 
-include::body/chapter_02.adoc[]
+include::body/integration.adoc[]
 
-include::tail/epigraph.adoc[]
+:sectnums!:
 
 include::tail/appendix.adoc[]
 
@@ -30,4 +33,6 @@ include::tail/bibliography.adoc[]
 
 include::tail/index.adoc[]
 
-include::tail/test.adoc[]
+include::tail/colophon.adoc[]
+
+include::test.adoc[]
