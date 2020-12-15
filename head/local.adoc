@@ -7,7 +7,7 @@
 :doctitle: Linux 硬測筆記
 :producer: 趙惟倫
 :creator: 趙惟倫
-:description: A guide to survive in this world
+:description: Linux 硬體相容性測試筆記
 :keywords: linux, compatibility
 :front-cover-image: data/cover.png
 :title-logo-image: data/logo.png[Logo,100,100]
