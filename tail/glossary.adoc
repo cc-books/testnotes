@@ -1,0 +1,5 @@
+[glossary]
+== 名詞對照
+
+[glossary]
+WWAN:: Wireless Wide Area Network

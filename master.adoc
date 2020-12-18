@@ -1,21 +1,23 @@
-include::head/local.adoc[]
-
+include::config.adoc[]
 = {doctitle}
 
 :sectnums!:
 
-toc::[]
-
-// include::tail/epigraph.adoc[]
+// include::head/epigraph.adoc[]
 
 include::head/foreword.adoc[]
 
-include::head/preamble.adoc[]
-include::head/acknowledgments.adoc[]
+include::head/preface.adoc[]
+
+toc::[]
 
 :sectnums:
 
+include::body/buildup.adoc[]
+
 include::body/install.adoc[]
+
+include::body/network.adoc[]
 
 include::body/integration.adoc[]
 

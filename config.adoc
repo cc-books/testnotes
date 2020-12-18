@@ -9,27 +9,25 @@
 :creator: 趙惟倫
 :description: Linux 硬體相容性測試筆記
 :keywords: linux, compatibility
+:imagesdir: {docdir}/data
+:codedir: {docdir}/data
+:datadir: {docdir}/data
 :front-cover-image: data/cover.png
 :title-logo-image: data/logo.png[Logo,100,100]
 :lang: cmn
-:toc: left
+:toc: macro
 :toclevels: 2
 :toc-title: 目次
 :sectnumlevels: 2
-:numbered:
 :icons: font
 :icon-set: fi
-:imagesdir: {docdir}/data
 :source-language: bash
-:codedir: {docdir}/data
-:datadir: {docdir}/data
 :experimental:
 :stem: latexmath
 :hide-uri-scheme:
 :chapter-label:
 :appendix-caption: 附錄
 :listing-caption: 列表
-
 :media: prepress
 :pdf-stylesdir: {docdir}/face
 :pdf-fontsdir: {docdir}/face
