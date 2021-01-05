@@ -1,0 +1,16 @@
+== 設定 BIOS
+安裝 GNU/Linux 系統前應該先進入 BIOS 設定畫面，選取「重新載入預設值」後儲存再重新開機，
+以免受到之前進行 BIOS 相容性測試的影響。此項動作是藉由抹除 CMOS 中的使用者設定值，
+而回復由 BIOS 所預設的各項初始值。
+
+=== PCI 匯流排
+
+=== USB 匯流排
+泛用序列匯流排(USB, Universal Serial Bus) 是目前最流行的接頭型式，
+隨著規格不斷地擴充與演進，大有一統個人電腦周邊設備介面的趨勢。
+主要世代與相應的 GNU/Linux 驅動程式以及規格速度如下：
+[square]
+* USB 1.0: ohci 1.5Mbps
+* USB 1.1: ohci 12Mbps
+* USB 2.0: ehci 480Mbps
+* USB 3.0: xhci 5000Mbps

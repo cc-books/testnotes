@@ -1,9 +1,6 @@
 include::config.adoc[]
-= {doctitle}
 
 :sectnums!:
-
-// include::head/epigraph.adoc[]
 
 include::head/foreword.adoc[]
 
@@ -14,6 +11,8 @@ toc::[]
 :sectnums:
 
 include::body/buildup.adoc[]
+
+include::body/bios.adoc[]
 
 include::body/install.adoc[]
 
@@ -37,4 +36,4 @@ include::tail/index.adoc[]
 
 include::tail/colophon.adoc[]
 
-include::test.adoc[]
+// include::test.adoc[]
