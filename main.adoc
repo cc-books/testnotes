@@ -12,11 +12,25 @@ toc::[]
 
 include::body/buildup.adoc[]
 
+include::body/environ.adoc[]
+
 include::body/bios.adoc[]
 
 include::body/install.adoc[]
 
+include::body/method.adoc[]
+
+include::body/bus.adoc[]
+
+include::body/input.adoc[]
+
+include::body/display.adoc[]
+
 include::body/network.adoc[]
+
+include::body/wireless.adoc[]
+
+include::body/wakeup.adoc[]
 
 include::body/integration.adoc[]
 

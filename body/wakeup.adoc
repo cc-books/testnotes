@@ -1,0 +1,11 @@
+== 喚醒測試
+
+=== 睡眠機制
+
+如果要停用相關服務，可以執行下列命令：
+--
+　　root> *systemctl mask sleep.target hybrid-sleep.target* +
+　　root> *systemctl mask suspend.target hibernate.target*
+--
+
+=== 喚醒手法

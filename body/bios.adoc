@@ -6,7 +6,7 @@
 === PCI 匯流排
 
 === USB 匯流排
-泛用序列匯流排(USB, Universal Serial Bus) 是目前最流行的接頭型式，
+**泛用序列匯流排**(USB, Universal Serial Bus) 是目前最流行的接頭型式，
 隨著規格不斷地擴充與演進，大有一統個人電腦周邊設備介面的趨勢。
 主要世代與相應的 GNU/Linux 驅動程式以及規格速度如下：
 [square]

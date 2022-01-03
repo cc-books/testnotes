@@ -1,0 +1,100 @@
+== 輸入裝置
+
+=== 鍵盤
+
+==== 條碼
+**條碼掃瞄器**(Barcode Scanner) 其實是一種模擬鍵盤的裝置，
+以光學掃瞄條碼之後，再解析為代碼對應的文字。早期還有扮演簡易讀卡機的功能，
+目前多用於快速輸入片段文數字的場合。
+
+==== RFID
+**無線射頻辨識**(RFID) 的標準為非接觸式的 ISO 14443A/B，其他較不普遍的規格包括 ISO 15693 與 Mifare。
+RFID 讀卡機介面傳統為序列埠，或是轉換後的 USB2COM(VCP)，目前也有 USB HID 介面出現。
+
+*rfdump* 是圖形介面的 RFID 標籤讀取軟體，可以讀取內容符合標準的卡片，
+而某些測試軟體衹能識別特定的介面。
+
+=== 滑鼠
+
+=== 讀卡機
+內嵌晶片的**靈巧卡**(SmartCard) 或**晶片卡**(IC Card)，是用途相當廣泛的一種辨識卡片。
+依照讀取時是否需要與卡片物理接觸，**讀卡機**(Card Reader) 可以分為「接觸式」與「非接觸式」兩大類。
+接觸式的讀卡機通過物理接觸來讀取晶片中的資訊；非接觸式的讀卡機則以採用基於 RFID 的**近場通訊**(NFC) 技術為主。
+
+舊型機種仍有可能使用 PS/2 或 RS-232 接頭，但多數的讀卡機是以 USB 介面連接到主板，
+因此可以利用 *lsusb* 命令看到它的廠商、産品識別號，不過這衹表示硬體裝置識別成功，
+還是需要依此確認驅動函式庫的名稱，才能進一步透過軟體讀取。
+--
+　　user> *lsusb* +
+　　ID 076b:3031 OmniKey AG OMNIKEY 3x21 Smart Card Reader +
+　　ID 0ca6:0010 Castles Technology Co., Ltd EZUSB PC/SC Smart Card Reader +
+　　                         ：                   ： +
+　　user> *lsusb -t* +
+　　/:  Bus 05.Port 1: Dev 4, If 0, Class=Chip/SmartCard, Driver=usbfs, 12M +
+　　/:  Bus 04.Port 2: Dev 6, If 0, Class=Chip/SmartCard, Driver=usbfs, 12M +
+　　                         ：                   ：
+--
+
+晶片讀卡機遵循的統一軟體介面為 PC/SC(ISO 7816)，
+由 opensc 套件提供基本與加密介面函式庫。首先安裝基本的套件需求：
+--
+　　root> *dnf install opensc pcsc-lite pcsc-lite-ccid pcsc-tools*
+--
+
+其中 pcsc-lite 套件的 *pcscd* 守護程式負責讀取服務，如果系統支援熱插拔功能，
+該服務於讀卡機連接時就會自動啟用，同時也會預設附加 --auto-exit 的參數。
+
+libccid 是 Linux 系統內建的標準驅動函式庫，支援大多數的讀卡機型號。
+有些讀卡機的規格支援 libccid 卻無法驅動，是因為尚未登錄於裝置列表，
+可以自行修改 /usr/lib64/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist：
+袛需要將相關資料加入 ifdVendorID, ifdProductID, ifdFriendlyName 三個鍵值段中，
+成為同樣次序的陣列項目。如果測試成功，不妨順便依照 https://ccid.apdu.fr/
+中的說明提出登錄要求。
+
+libacsccid 則是基於 libccid 的驅動函式庫，同樣內建於大多數的 Linux 系統。
+它的裝置列表專門收錄 ACS 公司所生産的讀卡機型號。
+
+要是手上的型號無法以 libccid 驅動，請先在散佈版的套件庫中搜尋，是否已經有打包好的特定型號驅動函式庫。
+萬一套件庫中找不到，就需要去讀卡機廠商的網站，看看是否有提供 Linux 的驅動函式庫，
+下面以安裝 Castles EZUSB 的命令為例：
+--
+　　root> *# 從 www.castlestech.com 下載 201511920271676073.zip* +
+　　root> *unzip 201511920271676073.zip* +
+　　root> *cd EZUSB_Linux* +
+　　root> *unzip EZUSB_Linux_x86_64_v1.5.3.zip* +
+　　root> *cd EZUSB_Linux_x86_64_v1.5.3/driver_ezusb_v1.5.3_for_64_bit* +
+　　root> *./install* +
+　　root> *systemctl restart pcscd*
+--
+
+pcsc-tools 套件中的 *pcsc_scan* 用來掃描 PC/SC 裝置以及偵測卡片資料，
+如果是手動執行 *pcscd* 並加上 *-f -d* 參數，也能達到類似效果。
+在安裝完驅動函式庫並重新啟動服務之後，可以利用這個程式來驗證讀卡機與卡片的可用性。
+在文字模式中執行之後，程式會顯示搜尋到的讀卡機型號，並等待使用者插入卡片。
+插入卡片後，就會看到卡片狀態跟著變更。
+
+NOTE: 同一套件中還有 *scriptor* 程式，是用來輸出讀卡機指令的文字介面，
+但是每種讀卡機的指令集各自不同，需要參考規格才能正確操作。
+另外還可以安裝 esc 套件，以獲得圖形介面的靈巧卡管理程式。
+
+對於某些比較舊或比較新的型號，仍然有機會透過調整系統來成功驅動。
+舊型的讀卡機有可能同時受到 libccid 與廠商軟體的支援，如果同時安裝兩份驅動函式庫，
+反而容易互相干擾。此時可以移除 libccid 套件，衹留下廠商的驅動函式庫試試。
+由於驅動函式庫支援的型號，都會記錄在各自的純文字 XML 檔案 Info.plist 中。
+新型的讀卡機如果無法驅動，也許衹是因為它的廠商識別號、産品識別號、産品名稱還沒有加入列表內容。
+適當修改 libccid 或舊版廠商軟體的列表檔案，說不定就能順利驅動讀卡機。
+
+NOTE: 有些較舊的散佈版與 *pcscd* 搭配的中介軟體是 *openct* 而非 *opensc*，
+對應 *pcsc_scan* 的測試程式則為 *openct-tool*，但可能不支援新的驅動函式庫。
+
+NOTE: 舊式具備 RS-232 介面的讀卡機，仍然需要序列埠(例如 /dev/ttyS0 或 /dev/ttyUSB0)，
+還可能需要手動符號鏈結至 /dev/pcsc/1 。
+而設定檔案另外位於 /etc/reader.conf.d/，內建其中衹有一個使用 ccidtwin 驅動程式的範例檔。
+如果想要使用特殊的機型，就必須自行準備驅動程式，並修改出適當的設定檔。
+
+NOTE: 某些讀卡機還支援**安全存取模組**(SAM)，通常是以
+SIM 卡的型式存在，用來進行異動作業的加密與驗證。
+
+=== 刷卡機
+舊式貼有磁條的卡片，需要利用刷卡機來讀取資訊。
+
