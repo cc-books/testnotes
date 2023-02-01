@@ -10,15 +10,26 @@ toc::[]
 
 :sectnums:
 
+include::body/method.adoc[]
+
+include::body/whyfree.adoc[]
+
+include::body/software.adoc[]
+
+
 include::body/buildup.adoc[]
 
 include::body/environ.adoc[]
 
 include::body/bios.adoc[]
 
-include::body/install.adoc[]
+include::body/osinstall.adoc[]
 
-include::body/method.adoc[]
+include::body/pkginstall.adoc[]
+
+include::body/srcinstall.adoc[]
+
+include::body/command.adoc[]
 
 include::body/bus.adoc[]
 
