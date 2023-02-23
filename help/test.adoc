@@ -30,3 +30,12 @@ public void Hello()   <1>
 NOTE: 這只是一個簡單範例。點一下 btn:[OK] 按鈕結束。 icon:[heart]
 
 WARNING: 版權沒有，藏私必究。
+
+[width="80%",options="header"]
+|===============================================
+|分割區	|掛載點		|分割區標籤	|檔案系統
+|sda1	|/boot/efi	|ESP		|vfat
+|sda2	|/boot		|Linux Native	|ext4
+|sda3	|/		|Linux Native	|ext4
+|sda4	|		|Linux Swap	|swap
+|===============================================

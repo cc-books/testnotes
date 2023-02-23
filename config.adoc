@@ -24,7 +24,7 @@
 :source-language: bash
 :experimental:
 :stem: latexmath
-:hide-uri-scheme:
+// :hide-uri-scheme:
 :chapter-label:
 :appendix-caption: 附錄
 :listing-caption: 列表

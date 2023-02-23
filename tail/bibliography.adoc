@@ -1,12 +1,10 @@
 [bibliography]
 == 參考資料
 
-* [[[csp]]] 陳鍾誠 (2013)。《系統程式》。臺北：旗標。
-* [[[qlo]]] 邱世華 (2009)。《Linux 作業系統之奧義》。臺北：悅知文化。
-* [[[qlh]]] 邱世華 (2015)。《Linux 硬體架構與指令之解析》。臺北：悅知文化。
-* [[[cel]]] Chris Simmonds (2015)。《精通嵌入式 Linux 程式設計》。錢亞宏譯。新北：博碩文化。
-* [[[afo]]] Ask Fedora <\https://ask.fedoraproject.org/>
-* [[[soc]]] Stack Overflow <\https://stackoverflow.com/>
-* [[[sec]]] Stack Exchange <\https://unix.stackexchange.com/>
-
-* [[[slse]]] Simulators vs. Emulators: What’s the Difference, Anyway? <https://saucelabs.com/amp/blog/simulators-vs-emulators-whats-the-difference-anyway>
+* 陳鍾誠 (2013)。《系統程式》。臺北：旗標。
+* 邱世華 (2009)。《Linux 作業系統之奧義》。臺北：悅知文化。
+* 邱世華 (2015)。《Linux 硬體架構與指令之解析》。臺北：悅知文化。
+* Chris Simmonds (2015)。《精通嵌入式 Linux 程式設計》。錢亞宏譯。新北：博碩文化。
+* Ask Fedora <\https://ask.fedoraproject.org/>
+* Stack Overflow <\https://stackoverflow.com/>
+* Stack Exchange <\https://unix.stackexchange.com/>

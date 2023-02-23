@@ -16,7 +16,6 @@ include::body/whyfree.adoc[]
 
 include::body/software.adoc[]
 
-
 include::body/buildup.adoc[]
 
 include::body/environ.adoc[]
@@ -25,11 +24,9 @@ include::body/bios.adoc[]
 
 include::body/osinstall.adoc[]
 
-include::body/pkginstall.adoc[]
+include::body/commandline.adoc[]
 
-include::body/srcinstall.adoc[]
-
-include::body/command.adoc[]
+include::body/swinstall.adoc[]
 
 include::body/bus.adoc[]
 
