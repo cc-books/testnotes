@@ -2,6 +2,7 @@
 :revdate: {docdate}
 :revnumber: 1.0
 :email: bluebat@member.fsf.org
+:homepage: https://github.com/bluebat/book-testnotes
 :copyright: CC0
 :doctype: book
 :doctitle: Linux 硬測筆記
@@ -15,22 +16,33 @@
 :front-cover-image: data/cover.png
 :title-logo-image: data/logo.png[Logo,100,100]
 :lang: cmn
+:encoding: utf-8
 :toc: macro
 :toclevels: 2
 :toc-title: 目次
 :sectnumlevels: 2
 :icons: font
-:icon-set: fi
+:icon-set: icofont
+//:caution-caption: :fire:
+//:important-caption: :exclamation:
+//:note-caption: :paperclip:
+//:tip-caption: :bulb:
+//:warning-caption: :warning:
 :source-language: bash
+:syntax-highlighter: rouge
+:source-highlighter: rouge
+:rouge-style: monokai
 :experimental:
 :stem: latexmath
-// :hide-uri-scheme:
+:hide-uri-scheme!:
 :chapter-label:
 :appendix-caption: 附錄
-:listing-caption: 列表
+:listing-caption: 表
+:figure-caption: 圖
 :media: prepress
-:pdf-stylesdir: {docdir}/face
 :pdf-fontsdir: {docdir}/face
+:pdf-stylesdir: {docdir}/face
 :pdf-style: KaiGenGothicTW
 :pdf-page-size: B5
 :mathematical-format: svg
+

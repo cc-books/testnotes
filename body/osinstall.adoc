@@ -66,7 +66,7 @@ ISO 9660 並未使用開頭的 32K 位元組，因此可以填入額外資訊來
 映像檔都被製作成支援 USB 開機的功能。也就是說，使用者可以像操作磁碟映像檔(.img, .dd)
 一樣，將 .iso 檔案以 *dd* 命令直接寫入 USB 隨身碟，製作出可開機的安裝媒體：
 --
-　　root> *dd if=_install_.iso of=/dev/_sdb_ bs=4M*
+　　root# *dd if=_install_.iso of=/dev/_sdb_ bs=4M*
 --
 但是如此也增加了媒體損壞導致安裝過程失敗的風險，因此安裝前建議做好光碟版本的備案，
 或是考慮使用精簡型的光碟映像檔（開機之後，需要連上網路才能進行套件安裝）。
@@ -112,14 +112,14 @@ ISO 9660 並未使用開頭的 32K 位元組，因此可以填入額外資訊來
 有些內建混合型硬碟的機型，會發生安裝軟體無法識別的情形，可能是因為其中的兩顆硬碟曾經被加入 RAID 群組。
 萬一也要保留舊資料而無法進行格式化，則需以外部系統進入後執行：
 --
-　　root> *dmsetup remove_all* +
-　　root> *dmraid -x /dev/sdb* +
-　　root> *dmraid -r -E /dev/sdb*
+　　root# *dmsetup remove_all* +
+　　root# *dmraid -x /dev/sdb* +
+　　root# *dmraid -r -E /dev/sdb*
 --
 或是手動抹去最前與最後的 1024 位元組（2 個磁區）：
 --
-　　root> *dd if=/dev/zero of=/dev/sdb bs=1k count=1* +
-　　root> *dd if=/dev/zero of=dev/sdb bs=1k seek=$((_磁區數_-2))*
+　　root# *dd if=/dev/zero of=/dev/sdb bs=1k count=1* +
+　　root# *dd if=/dev/zero of=dev/sdb bs=1k seek=$((_磁區數_-2))*
 --
 
 更複雜的情況是想要保留儲存裝置上原有的系統，也就是安裝成多重開機的模式。
@@ -175,7 +175,7 @@ ISO 9660 並未使用開頭的 32K 位元組，因此可以填入額外資訊來
 有些系統的安裝過程會提供使用者較多的選擇權力，但有些系統則會根據時區而自動決定其他相關的地區設定。
 比較保險的做法是在安裝時選擇美國的時區之一，而在安裝後進入系統執行變更的命令：
 --
-　　root> *timedatectl set-timezone _Asia/Taipei_*
+　　root# *timedatectl set-timezone _Asia/Taipei_*
 --
 
 ==== 目標裝置
@@ -235,9 +235,9 @@ ISO 9660 並未使用開頭的 32K 位元組，因此可以填入額外資訊來
 
 像是重建**初始記憶體檔案系統**(initramfs) 來加入支援儲存裝置的內核模組，或是設定固定時間之後自動關機。
 --
-　　root> *chroot /mnt/sysimage* +
-　　root> *dracut -f --add-drivers "sdhci-pci xhci-pci" /boot/initramfs-_內核版本_.img _內核版本_* +
-　　root> *sleep _預估安裝完成安全秒數_ ; poweroff*
+　　root# *chroot /mnt/sysimage* +
+　　root# *dracut -f --add-drivers "sdhci-pci xhci-pci" /boot/initramfs-_內核版本_.img _內核版本_* +
+　　root# *sleep _預估安裝完成安全秒數_ ; poweroff*
 --
 安裝成功進入系統之後，當然不要忘記修改 /etc/dracut.conf.d/ 或 /etc/initramfs-tools/modules，
 才能在萬一內核更新而 *dracut* 仍未更新時，繼續保有儲存裝置的支援。
@@ -269,18 +269,18 @@ ISO 9660 並未使用開頭的 32K 位元組，因此可以填入額外資訊來
 再緊接著輸入需要管理員身分的命令，並回答一般使用者的密碼即可執行。如果一般使用者不具備 *sudo* 的執行權力，
 則需要改為輸入命令 *su -* 並回答管理員密碼，便能夠完整切換成管理員身分。
 --
-　　user> *sudo _dmidecode_* +
+　　user$ *sudo _dmidecode_* +
 　　[sudo] password for user: +
-　　user> *su -* +
+　　user$ *su -* +
 　　Password: +
-　　root>
+　　root#
 --
 如果具備 *sudo* 執行權力的一般使用者，想要連續以管理員身分輸入命令，
 還可以結合上面的兩項命令，衹要回答一般使用者的密碼，就可以維持切換成管理員身分：
 --
-　　user> *sudo su -* +
+　　user$ *sudo su -* +
 　　[sudo] password for user: +
-　　root>
+　　root#
 --
 某些安裝完的系統，預設拒絕直接以管理員身分登入。
 這是利用了 **隨插式認證模組**(PAM) 的功能，相關的設定位於 /etc/pam.d/ 目錄。
@@ -288,8 +288,8 @@ ISO 9660 並未使用開頭的 32K 位元組，因此可以填入額外資訊來
 ==== 套件更新
 進入系統桌面後的第一件事，建議是立即連上網路進行套件更新，並加裝一些個人習慣使用，卻不在預設安裝列表中的套件。
 --
-　　root> *dnf update* +
-　　root> *dnf install _joe_*
+　　root# *dnf update* +
+　　root# *dnf install _joe_*
 --
 如果更新或安裝作業不成功，請查看是否網路未通、防火牆設定阻擋，或是套件庫的設定不正確。
 

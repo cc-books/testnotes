@@ -1,6 +1,7 @@
-A simple http://asciidoc.org[AsciiDoc] document.
+include::config.adoc[]
 
 == 簡介
+A simple http://asciidoc.org[AsciiDoc] document.
 
 A **paragraph** followed by a _simple_ list with #square bullets#.
 

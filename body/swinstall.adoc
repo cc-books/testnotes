@@ -27,8 +27,8 @@
 也可以在終端機模擬視窗中，利用 *wget* 命令配合檔案網址取得。
 例如：
 --
-　　user> *wget _https://www.foobar.org/download/foobar-3.0.zip_* +
-　　user> *wget _https://github.com/foo/bar/archive/refs/tags/v2.1.tar.gz_ -O _bar-2.1.tar.gz_*
+　　user$ *wget _https://www.foobar.org/download/foobar-3.0.zip_* +
+　　user$ *wget _https://github.com/foo/bar/archive/refs/tags/v2.1.tar.gz_ -O _bar-2.1.tar.gz_*
 --
 
 要進入到下一階段的組建步驟之前，需要先將原始碼展開為原本的檔案目錄型式。
@@ -38,20 +38,20 @@
 但是也有些格式像是 `rar`, `zip` 或 `7z` ，同時具備封裝與壓縮的功能，能夠一次就滿足將整個檔案目錄打包起來的需求。
 例如：
 --
-　　user> *tar -czvf _bar-2.1.tar.gz bar/_* +
-　　user> *zip -r _foobar-3.0.zip foobar-3.0/_*
+　　user$ *tar -czvf _bar-2.1.tar.gz bar/_* +
+　　user$ *zip -r _foobar-3.0.zip foobar-3.0/_*
 --
 而使用者要熟悉的動作，則是如何將其解開：
 --
-　　user> *tar -xvf _bar-2.1.tar.gz_* +
-　　user> *unzip _foobar-3.0.zip_*
+　　user$ *tar -xvf _bar-2.1.tar.gz_* +
+　　user$ *unzip _foobar-3.0.zip_*
 --
 有些打包檔在製作時，不是以一個目錄做為打包來源，導致解開後會在當前工作目錄中產生一堆零散的檔案。
 如果先建立好一個新的目錄，再從目錄中解開上層的打包檔，就可以避免這種**打包炸彈**(tarbomb)造成的不便：
 --
-　　user> *mkdir _foobar-0.1_* +
-　　user> *cd _foobar-0.1_* +
-　　user> *unzip ../_foobar-0.1.zip_*
+　　user$ *mkdir _foobar-0.1_* +
+　　user$ *cd _foobar-0.1_* +
+　　user$ *unzip ../_foobar-0.1.zip_*
 --
 
 ==== 原始碼組建
@@ -75,7 +75,7 @@
 大部分開發者採用傳統的 Make 工具做為組建管理機制，主要是由 *make* 命令與預設的設定檔所組成。
 拿到原始碼的使用者，一般衹需要在解開後的目錄中執行：
 --
-　　user> *make*
+　　user$ *make*
 --
 就會讀取開發者於工作目錄中事先寫好的 `Makefile` 純文字檔案，並依照其中設定的命令順序來執行。
 如果目錄中存在名為 `makefile` 或 `GNUmakefile` 的檔案，同樣預設會被讀取，當然也支援藉由引數來指定的設定檔名稱。
@@ -107,14 +107,14 @@
 ==== 原始碼安裝
 傳統的安裝過程同樣也是使用 Make 機制，習慣上則以 `install` 做為目標參數：
 --
-　　user> *make install*
+　　user$ *make install*
 --
 如果原始碼軟體包不支援 Make 的安裝目標，也沒有其他可用的機制或安裝命令稿，
 就衹能手動在系統中建立目錄，再將需要的檔案拷貝過去。
 
 通常在 Make 組建管理機制中，會以 `uninstall` 目標參數來呼叫解除安裝的動作：
 --
-　　user> *make uninstall*
+　　user$ *make uninstall*
 --
 但是並非所有的開發者都會將它實作在 `Makefile` 檔案中。
 如果真的必須解除安裝的話，衹能參考安裝的詳細過程，然後手動將它們逐一反向操作。
@@ -134,13 +134,13 @@
 雖然安裝軟體包不需要先經過組建的步驟，但是通常並不會像從原始碼安裝那樣去使用 Make 機制。
 建議先閱讀隨附的文件，或是找找看是否已經有寫好的安裝命令稿，方便直接執行安裝。
 --
-　　root> *_./install.sh_*
+　　root# *_./install.sh_*
 --
 有些軟體包是以單一的執行檔案型式散佈，副檔名可能是 `sh`, `bin`, `bundle` ，或是沒有副檔名。
 檔案通常經過特殊的封裝、壓縮甚至加密的方式，而且不需要先由使用者設法解開。
 確認檔案具備可執行屬性之後（參考〈檔案與目錄〉），就可以直接在工作目錄中執行它：
 --
-　　root> *_./foobar-16.3.2-linux64.bin_*
+　　root# *_./foobar-16.3.2-linux64.bin_*
 --
 安裝內容簡單的軟體，可能在執行完步驟後就直接結束命令；
 比較複雜的軟體，則會在過程中詢問一些選項。
@@ -162,6 +162,7 @@
 
 各類 Linux 系統所使用的主要套件格式包括 RPM 與 DEB 兩種，分別由
 RHEL、Fedora、CentOS、SUSE,… 以及 Debian、Ubuntu、Mint,… 等散佈版所支持。
+另外存在許多次要的套件格式，雖然結構邏輯類似，但是組成的細節並不相同，而僅見於小眾的散佈版之中。
 如果類比於適用 Windows 系統的 MSI 格式，那些提供大量 Windows 應用軟體的網站，
 就相當於 Windows 系統的套件庫。
 
@@ -213,9 +214,9 @@ RHEL、Fedora、CentOS、SUSE,… 以及 Debian、Ubuntu、Mint,… 等散佈版
 
 不論是套件庫命令或是套件檔案命令，有些動作其實可以透過不衹一種命令完成。例如：
 --
-　　root> *dnf install _foobar_* +
-　　root> *dnf install _foobar-3.0-1.x86_64.rpm_* +
-　　root> *rpm -i _foobar-3.0-1.x86_64.rpm_*
+　　root# *dnf install _foobar_* +
+　　root# *dnf install _foobar-3.0-1.x86_64.rpm_* +
+　　root# *rpm -i _foobar-3.0-1.x86_64.rpm_*
 --
 以上三條適用於 RPM 套件系統的命令，都是為了要安裝 foobar 軟體，
 但是執行前提與過程細節會略有差異，實際使用時需要參考說明文件留意一下。

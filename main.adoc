@@ -26,6 +26,8 @@ include::body/osinstall.adoc[]
 
 include::body/commandline.adoc[]
 
+include::body/filesystem.adoc[]
+
 include::body/swinstall.adoc[]
 
 include::body/bus.adoc[]
@@ -58,4 +60,3 @@ include::tail/index.adoc[]
 
 include::tail/colophon.adoc[]
 
-// include::test.adoc[]
