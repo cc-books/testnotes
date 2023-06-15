@@ -1,10 +1,11 @@
-include::config.adoc[]
+//include::config.adoc[]
+include::config1.adoc[]
 
 :sectnums!:
 
-include::head/foreword.adoc[]
-
 include::head/preface.adoc[]
+
+include::head/abstract.adoc[]
 
 toc::[]
 
@@ -26,7 +27,9 @@ include::body/osinstall.adoc[]
 
 include::body/commandline.adoc[]
 
-include::body/filesystem.adoc[]
+include::body/file-dir.adoc[]
+
+include::body/textfile.adoc[]
 
 include::body/swinstall.adoc[]
 

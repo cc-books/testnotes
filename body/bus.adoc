@@ -11,17 +11,17 @@ USB HID 介面的狀態有可能會受鍵盤的鎖定燈號影響：
 --
 
 ==== VCP
-VCP(Virtual COM Port) 介面的 /dev/ttyUSB* 無法以 setserial 設定，而是以 stty 命令：
+**虛擬序列埠**(VCP) 介面的 /dev/ttyUSB* 無法以 setserial 設定，而是以 stty 命令：
 --
 　　root# *stty -a -F /dev/ttyUSB0* \#顯示目前設定值 +
 　　root# *stty -F /dev/ttyUSB0 19200 -parenb cs8 -cstopb -ixon* +
-　　root# *cat < /dev/ttyUSB* |xxd -g 1*
+　　root# *cat < /dev/ttyUSB0 |xxd -g 1*
 --
 IMPORTANT: 最好先停用或移除 ModemManager 套件以免 VCP 受到影響。
 
 如果想要將十六進位的字元直接寫入裝置中，可參考下面的例子：
 --
-　　root# *echo -en '\x_01_\x_01_\x_CA_\x_60_\x_00_\x_03_\x_A9_' > /dev/_ttyUSB0_*
+　　root# *echo -en _'\x01\x01\xCA\x60\x00\x03\xA9'_ > /dev/_ttyUSB0_*
 --
 或是借助 xxd -r -p 命令，先進行轉換再輸出：
 --
