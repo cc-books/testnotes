@@ -108,3 +108,13 @@ footnote:[https://saucelabs.com/amp/blog/simulators-vs-emulators-whats-the-diffe
 * **單機**(standalone) 架構：運行時不需要網路，軟體不扮演任何網路角色。
 * **客戶端－伺服器**(client-server) 架構：運行時需要網路，軟體扮演客戶端或伺服器的角色。
 * **點對點**(point-to-point) 架構：運行時需要網路，軟體扮演端點的角色。
+
+=== 軟體執行
+手動執行軟體的方式：
+
+[square]
+* 輸入程式名稱：於命令列模式或執行視窗。
+* 雙擊程式圖示：於軟體選單或檔案管理視窗。
+* 按下快捷鍵
+* 觸發硬體事件：熱插拔裝置或媒體。
+

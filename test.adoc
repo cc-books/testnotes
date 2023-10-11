@@ -30,7 +30,13 @@ public void Hello()   <1>
 
 NOTE: 這只是一個簡單範例。點一下 btn:[OK] 按鈕結束。 icon:[heart]
 
+TIP: Tip
+
 WARNING: 版權沒有，藏私必究。
+
+CAUTION: Caution
+
+IMPORTANT: Important
 
  縮進一格
  縮進一格

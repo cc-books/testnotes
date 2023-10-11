@@ -1,0 +1,407 @@
+== 開機前執行環境
+*PXE*(開機前執行環境) 可以視為由韌體提供具有網路功能的開機載入程式，
+從網路上直接載入整個作業系統，或是間接先載入內核，又或是先載入更前端的開機管理程式。
+網路開機與本機開機的流程類似，衹是軟體部分經由網路取得，而非來自本機儲存裝置。
+
+PXE 實際上是一項網路技術，提供此項技術的軟體稱為「PXE 伺服應用」；而提供此項技術的硬體則稱之為「PXE 伺服主機」，兩者均常以通稱「PXE 伺服器」來代表。
+關於網路的基本設定，請參閱〈網路裝置〉中的說明；而從〈軟體服務〉的內容還可以進一步了解其他服務的設定。
+
+=== 準備工作
+作用於區域網路的 PXE 技術，客戶端與基本的伺服端機器必須位於同一區域網路之中，但是提供檔案的伺服器則沒有這個限制。
+通常現有的辦公用區域網路都已經具備了網路位址配送服務，並不適合做為 PXE 技術測試環境，因為會很容易造成相互干擾。
+最好將客戶端與伺服端連接於一臺額外的交換器(switch) 或集線器(hub)，建置一組獨立的測試用區域網路。
+
+==== 客戶端開機韌體
+支援 PXE 技術的客戶端機器，必須能夠經由開機韌體設定為網路開機，設定時還要注意優先順序以及想要使用的網路協定。
+PXE 開機時如果出現記憶體不足的訊息，可以試試藉由內核參數 `mem=` 或 `ramdisk_size=` 來增加運用的記憶體，
+或是降低開機韌體設定中的 DVMT(動態視訊記憶體技術) 用量。
+如果在開機過程中無法使用鍵盤或滑鼠，可以試試停用開機韌體設定中的 Fast Boot(快速開機) 功能，
+或是調整其他與 USB 有關的項目，而直接改換不同的 USB 插口(socket) 也可能會有幫助。
+
+==== 伺服端安裝套件
+為了建立 PXE 網路技術，需要安裝以下套件：
+（不同的散佈版所使用的套件名稱可能會不同，有些還會載入其他依存的套件，可以藉由搜尋重點檔案是否存在來確認。）
+
+[square]
+* `dhcp-server`: 提供 DHCP(動態主機設定協定) 服務，重點檔案為 `dhcpd.service` 與 `dhcpd6.service` 。
+* `tftp-server`: 提供 TFTP(簡單檔案傳輸協定) 服務，重點檔案為 `tftp.socket` 。
+* `httpd`: 提供 HTTP(超文字傳輸協定) 服務，重點檔案為 `httpd.service` 。
+* `nfs-utils`: 提供 NFS(網路檔案系統) 服務，重點檔案為 `nfs-server.service` 。
+* `syslinux`: 提供 PXE 開機載入程式，重點檔案為 `pxelinux.0` 。
+
+==== 伺服端網路設定
+賦予 PXE 伺服器一個自訂的主機名稱：
+--
+　　root# *hostnamectl set-hostname _pxe.lab.local_*
+--
+`/etc/hostname` 的內容即為設定的主機名稱。
+然後看一下目前的網路裝置組態：
+--
+　　root# *nmcli connection show* +
+　　NAME        UUID                                  TYPE      DEVICE +
+　　eth0        92225193-b020-3257-9c4c-d0fa2a06cadf  ethernet  eno1 +
+　　lo          e36fa446-245d-454c-962e-97a0e1e9327e  loopback  lo
+--
+其中第一欄 `NAME` 或第二欄 `UUID` 的值，可以做為其他命令中指定裝置的參數名稱。
+接著設定為固定 IP：
+--
+　　root# *nmcli connection modify _eth0_ ipv4.address _192.168.0.1/24_* +
+　　root# *nmcli connection modify _eth0_ ipv4.gateway _192.168.0.254_* +
+　　root# *nmcli connection modify _eth0_ ipv4.dns _192.168.0.254_* +
+　　root# *nmcli connection modify _eth0_ ipv4.dns-search _lab.local_* +
+　　root# *nmcli connection modify _eth0_ ipv4.method manual*
+--
+如果也要支援 IPv6 的話，就要進行相應的設定：
+--
+　　root# *nmcli connection modify _eth0_ ipv6.address _fd::1/64_* +
+　　root# *nmcli connection modify _eth0_ ipv6.gateway _fd::fd_* +
+　　root# *nmcli connection modify _eth0_ ipv6.dns _fd::fd_* +
+　　root# *nmcli connection modify _eth0_ ipv6.dns-search _lab.local_* +
+　　root# *nmcli connection modify _eth0_ ipv6.method manual*
+--
+`/etc/hosts` 的內容加上：
+
+./etc/hosts (部分)
+++++
+192.168.0.1     pxe.lab.local
+fd::1           pxe.lab.local
+++++
+
+同時也不要忘記檢查一下，是否網路裝置已設定為開機後自動連線，否則就應該要執行設定指令：
+--
+　　root# *nmcli -f name,autoconnect connection* +
+　　NAME        AUTOCONNECT +
+　　eth0        no +
+　　lo          no +
+　　root# *nmcli connection modify _eth0_ connection.autoconnect yes*
+--
+
+=== 服務需求
+基本的 PXE 技術是由兩項網路服務所組成：DHCP 與 TFTP。
+前者負責配送 IP 位址與相關網路資訊，後者則負責提供開機檔案，兩者可建置於單一主機，或是分散於兩臺主機。
+進階的 PXE 技術則包含了 HTTP 與 NFS 服務，提供更快速的檔案傳輸以及更完整的網路檔案系統。
+
+==== TFTP 服務
+提供 TFTP 服務的主機稱為 TFTP 伺服器，它是 DHCP 服務預設搭配的檔案傳輸協定，
+因此又稱為 next-PXE 伺服器，而在 DHCP 的設定檔中是以 `next-server:` 的項目來指定網路位址。
+
+預設放置傳輸檔案的位置在 `/var/lib/tftpboot/` 目錄之下，這也被稱為 TFTP 的根目錄，其中的檔案最好都打開可讀的屬性。
+
+TFTP 服務是藉由 `tftp.socket` 的形式所觸發，因此嘗試啟動與啟用的命令為：
+--
+　　root# *systemctl start tftp.service* +
+　　root# *systemctl enable tftp.socket*
+--
+表示當 DHCP 服務需要進一步提供檔案時，才會引發 TFTP 服務。
+
+==== HTTP 服務
+如果將上述的 TFTP 改為 HTTP 則稱之為 PXE-HTTP 網路技術，需要開機韌體的支援才行。
+雖然支援 PXE-HTTP 的開機韌體一般也會支援 PXE-HTTPS，但是在伺服端還是以建置 HTTP 服務較為方便。
+做為提供靜態檔案的服務，設定檔的內容通常不需要修改，除非想要更動一些預設值：
+
+./etc/httpd/conf/httpd.conf (部分)
+++++
+Listen 80
+DocumentRoot "/var/www/html"
+++++
+
+做為測試目的而將 HTTP 與 TFTP 服務由同一臺伺服器提供時，可以將兩者的根目錄設為同一位置：
+--
+　　root# *rmdir /var/www/html* +
+　　root# *ln -s ../lib/tftpboot /var/www/html*
+--
+
+嘗試啟動 `httpd.service` 之後，如果運作正常，就可以將它設定為啟用：
+--
+　　root# *systemctl start httpd* +
+　　root# *systemctl enable httpd*
+--
+
+==== NFS 服務
+除了傳送並執行開機檔案之外，透過 PXE 技術載入具備網路模組的內核，然後再接續掛載網路檔案系統，就可以達成「無碟系統」的功能。
+NFS 是最普遍使用的網路檔案系統，由於內核已具備客戶端的模組，因此可將其編譯為內建，或是包含在記憶體檔案系統中。
+
+常見的 Linux 的 NFS 服務，是由運行在內核空間中的內核模組所提供的。
+提供 NFS 服務的伺服器，就是無碟系統檔案所**寄存**(hosted) 的地方。
+
+./etc/exports
+++++
+/var/nfs *(rw,no_root_squash,sync,no_all_squash)
+++++
+
+嘗試啟動 `nfs-server.service` 之後，利用指令 `exportfs` 可以在伺服器上列出目前分享的目錄。
+如果運作正常，就可以將它設定為啟用：
+--
+　　root# *systemctl start nfs-server* +
+　　root# *exportfs* +
+　　/var/nfs         <world> +
+　　root# *systemctl enable nfs-server*
+--
+
+==== DHCP 服務
+提供 DHCP 服務的主機，稱為 DHCP 伺服器。
+為了區分 IPv4 與 IPv6，系統套件提供了 `dhcpd.service` 與 `dhcpd6.service` 兩個分開的服務，單元檔案位於 `/usr/lib/systemd/system` 目錄之中。
+兩個服務雖然呼叫同一個程式，但是利用不同的選項使得各自的功能獨立，並且讀取不同的設定檔：
+
+./etc/dhcp/dhcpd.conf
+++++
+option domain-name "lab.local";
+option domain-name-servers 192.168.0.254;
+option routers 192.168.0.254;
+ddns-update-style none;
+authoritative;
+option arch code 93 = unsigned integer 16;
+next-server 192.168.0.1;
+
+subnet 192.168.0.0 netmask 255.255.255.0 {
+  range 192.168.0.100 192.168.0.250;
+  if option arch = 00:07 {
+    # x64 UEFI
+    filename "uefi/grubx64.efi";
+  } else if option arch = 00:10 {
+    # x64 UEFI HTTP
+    option vendor-class-identifier "HTTPClient";
+    filename "http://192.168.0.1/uefi/gentoo.efi";
+  } else {
+    filename "pxelinux.0";
+  }
+}
+++++
+
+./etc/dhcp/dhcpd6.conf
+++++
+option dhcp6.domain-search "lab.local";
+option dhcp6.name-servers fd::fd;
+option dhcp6.preference 255;
+option dhcp6.bootfile-url code 59 = string;
+option dhcp6.vendor-class code 16 = {integer 32, integer 16, string};
+option dhcp6.client-arch-type code 61 = array of unsigned integer 16;
+
+subnet6 fd::/64 {
+    range6 fd::10 fd::df;
+    if option dhcp6.client-arch-type = 00:07 {
+        option dhcp6.bootfile-url "tftp://[fd::1]/uefi/grubx64.efi";
+    } else if option dhcp6.client-arch-type = 00:10 {
+        option dhcp6.vendor-class 0 0 "HTTPClient";
+        option dhcp6.bootfile-url "http://[fd::1]/uefi/gentoo.efi";
+    } else {
+        option dhcp6.bootfile-url "tftp://[fd::1]/pxelinux.0";
+    }
+}
+++++
+
+對於這兩個服務的嘗試啟動與啟用，當然必須分別執行：
+--
+　　root# *systemctl start dhcpd* +
+　　root# *systemctl enable dhcpd*
+　　root# *systemctl start dhcpd6* +
+　　root# *systemctl enable dhcpd6*
+--
+
+NOTE: dhcpd 與 dhcpd6 兩個服務如果由於過早啟動而失敗，可以考慮在單元檔案的 `[Service]` 段落中加入 `ExecStartPre=/usr/bin/sleep 10` 的延遲設定。
+
+=== 主要功能
+DHCP 設定檔中 `filename` 項目所分發的檔案，開啟了後續的 PXE 主要功能。
+需要網路開機的裝置，會從 DHCP 伺服器的回應中，得到 TFTP 伺服器以及 PXE 檔案的位置資訊。
+開機韌體利用 TFTP 協定取得檔案之後，隨即將它載入記憶體中並轉移系統控制權。
+
+==== 開機載入
+在 Legacy BIOS 模式下，傳統的 PXE 選單功能就是由 `pxelinux.0` 這個檔案所提供。
+它是 SYSLINUX 軟體家族中，類似 GRUB 且具有網路功能的開機載入程式。
+通常會將 PXE 的主體以及需要的工具與模組檔案，拷貝到 TFTP 的根目錄下：
+--
+　　root# *mkdir -p /var/lib/tftpboot/pxelinux.cfg* +
+　　root# *cd /usr/share/syslinux* +
+　　root# *cp pxelinux.0 memdisk menu.c32 vesamenu.c32 libcom32.c32 libutil.c32 ldlinux.c32 lib/var/lib/tftpboot/* +
+--
+
+在 UEFI 模式下，PXE 開機載入功能通常是由 `grubx64.efi` 這個檔案所提供，或是依需要由 `BOOTx64.efi` 或 `shimx64.efi` 等檔案間接引入。
+如果 PXE 伺服主機是以 UEFI 模式開機，那麼所需檔案可以直接從 `/boot/efi/EFI/__作業系統__/` 目錄中拷貝過來。
+依據之前的 DHCP 設定檔範例，相關的檔案是放在 TFTP 根目錄下的 `uefi/` 子目錄中。
+
+PXE 檔案也可以是具有自我完備功能的單一檔案，例如可開機的 `.iso` 檔案，或是 UEFI 模式下可獨立運作的 `.efi` 檔案，
+但是會因為需要將整個檔案載入記憶體中，而導致開機時間過長或者軟體功能受限。
+
+==== 開機選單
+`/var/lib/tftpboot/pxelinux.cfg/default` 是 `pxelinux.0` 的預設設定檔。
+如同 SYSLINUX 家族中的其他軟體一樣，設定檔的結構其實與 GRUB 相差不多。
+
+./var/lib/tftpboot/pxelinux.cfg/default
+++++
+ui vesamenu.c32
+prompt 0
+timeout 50
+default dos
+
+label dos
+menu label FreeDOS 1.3 Live
+kernel memdisk
+append initrd=image/FD13BOOT.img
+++++
+
+如果想要依個別的網路卡號分別設定，還可以建立像是 `/var/lib/tftpboot/pxelinux.cfg/_nn-xx-xx-xx-xx-xx-xx_` 的檔案。
+檔名中的 _nn_ 是數字表示的優先順序，_xx-xx-xx-xx-xx-xx_ 則是小寫的網路卡號，內容格式則與 `default` 檔案相同。
+
+UEFI 模式的 `grubx64.efi` 預設會讀取同一目錄中的 `grub.cfg` 做為設定檔，而不同網卡的設定可以放在 `grub.cfg-_nn-xx-xx-xx-xx-xx-xx_` 名稱格式的檔案中。
+
+./var/lib/tftpboot/uefi/grub.cfg
+++++
+terminal_output console
+set timeout_style=menu
+set timeout=5
+insmod all_video
+set gfxpayload=keep
+insmod efinet
+insmod gzio
+insmod part_msdos
+insmod part_gpt
+insmod ext2
+insmod chain
+set root=tftp,192.168.0.1
+set default="0"
+
+menuentry 'UEFI Shell 2.2' {
+    chainloader uefi/Shell.efi
+}
+++++
+
+==== 載入映像檔
+
+./var/lib/tftpboot/pxelinux.cfg/default (部分)
+++++
+label slitaz
+menu label Slitaz 5.0rc Live
+kernel memdisk
+append initrd=image/slitaz-rolling-core64.iso iso raw
+++++
+
+./var/lib/tftpboot/uefi/grub.cfg (部分)
+++++
+menuentry 'Slitaz 5.0rc' {
+    echo 'Loading Slitaz Linux... [root]'
+    loopback loop image/slitaz-rolling-core64.iso
+    linuxefi (loop)/boot/vmlinuz-3.16.55-slitaz64 root=0x100 video=-32 autologin lang=en_US kmap=us
+    initrdefi (loop)/EFI/boot/rootfs.gz
+}
+++++
+
+==== 載入網路系統
+透過網路開機所載入的系統中，最重要的目標當然就是一個完整的 Linux 作業系統。
+由於 TFTP 傳輸的速度較慢，而且有限的功能無法做為適當的網路檔案系統，
+因此 PXE 技術通常衹負責傳送內核與記憶體檔案系統，剩下的使用者空間部分則由內核自行掛載。
+
+不過有些散佈版的標準組態是不支援網路開機的，因此必須要先在原系統中重建記憶體檔案系統：
+--
+　　root# *dracut --add "network nfs" --add-drivers "_r8169_ nfsv4" initramfs.img $(uname -r)*
+--
+製作前要確認是否已安裝 `dracut-network` 與 `nfs-utils` 套件，也要含入無碟系統的網路卡內核驅動模組，這樣新產生出來的 `initramfs.img` 才能用於網路開機。
+假設 PXE 的傳送檔案想要放在 TFTP 根目錄下的 `linux/` 子目錄中，所以要將網路寄存系統的 `vmlinuz` 與 `initramfs.img` 檔案拷貝過來，並且記得設為可讀。
+如果有多個內核與記憶體檔案系統同時存在，就要在檔名加上版本號碼或是其他可供區分的標識。
+另外最好在原系統中停用 `selinux`、`firewalld`、`auditd` 等功能或服務。
+
+首先以外部的作業系統（例如安裝於閃碟上的 Linux），將想要寄存的整個檔案系統打包出來
+（假設原系統的根目錄位於 `/dev/sda2` ，而 `/dev/sdb` 是外部的閃碟裝置）：
+--
+　　root# *mount /dev/_sda2_ /mnt* +
+　　root# *cd /mnt* +
+　　root# *tar zcvf _/root/rootfs-for-nfs.tar.gz_* \*
+--
+然後再於 NFS 伺服器掛載閃碟上的系統，接著解包整個檔案系統後，匯入到 NFS 根目錄中預定分享的目錄：
+--
+　　root# *mount /dev/_sdb2_ /mnt* +
+　　root# *cd _/var/nfs/linux_* +
+　　root# *tar xvf _/mnt/root/rootfs-for-nfs.tar.gz_*
+--
+
+無碟系統的內核與記憶體檔案系統，已經藉由 PXE 技術載入，而開機載入的相關檔案也不再需要，因此如果空間有限的話，可以將分享目錄中原系統的 `/boot` 子目錄移除。
+（通常用於 UEFI 開機模式且存放在 `/dev/sda1` 中的 `/boot/efi` 掛載目錄，也不需要進行打包與匯入。）
+載入時會指定分享的目錄將成為無碟系統中的根目錄，原系統 `/etc/fstab` 檔案中關於根目錄的設定將被忽略，關於其他不再適用的掛載設定則要移除。
+
+./var/lib/tftpboot/pxelinux.cfg/default (部分)
+++++
+label linux
+menu label Linux Diskless System
+kernel linux/vmlinuz
+append initrd=linux/initramfs.img rw ip=dhcp root=/dev/nfs nfsroot=192.168.0.1:/var/nfs/linux
+++++
+
+./var/lib/tftpboot/uefi/grub.cfg (部分)
+++++
+menuentry 'Linux Diskless System' { 
+    linuxefi linux/vmlinuz rw ip=dhcp root=/dev/nfs nfsroot=192.168.0.1:/var/nfs/linux
+    initrdefi linux/initramfs.img
+}
+++++
+
+由於網路傳輸速度的落差，載入內核時可能需要加上 `rootwait` 或 `rootdelay=5` 類型的參數，而有些散佈版可能還需要 `boot=nfs` 或 `netboot=nfs` 的額外參數。
+
+=== 替代方案
+PXE 技術對於伺服端與客戶端都有一定的配置要求。
+如果伺服端提供的硬體資源或網路服務無法滿足要求，或是客戶端的開機韌體無法支援網路開機，那麼就要尋求一些替代方案，才有可能達到網路開機的效果。
+
+==== DNSmasq
+如果有架設 DNS、DHCP、TFTP 於同一臺伺服器的需求，可以考慮利用 DNSmasq 軟體來同時提供這三項服務。
+這個方案適用於小型簡單的區域網路，並且省下安裝與建置其他軟體的工作。
+
+./etc/dnsmasq.conf (部分)
+++++
+enable-tftp
+tftp-root=/var/lib/tftpboot
+dhcp-match=set:legacy,option:client-arch,0
+dhcp-match=set:uefi,option:client-arch,7
+dhcp-boot=tag:legacy,pxelinux.0
+dhcp-boot=tag:uefi,grubx64.efi
+++++
+
+要是已經使用了其他提供相同服務的軟體，就必須停用 DNSmasq 之中的相關項目。
+
+==== iPXE
+PXE 應用需要開機韌體與網路卡韌體的同時支援，而對於達不到這項要求的系統，還可以利用混合本地與網路開機的替代方案。
+例如 iPXE 專案
+footnote:[iPXE - open source boot firmware <https://ipxe.org/>]
+就是藉由本地儲存裝置先載入精簡且特化的內核，包括網路卡與網路協定的驅動程式，
+由內核空間發出客戶端的請求，接著從各種網路服務（不限於 TFTP）連鎖載入開機檔案。
+
+需要的檔案可以從 `ipxe-bootimgs` 套件中取得，而較舊的套件可能會以 `gpxe` 或 `etherboot` 做為名稱。
+可以利用 `linux16 /usr/share/ipxe/ipxe.lkrn` 敘述，將它做為 GRUB 設定檔中的選項之一。
+或是利用標準的 `ipxe.iso` 燒錄成光碟開機後，按 kbd:[Ctrl-B] 進入 iPXE Shell 執行：
+--
+　　iPXE> *dhcp* +
+　　iPXE> *chain _http://192.168.0.1/ipxe/menu.ipxe_*
+--
+來讀取網路上的設定檔，進一步達到網路開機的效果。
+
+.menu.ipxe
+++++
+#!ipxe
+menu Selection
+item freedos FreeDOS
+item slitaz Slitaz Linux
+item fedora Fedora Linux
+item local Local Drive
+choose os && goto ${os}
+
+:freedos
+kernel memdisk bigraw fastboot
+initrd image/FD13BOOT.img
+boot
+
+:slitaz
+sanboot image/slitaz-rolling-core64.iso
+
+:fedora
+kernel linux/vmlinuz rw root=/dev/nfs nfsroot=192.168.0.1:/var/nfs/linux
+initrd linux/initramfs.img
+boot
+
+:local
+sanboot --no-describe --drive 0x80
+++++
+
+也可以依照套件中的說明，於**重製**(re-mastering) `ipxe.iso` 時內嵌自訂的設定檔，即可達到自動執行的效果。
+
+==== iVentoy
+iVentoy 專案
+footnote:[iVentoy: A new netboot solution <https://www.iventoy.com/>]
+提供免費的 PXE 伺服軟體。
+

@@ -1,10 +1,8 @@
-//include::config.adoc[]
-include::config1.adoc[]
+include::config.adoc[]
 
 :sectnums!:
 
 include::head/preface.adoc[]
-
 include::head/abstract.adoc[]
 
 toc::[]
@@ -12,54 +10,35 @@ toc::[]
 :sectnums:
 
 include::body/method.adoc[]
-
 include::body/whyfree.adoc[]
-
 include::body/software.adoc[]
-
 include::body/buildup.adoc[]
-
 include::body/environ.adoc[]
-
 include::body/bios.adoc[]
-
+include::body/pxe.adoc[]
 include::body/osinstall.adoc[]
-
+include::body/boot.adoc[]
+include::body/init.adoc[]
 include::body/commandline.adoc[]
-
 include::body/file-dir.adoc[]
-
 include::body/textfile.adoc[]
-
 include::body/swinstall.adoc[]
-
+include::body/chips.adoc[]
 include::body/bus.adoc[]
-
 include::body/input.adoc[]
-
 include::body/display.adoc[]
-
 include::body/network.adoc[]
-
 include::body/wireless.adoc[]
-
+include::body/server.adoc[]
 include::body/wakeup.adoc[]
-
 include::body/integration.adoc[]
 
 :sectnums!:
 
 include::tail/appendix.adoc[]
-
 include::tail/shortcuts.adoc[]
-
 include::tail/glossary.adoc[]
-
 include::tail/qanda.adoc[]
-
 include::tail/bibliography.adoc[]
-
 include::tail/index.adoc[]
-
 include::tail/colophon.adoc[]
-

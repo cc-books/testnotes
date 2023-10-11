@@ -3,6 +3,15 @@
 === PCI
 
 === USB
+**泛用序列匯流排**(USB, Universal Serial Bus) 是目前最流行的接頭型式，
+隨著規格不斷地擴充與演進，大有一統個人電腦周邊設備介面的趨勢。
+主要世代與相應的 GNU/Linux 驅動程式以及規格速度如下：
+
+[square]
+* USB 1.0: ohci 1.5Mbps
+* USB 1.1: ohci 12Mbps
+* USB 2.0: ehci 480Mbps
+* USB 3.0: xhci 5000Mbps
 
 ==== HID
 USB HID 介面的狀態有可能會受鍵盤的鎖定燈號影響：

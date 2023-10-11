@@ -145,7 +145,7 @@ NOTE: 透過瀏覽器下載時，檔案名稱可能會自動變更再儲存。
 　　root# *_./foobar-16.3.2-linux64.bin_*
 --
 安裝內容簡單的軟體，可能在執行完步驟後就直接結束命令；
-比較複雜的軟體，則會在過程中詢問一些選項。
+比較複雜的軟體，則會先將自己在暫存目錄中解開壓縮，並在執行過程中詢問一些安裝選項。
 
 如果安裝過程不順利，或是安裝完成後的結果不如預期
 （例如：軟體圖示沒有出現在系統選單上，或者直接執行命令沒有動作），
@@ -195,14 +195,15 @@ footnote:[例如筆者所建立的 RPM Sphere <https://rpmsphere.github.io/>]。
 依照打包格式的不同，常見的套件檔案名稱可能會以 `rpm` 或 `deb` 結尾。
 如果使用者先透過拷貝或下載而取得套件檔案，也可以不必連結套件庫就能進行套件的安裝或更新。
 
-在 RPM 與 DEB 兩種套件管理系統中，適用於套件庫與套件檔案的命令分別為 `dnf`, `rpm` 與 `apt`, `dpkg` 。
+在 RPM 套件管理系統中，用於套件庫與套件檔案的命令分別為 `dnf`, `rpm`，
+而用於 DEB 套件管理系統的命令，則分別為 `apt`, `dpkg` 。
+NOTE: `dnf` 命令的前身為 `yum`，而 `apt` 的前身為 `apt-get`。
 以下列出最常用的命令引數範例：
 
 [width="80%",options="header"]
 |=============================
 |套件格式|RPM|DEB
-|套件庫資訊更新|dnf 子命令 --refresh|apt update
-|套件更新|dnf update|apt upgrade
+|套件更新|dnf update|apt update; apt upgrade
 |套件資訊整理|dnf clean all|apt clean all
 |套件字串搜尋|dnf search __搜尋字串__|apt search __搜尋字串__
 |套件安裝|dnf install __套件名稱__|apt install __套件名稱__

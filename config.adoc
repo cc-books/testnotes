@@ -5,7 +5,7 @@
 :homepage: https://github.com/bluebat/book-testnotes
 :copyright: CC-BY-SA-4.0
 :doctype: book
-:doctitle: Linux 硬測筆記
+:doctitle: 電腦上跑 Linux: 硬體測試筆記
 :producer: 趙惟倫
 :creator: 趙惟倫
 :description: Linux 硬體相容性測試筆記
@@ -43,6 +43,7 @@
 :pdf-fontsdir: {docdir}/face
 :pdf-stylesdir: {docdir}/face
 :pdf-style: KaiGenGothicTW
+//:pdf-style: NotoSansCJKtc
 :pdf-page-size: B5
 :mathematical-format: svg
 
