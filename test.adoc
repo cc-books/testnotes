@@ -38,17 +38,32 @@ CAUTION: Caution
 
 IMPORTANT: Important
 
- 縮進一格
- 縮進一格
+ 縮進一格 <1>
+ 縮進一格 <2>
+
+[literal,indent=10]
+--
+Open Block 0 literal
+--
+
+[example,indent=10]
+--
+Open Block 0 example
+--
+
+[source,indent=10]
+--
+Open Block 0 source
+--
 
 ++++
-四個加號
-四個加號
+四個加號 <1>
+四個加號 <2>
 ++++
 
 ....
-四個句號
-四個句號
+四個句號 <1>
+四個句號 <2>
 ....    
 
 [width="80%",options="header"]

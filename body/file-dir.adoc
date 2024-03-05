@@ -40,12 +40,12 @@ Linux 使用**路徑**(path) 來指明檔案或目錄在檔案系統中的位置
 由於檔案系統階層是一個邏輯性的概念，因此有可能涵蓋了多個儲存分割區上的檔案系統，同時包括了作業階段才建立的虛擬目錄。
 
 在 Linux 檔案系統階層中，根目錄之下是一些屬於第一層的子目錄：
---
-　　user$ *ls -F /* +
-　　bin@   dev/  home/  lib64@  mnt/  proc/  run/   srv/  tmp/  var/ +
-　　boot/  etc/  lib@   media/  opt/  root/  sbin@  sys/  usr/
---
-即使不利用 `-F` 選項來為目錄名稱附上辨識符號，目前 Linux 系統預設的 `ls` 命令也會以顏色來區分不同類型的檔案或目錄名稱。
+====
+user$ *ls -F /* +
+bin@   dev/  home/  lib64@  mnt/  proc/  run/   srv/  tmp/  var/ +
+boot/  etc/  lib@   media/  opt/  root/  sbin@  sys/  usr/
+====
+即使不利用 `-F` 選項來為目錄與鏈結名稱附上辨識符號，目前 Linux 系統預設的 `ls` 命令也會以顏色來區分不同類型的檔案或目錄名稱。
 如果想看看檔案系統階層的模擬樹狀結構，外部命令 `tree` 就可以滿足這個需求。
 以下粗略地將其分為三類來介紹：系統目錄、個人目錄、虛擬目錄。
 
@@ -60,9 +60,9 @@ Linux 使用**路徑**(path) 來指明檔案或目錄在檔案系統中的位置
 
 `sbin`, `bin`, `lib`, `lib64` 等目錄名稱在 `/usr` 路徑下會再次出現，這是由於傳統大型主機將 `/usr` 做為獨立分割區的掛載點，甚至會使用網路檔案系統來掛載。
 一些開機時期非必要、一般使用者才會用到的程式與函式庫，就被放到了 `/usr` 之下相對應的子目錄中。
-但是經過了在個人電腦上的演變影響，分離掛載的 `/usr` 路徑已無太大的實用性。
+但是經過了在個人電腦上的演變影響，分離掛載的 `/usr` 路徑已無太大的實用性，甚至還出現了合併 `sbin` 與 `bin` 兩個目錄的提議。
 因此目前較流行的做法，是維持 `/` 與 `/usr` 在同一個分割區中，避免直接引用根目錄之下的前述四個目錄，
-並將它們做為 `/usr` 路徑下同名目錄的軟式鏈結，以維持與傳統軟體的相容性。
+並將它們做為 `/usr` 路徑下同名目錄的軟式鏈結（參閱本章稍後的〈檔案屬性〉），以維持與傳統軟體的相容性。
 
 由此可知 `/usr` 是檔案系統階層中最主要的分支，除了命令程式與函式庫之外，
 還包括像是 `/usr/include` 之下的軟體開發標頭檔案(header files)，以及存放了各類資料檔案的 `/usr/share` 路徑。
@@ -115,27 +115,27 @@ NOTE: 每種裝置都有各自獨特的命名規則與初始編號數字。
 多數的檔案都支援**魔術字元**(magic number) 的自我標識，也就是以檔案開頭的固定位置、固定個數字元來標識類型。
 其他軟體也是依靠這個方法，識別收到的資料是否屬於可以處理的對象。
 文字模式的 `file` 工具程式，除了利用這個特性之外，還會配合解析檔案內容，讓使用者能夠初步識別某個檔案的類型。
---
-　　user$ *echo _測試資料_ | gzip -c > foobar.unknown* +
-　　user$ *file _foobar.unknown_* +
-　　foobar.unknown: gzip compressed data, from Unix, truncated +
-　　user$ *file _/usr/bin/file_* +
-　　/usr/bin/file: ELF 64-bit LSB pie executable, x86-64, ...
---
+====
+user$ *echo _測試資料_ | gzip -c > foobar.unknown* +
+user$ *file _foobar.unknown_* +
+foobar.unknown: gzip compressed data, from Unix, truncated +
+user$ *file _/usr/bin/file_* +
+/usr/bin/file: ELF 64-bit LSB pie executable, x86-64, ...
+====
 
 === 檔案屬性
 每個檔案除了本身的名稱以及在檔案系統階層中所處的位置以外，還具備了一些**屬性**(attribute)。
 利用後面小節〈相關命令：目錄操作〉中提到的 `ls` 命令，能夠列出檔案或目錄的屬性：
---
-　　user$ *ls -la _$HOME_* +
-　　總用量 24
-　　drwx------ 3 user   user   4096  4月 16 12:58 . +
-　　drwxr-xr-x 4 root   root   4096  4月 16 12:58 .. +
-　　-rw-r--r-- 1 user   user     18  9月 27  2022 .bash_logout +
-　　-rw-r--r-- 1 user   user    141  9月 27  2022 .bash_profile +
-　　-rw-r--r-- 1 user   user    492  9月 27  2022 .bashrc +
-　　drwxr-xr-x 4 user   user   4096  7月 23  2021 .mozilla
---
+====
+user$ *ls -la _$HOME_* +
+總用量 24
+drwx------ 3 user   user   4096  4月 16 12:58 . +
+drwxr-xr-x 4 root   root   4096  4月 16 12:58 .. +
+-rw-r--r-- 1 user   user     18  9月 27  2022 .bash_logout +
+-rw-r--r-- 1 user   user    141  9月 27  2022 .bash_profile +
+-rw-r--r-- 1 user   user    492  9月 27  2022 .bashrc +
+drwxr-xr-x 4 user   user   4096  7月 23  2021 .mozilla
+====
 列出的資料如果以空格區隔，可以分為 9 欄，依次為：
 屬性字串、鏈結數量、擁有使用者、擁有群組、資料大小、修改月分、修改日號、修改年分、名稱。
 
@@ -157,16 +157,16 @@ NOTE: 每種裝置都有各自獨特的命名規則與初始編號數字。
 衹有檔案或目錄的擁有者或是超級使用者，被允許利用 `chmod`(change mode) 命令來修改屬性字串。
 `chmod` 的第一個參數是讀寫屬性的設定值，可以接受權限代號或者八進制數字模式之一，而第二個之後的參數則為想要改變的檔案或目錄名稱。
 最常使用的 `chmod` 命令選項是 `-R`(recursive) ，表示遞迴進入參數中的目錄以設定屬性。
---
-　　root# *ll _file.ext_* +
-　　-rwxrwxrwx 1 user   user   3628  5月 14  2023 file.ext +
-　　root# *chmod 644 _file.ext_* +
-　　root# *ll _file.ext_* +
-　　-rw-r--r-- 1 user   user   3628  5月 14  2023 file.ext +
-　　root# *chmod +x _file.ext_* +
-　　root# *ll _file.ext_* +
-　　-rwxr-xr-x 1 user   user   3628  5月 14  2023 file.ext
---
+====
+root# *ll _file.ext_* +
+-rwxrwxrwx 1 user   user   3628  5月 14  2023 file.ext +
+root# *chmod 644 _file.ext_* +
+root# *ll _file.ext_* +
+-rw-r--r-- 1 user   user   3628  5月 14  2023 file.ext +
+root# *chmod +x _file.ext_* +
+root# *ll _file.ext_* +
+-rwxr-xr-x 1 user   user   3628  5月 14  2023 file.ext
+====
 
 ==== 鏈結與大小
 **軟式鏈結**(soft/symbolic link) 類似其他作業系統中的捷徑，是僅有一條內容的檔案，註記著建立鏈結的目標檔案或目錄位置。
@@ -188,13 +188,13 @@ NOTE: 每種裝置都有各自獨特的命名規則與初始編號數字。
 變更檔案或目錄的擁有權則需要透過 `chown`(change ownership)，同樣衹允許擁有者或超級使用者執行命令。
 第一個參數是擁有權的設定值，由新的擁有者與擁有群組以冒號相連而成，而第二個之後的參數則為想要改變的檔案或目錄名稱。
 `chown` 最常使用的命令選項是 `-R`(recursive) ，表示遞迴進入參數中的目錄以設定擁有權。
---
-　　root# *ll _file.ext_* +
-　　-rwxr-xr-x 1 user   user   3628  5月 14  2023 file.ext +
-　　root# *chown root:root _file.ext_* +
-　　root# *ll _file.ext_* +
-　　-rwxr-xr-x 1 root   root   3628  5月 14  2023 file.ext
---
+====
+root# *ll _file.ext_* +
+-rwxr-xr-x 1 user   user   3628  5月 14  2023 file.ext +
+root# *chown root:root _file.ext_* +
+root# *ll _file.ext_* +
+-rwxr-xr-x 1 root   root   3628  5月 14  2023 file.ext
+====
 
 ==== 修改日期
 屬性資料以第 6, 7, 8 欄，來顯示檔案或目錄的最近一次修改時間(change time)。
@@ -205,7 +205,7 @@ NOTE: 每種裝置都有各自獨特的命名規則與初始編號數字。
 假如工作目錄中不存在 `_file.ext_` 檔案，那麼在工作目錄中執行 `touch _file.ext_` 指令，就會建立一個名為 `_file.ext_` 的空檔案。
 而檔案的三項時間資訊，則會一致設為目前的時間。
 
-==== 名稱
+==== 檔案名稱
 Linux 的檔案名稱長度一般不能超過 255 個字元。由於一個常用漢字在 UTF-8 編碼中，相當於以 3 個字元來表示，
 因此檔案名稱長度的限制，會小於或等於 85 個漢字。
 
@@ -227,12 +227,12 @@ Linux 的檔案名稱長度一般不能超過 255 個字元。由於一個常用
 既有檔案系統中的任何一個空目錄，都可以做為**掛載點**(mount point) 來使用。
 就好像在一段光秃秃的枝條上，再嫁接上一叢外部的枝葉。
 掛載與取消掛載的外部命令分別是 `mount` 與 `umount` ：
---
-　　root# *mkdir -p _/opt/data_* +
-　　root# *mount _/dev/sdb1 /opt/data_* +
-　　root# *cp -a _/root/data/\* /opt/data_* +
-　　root# *umount /opt/data*
---
+====
+root# *mkdir -p _/opt/data_* +
+root# *mount _/dev/sdb1 /opt/data_* +
+root# *cp -a _/root/data/\* /opt/data_* +
+root# *umount /opt/data*
+====
 NOTE: `umount` 命令的拼法需要特別注意。
 
 有些輸出中含有（檔案、目錄、分割區）容量大小的命令，如果加上了 `-h` 選項，
@@ -240,26 +240,26 @@ NOTE: `umount` 命令的拼法需要特別注意。
 這會將與位元組數量有關的數值，以 1024 的倍數單位呈現。
 
 如果想要知道檔案系統的大致情況，最常用的是外部命令 `df`(disk freespace)。
---
-　　user$ *df -h* +
-　　檔案系統	     容量   已用   可用  已用% 掛載點 +
-　　devtmpfs        4.0M     0  4.0M    0% /dev +
-　　tmpfs            16G     0   16G    0% /dev/shm +
-　　tmpfs           6.3G  1.5M  6.3G    1% /run +
-　　/dev/sda2        77G   61G   12G   84% / +
-　　tmpfs            16G  4.0K   16G    1% /tmp +
-　　/dev/sda1       599M   33M  567M    6% /boot/efi +
-　　tmpfs           3.2G   56K  3.2G    1% /run/user/0
---
+====
+user$ *df -h* +
+檔案系統	     容量   已用   可用  已用% 掛載點 +
+devtmpfs        4.0M     0  4.0M    0% /dev +
+tmpfs            16G     0   16G    0% /dev/shm +
+tmpfs           6.3G  1.5M  6.3G    1% /run +
+/dev/sda2        77G   61G   12G   84% / +
+tmpfs            16G  4.0K   16G    1% /tmp +
+/dev/sda1       599M   33M  567M    6% /boot/efi +
+tmpfs           3.2G   56K  3.2G    1% /run/user/0
+====
 
 至於個別目錄分支所佔用的儲存容量，可以利用外部命令 `du`(disk usage)，搭配適當的引數獲得：
---
-　　user$ *du -hs $HOME/\*/* +
-　　166M	/home/user/bin/ +
-　　4.0K	/home/user/Desktop/ +
-　　1.5G	/home/user/Documents/ +
-　　925M	/home/user/Downloads/
---
+====
+user$ *du -hs $HOME/\*/* +
+166M	/home/user/bin/ +
+4.0K	/home/user/Desktop/ +
+1.5G	/home/user/Documents/ +
+925M	/home/user/Downloads/
+====
 
 ==== 目錄操作
 列出目錄內容的內部命令 `ls`(list) 是最常用的命令殼動作。
@@ -302,10 +302,10 @@ NOTE: `umount` 命令的拼法需要特別注意。
 搜尋檔案或目錄主要有兩種方法：使用 `locate` 或是 `find` 外部命令。
 執行 `locate` 命令前，需要先以超級使用者身分執行過 `updatedb` ，這會建立一個檔案系統階層的名稱資料庫，然後就可以利用 `locate` 加上部分名稱字串做為參數進行搜尋。
 `find` 命令則是採取比較直接的方式，從使用者指定的目錄開始，比對以下層級的所有檔案或目錄，並依據指令中的條件過濾出顯示的結果。
---
-　　user$ *sudo updatedb* +
-　　user$ *locate _r8169_* +
-　　/usr/lib/modules/6.2.14/kernel/drivers/net/ethernet/realtek/r8169.ko.xz +
-　　user$ *find _/usr/lib/modules_ -name _r8169.ko.xz_* +
-　　/usr/lib/modules/6.2.14/kernel/drivers/net/ethernet/realtek/r8169.ko.xz
---
+====
+user$ *sudo updatedb* +
+user$ *locate _r8169_* +
+/usr/lib/modules/6.2.14/kernel/drivers/net/ethernet/realtek/r8169.ko.xz +
+user$ *find _/usr/lib/modules_ -name _r8169.ko.xz_* +
+/usr/lib/modules/6.2.14/kernel/drivers/net/ethernet/realtek/r8169.ko.xz
+====

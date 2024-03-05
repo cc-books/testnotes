@@ -8,9 +8,9 @@ footnote:[「六十四基底」編碼於維基百科的說明 <https://zh.wikipe
 編碼過的筆者電子郵件信箱地址：
 
 .email.b64
-++++
+....
 Ymx1ZWJhdEBtZW1iZXIuZnNmLm9yZwo=
-++++
+....
 
 === 文字檔類型
 如果依照廣義的說法，所謂的文字檔就是：檔案內容需要符合某種字元集的編碼規範，而解碼後所得到的，都是畫面可顯示、使用者可讀的文字。
@@ -39,16 +39,16 @@ Linux 中許多類型的檔案，都是以文字的格式呈現，
 但是要注意隨著導向符號的不同，會造成內容被覆蓋或是附加的結果。
 使用外部命令 `cat`(concatenate) ，可以顯示參數中的檔案內容（也就是輸出到終端機視窗中）。
 萬一檔案內容太多，導致前面的資料來不及看清楚，還可以使用 `more` 或 `less` 讓輸出成為分頁的模式。
---
-　　user$ *echo _初始的內容_ > _file.txt_* +
-　　user$ *echo _覆蓋的內容_ > _file.txt_* +
-　　user$ *cat _file.txt_* +
-　　覆蓋的內容 +
-　　user$ *echo _新增的內容_ >> _file.txt_* +
-　　user$ *cat _file.txt_* +
-　　覆蓋的內容 +
-　　新增的內容
---
+====
+user$ *echo _初始的內容_ > _file.txt_* +
+user$ *echo _覆蓋的內容_ > _file.txt_* +
+user$ *cat _file.txt_* +
+覆蓋的內容 +
+user$ *echo _新增的內容_ >> _file.txt_* +
+user$ *cat _file.txt_* +
+覆蓋的內容 +
+新增的內容
+====
 
 ==== 簡單編輯
 習慣上，**文字編輯軟體**的功能僅限於處理純文字格式，而**文書處理軟體**則用來產生比較複雜的正式文件。
@@ -60,20 +60,24 @@ Linux 中許多類型的檔案，都是以文字的格式呈現，
 將檔名做為參數來打開有相容問題的文字檔時，每種文字編輯器的表現也可能不盡相同。
 以〈文字檔：文字檔類型〉中所提到含有 BOM 的 DOS 換列格式為例，就有可能看到以下的編輯畫面：
 
-[subs="+macros"]
-----
+.file.txt
+....
 pass:[<u><FEFF></u>]覆蓋的內容 pass:[<u>M</u>]
+[.underline]#<FEFF>#覆蓋的內容 [.underline]#M#
+[underline]#<FEFF>#覆蓋的內容 [underline]#M#
+pass:[<FEFF>]覆蓋的內容 pass:[M]
++++<FEFF>+++覆蓋的內容 +++M+++
 新增的內容 pass:[<u>M</u>]
-----
+....
 應該足以提醒使用者要注意，進而採取適當的處理方式：
---
-　　user$ *file _file.txt_* +
-　　file.txt: Unicode text, UTF-8 (with BOM) text, with CRLF line terminators +
-　　user$ *dos2unix _file.txt_* +
-　　dos2unix: 正在轉換 file.txt 至 Unix 格式… +
-　　user$ *file _file.txt_* +
-　　file.txt: Unicode text, UTF-8 text
---
+====
+user$ *file _file.txt_* +
+file.txt: Unicode text, UTF-8 (with BOM) text, with CRLF line terminators +
+user$ *dos2unix _file.txt_* +
+dos2unix: 正在轉換 file.txt 至 Unix 格式… +
+user$ *file _file.txt_* +
+file.txt: Unicode text, UTF-8 text
+====
 
 在圖形環境中，可以選擇的文字編輯軟體就更多了，而文書處理軟體也都有匯入與匯出文字檔的功能。
 值得一提的是，不論使用滑鼠雙擊或拖曳將一段文字反白之後，在 Linux 環境中直接按下滑鼠滾輪鍵，
@@ -97,7 +101,7 @@ pass:[<u><FEFF></u>]覆蓋的內容 pass:[<u>M</u>]
 如果需要混合使用多個工具，實務上會利用管線符號(|) 將命令組合起來，甚至會寫成一個簡單的命令稿。
 （雖然在試驗階段可能還是需要將個別命令分開執行，才能確認中間產生的臨時檔案內容無誤。）
 
-=== 標記語言
+=== 標記語言檔
 最簡單也是最常見的文字內容格式，是以列為單位的**序列化**(serialization) 輸出。
 如果想要表現更有組織性的內容，可以按照**標記語言**(markup language) 的規範來達成。
 
@@ -107,55 +111,55 @@ pass:[<u><FEFF></u>]覆蓋的內容 pass:[<u>M</u>]
 以下嘗試幾種頁描述類型的標記語言，來顯示類似的文件格式內容：
 
 .article.html
-++++
+....
 <ul>
   <li><em>項目一</em>：內容一。</li>
   <li><em>項目二</em>：內容二。</li>
 </ul>
-++++
+....
 
 .article.md
-++++
+....
 - *項目一*：內容一。
 - *項目二*：內容二。
-++++
+....
 
 .article.adoc
-++++
+....
 * __項目一__：內容一。
 * __項目二__：內容二。
-++++
+....
 
 .article.tex
-++++
+....
 \begin{itemize}
   \item \emph{項目一}：內容一。
   \item \emph{項目二}：內容二。
 \end{itemize}
-++++
+....
 
 ==== 資料集合
 有非常多的標記語言可以用做資料集合，以下利用幾種常見的格式來表示相同的記錄內容：
 
 .data.csv
-++++
+....
 類別,項目,數值
 類別一,項目一,數值一
 類別一,項目二,數值二
 類別二,項目一,數值三
-++++
+....
 
 .data.conf
-++++
+....
 [類別一]
 項目一=數值一
 項目二=數值二
 [類別二]
 項目一=數值三
-++++
+....
 
 .data.xml
-++++
+....
 <類別一>
   <項目一>數值一</項目一>
   <項目二>數值二</項目二>
@@ -163,10 +167,10 @@ pass:[<u><FEFF></u>]覆蓋的內容 pass:[<u>M</u>]
 <類別二>
   <項目一>數值三</項目一>
 </類別二>
-++++
+....
 
 .data.json
-++++
+....
 {
   類別一:
   {
@@ -178,7 +182,7 @@ pass:[<u><FEFF></u>]覆蓋的內容 pass:[<u>M</u>]
     "項目一": "數值三"
   }
 }
-++++
+....
 
 ==== 多媒體
 雖然有些文字格式所用的標記語言語法複雜，而且檔案所佔空間較大，並不適合直接編輯，
@@ -187,7 +191,7 @@ pass:[<u><FEFF></u>]覆蓋的內容 pass:[<u>M</u>]
 這種情況在多媒體應用上尤其顯著，讀者可以自行參考做為像素圖形的 XPM 格式、向量圖形的 SVG 格式，
 以及聲音效果的 ABC 格式。
 
-=== 程式語言
+=== 程式語言檔
 程式是多個電腦語言指令組成的集合，通常是由機器語言編碼組成的二進位格式，可以直接交給處理器執行；
 也可能是由程式語言敘述組成的文字格式，或是由**位元碼**(bytecode) 組成的中介代碼格式，
 必須透過其他的**解譯器**(interpreter) 或**虛擬機**(process virtual machine) 間接執行，
@@ -197,7 +201,7 @@ pass:[<u><FEFF></u>]覆蓋的內容 pass:[<u>M</u>]
 下面是一個以 Python 指令稿語言編寫的九九乘法表程式，先利用文字編輯器將它輸入到檔案：
 
 .mt9x9.py
-++++
+....
 #!/usr/bin/python3
 for i in range(1, 10, 3):
     for j in range(1, 10):
@@ -205,7 +209,7 @@ for i in range(1, 10, 3):
             print(f"{k}x{j}={k*j:2}", end='\t')
         print(end='\n')
     print()
-++++
+....
 
 就能藉由輸入 `python3 mt9x9.py` 指令，來呼叫 `python3` 程式去解譯並執行這個指令稿。
 也可以先用 `chmod +x mt9x9.py` 指令將其屬性設定為可執行之後，再輸入 `./mt9x9.py` 來執行它。
@@ -215,7 +219,7 @@ for i in range(1, 10, 3):
 做為對照的 C 程式語言，先將以下內容存入檔案：
 
 .mt9x9.c
-++++
+....
 #include <stdio.h>
 int main(int argc, char *argv[]) {
     int i, j, k;
@@ -228,21 +232,21 @@ int main(int argc, char *argv[]) {
         putchar(10);
     }
 }
-++++
+....
 
 然後呼叫 C 的編譯程式 `gcc` （如果系統中不存在此外部命令，則需要先安裝好相關套件），將它編譯為二進位格式的機器語言檔案。
 如果順利的話，就會產生已經帶有可執行屬性的 `mt9x9` 檔案，可以直接輸入 `./mt9x9` 來執行它：
---
-　　user$ *gcc _mt9x9.c_ -o _mt9x9_* +
-　　user$ *_./mt9x9_*
---
+====
+user$ *gcc _mt9x9.c_ -o _mt9x9_* +
+user$ *_./mt9x9_*
+====
 程式語言衹是一種規範，有多種可能的方式能讓它實際運作。
 常用的 C 編譯程式並非衹有一種，還可以使用 `clang` 做為替代方案之一。
 這裡的 `gcc` 或 `clang` 其實衹是**編譯器**(compiler) 代表，與**組譯器**(assembler)、**鏈結器**(linker)…等元件，共同組成一套複雜的**工具鏈**(toolchain)。
 
 某種程式語言寫成的檔案是否需要經過編譯，或是解譯後即可執行，其實並不具有絕對的關係。
 如果能找到適當的 C 語言解譯程式
-footnote:[Tiny C Compiler <http://bellard.org/tcc/> 加上 -run 選項]，
+footnote:[Tiny C Compiler <http://bellard.org/tcc> 加上 -run 選項]，
 就可以不經編譯而直接解譯後執行 `mt9x9.c` 檔案。
-有興趣的讀者，可以參考其他程式語言輸出相同結果的實作
-footnote:[Multiplication Table in Various Programming Languages <https://github.com/bluebat/mt9x9/>]。
+有興趣的讀者，可以看看其他程式語言輸出相同結果的實作
+footnote:[Multiplication Table in Various Programming Languages <https://github.com/bluebat/mt9x9>]。
