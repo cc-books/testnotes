@@ -188,7 +188,7 @@ root# *$EDITOR /boot/extlinux/linux.conf*
 萬一要使用舊的參數（例如 `vga=`），可能還要搭配 `linux16` 來代替 `linux` 指令。
 
 載入指令後方參數標明內核檔案所在的路徑，是相對於之前 GRUB 指令 `set root=` 所設定的基準位置。
-接下來就是傳給內核的**內核參數**(kernel parameter)，有時也會全部移到可選的 `options` 指令後方。
+接下來就是傳給內核的**內核參數**(kernel parameter)，或是稱為**內核密技碼**(kernel cheatcode)，有時也會全部移到可選的 `options` 指令後方。
 如果遇到了 `--` 參數，則表示之後的參數即使以 `-` 開頭，也會被視為完整的參數而非選項。
 
 內核載入系統的過程可以分為幾個階段：
@@ -235,6 +235,14 @@ root# *$EDITOR /boot/extlinux/linux.conf*
 `lsmod` 命令會列出目前系統中已載入的外掛模組，也可以查看 `/proc/modules` 檔案的內容。
 開機時如果未載入某個驅動程式，可利用 `modinfo` 命令加上模組名稱做為參數，來確認該模組支援的裝置代號是否列出。
 
+內核模組與其參數名稱的組合，也可以視為一種內核參數來使用，因此能夠透過開機管理程式進行設定。
+在系統執行時期，用來動態載入或卸載外掛內核模組的命令是 `modprobe` ，它的參數可以做為內核模組的參數賦值。
+如果額外想要在內核啟動時期一併載入與設定的話，分別要在目錄 `/etc/modules-load.d/` 與 `/etc/modprobe.d/` 中建立相應的設定檔案。
+
+模組的**黑名單**(black list) 代表在載入模組的過程中，必須被刻意排除的模組名稱。
+可以經由內核參數 `modprobe.blacklist=` 或 `rdblacklist=` 來設定，而後者僅於記憶體檔案系統中有作用，
+需要加上 `/usr/lib/modprobe.d/` 目錄中檔案內容的黑名單設定，才能相當於前者的效果。
+
 有些模組於載入時，還需要參照額外的模組韌體。
 雖然也叫做「韌體」，卻與系統韌體不同，而是由裝置製造商發布的二進制檔案，包括了不想公開放在模組中的程式與設定。
 產生記憶體檔案系統時，如果出現缺少特定模組韌體的訊息，表示內核已更新至可以偵測到新裝置的版本，而模組韌體的版本並未跟上。
@@ -247,12 +255,15 @@ root# *$EDITOR /boot/extlinux/linux.conf*
 
 執行中的系統可以經由 `uname -r` 命令取得內核版本，如果要確認目前的內核參數，可以查看 `/proc/cmdline` 的內容。
 NOTE: Ubuntu Linux 並不完全照用基底的內核版本，實際的版本可見 `/proc/version_signature` 的內容。
-如果想要變更內核參數，可用 `sysctl` 命令，例如 `sysctl -w kernel.sysrq=1` 可於系統當掉時按下 kbd:[Alt - SysRq - R] 取得控制權。
-`sysctl -a` 以及 `/proc/sys/kernel/` 可用於顯示部分內核參數值，而 `gunzip -c /proc/config.gz` 可顯示目前內核組建時設定。
-特定內核模組的當前參數值，可以利用 `sysfsutils` 套件中的 `systool` 命令取得。
 
-內核初始化時會將偵測到的各項資訊記錄在 `/sys/kernel/debug/`，而各個項目的實際數值，
-有可能於執行時期動態變更，或是於裝置重置之後重新偵測。
+如果想要變更內核參數，可用 `sysctl` 命令，例如 `sysctl -w kernel.sysrq=1` 可於系統宕掉時按下 kbd:[Alt - SysRq - R] 取得控制權。
+`sysctl -a` 以及 `/proc/sys/kernel/` 可用於顯示部分內核參數值，而 `gunzip -c /proc/config.gz` 可顯示目前內核組建時設定。
+部分內核模組的當前參數值，允許利用 `sysfsutils` 套件中的 `systool` 命令取得。
+`sysctl` 命令可以暫時變更部分的內核模組參數值，嘗試確認後則需要建立 `/etc/sysctl.d/` 中的設定檔才能保持下去。
+
+
+內核初始化時，會將偵測到的各項資訊記錄在 `/sys/kernel/debug/` ，而內核參數 `loglevel=0` 可以取消印出部分的錯誤訊息。
+各個項目的實際數值，有可能於執行時期動態變更，或是於裝置重置之後重新偵測。
 
 如果散佈版未自動建立 pty 而需要手動建立時：
 ====
@@ -267,4 +278,9 @@ root# *mount -o remount,rw /sysroot* +
 root# *chroot /sysroot* +
 root# *passwd*
 ====
-可能還需要 `restorecon -v /etc/shadow ; setenforce 1` 以重置 SELinux。
+可能還需要以下的指令來重置 SELinux：
+====
+root# *restorecon -v /etc/shadow* +
+root# *setenforce 1* +
+root# *touch /.autorelabel*
+====

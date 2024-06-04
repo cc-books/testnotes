@@ -69,6 +69,9 @@ vertical_rhythm: $base_line_height_length
 horizontal_rhythm: $base_line_height_length
 link:
   font_color: 428bca
+mark:
+  font_color: ffffff
+  background_color: 000000
 # literal is currently used for inline monospaced in prose and table cells
 literal:
   font_color: b12146

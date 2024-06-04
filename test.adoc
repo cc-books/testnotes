@@ -10,6 +10,7 @@ A **paragraph** followed by a _simple_ list with #square bullets#.
 * 測試__中文斜體字__
 * 測試 [underline]#文字加底線#
 * 測試 [line-through]#刪除線#
+* 測試 #改變顏色#
 
 IMPORTANT: `[underline]` 和 `[line-through]` 前面必須有一個空格，否則無效。
 
@@ -38,33 +39,41 @@ CAUTION: Caution
 
 IMPORTANT: Important
 
+ 縮進一格 [underline]#底線#
  縮進一格 <1>
- 縮進一格 <2>
 
 [literal,indent=10]
 --
-Open Block 0 literal
+兩個減號
+Open Block -10 [underline]#底線# literal
 --
 
 [example,indent=10]
 --
-Open Block 0 example
+兩個減號 +
+Open Block -10 [underline]#底線# example
 --
 
 [source,indent=10]
 --
-Open Block 0 source
+兩個減號
+Open Block -10 [underline]#底線# source
 --
 
 ++++
-四個加號 <1>
-四個加號 <2>
+四個加號 [underline]#底線#
+四個加號 <u>底線</u>
 ++++
 
 ....
+四個句號 [underline]#底線#
 四個句號 <1>
-四個句號 <2>
 ....    
+
+====
+四個等號 [underline]#底線# +
+四個等號 <1>
+====
 
 [width="80%",options="header"]
 |===============================================

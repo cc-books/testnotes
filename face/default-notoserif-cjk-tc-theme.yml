@@ -10,17 +10,17 @@ font:
       italic: LiberationMono-Italic.ttf
       bold_italic: LiberationMono-BoldItalic.ttf
     Noto Serif CJK TC:
-      normal: notoserif-cjk-tc-normal.ttf
-      bold: notoserif-cjk-tc-bold.ttf
-      italic: notoserif-cjk-tc-italic.ttf
-      bold_italic: notoserif-cjk-tc-bold_italic.ttf
+      normal: NotoSerifCJKtc-Normal.ttf
+      bold: NotoSerifCJKtc-Bold.ttf
+      italic: NotoSerifCJKtc-Italic.ttf
+      bold_italic: NotoSerifCJKtc-BoldItalic.ttf
     # Empty zero
-    Noto Sans Mono:
+    Noto Sans Mono CJK TC:
       normal: NotoSansMonoCJKtc-Regular.ttf
       bold: NotoSansMonoCJKtc-Bold.ttf
       italic: NotoSansMonoCJKtc-Italic.ttf
       bold_italic: NotoSansMonoCJKtc-BoldItalic.ttf
-  fallbacks: [Noto Sans Mono]
+  fallbacks: [Noto Sans Mono CJK TC]
 page:
   background_color: FFFFFF
   layout: portrait
@@ -243,7 +243,7 @@ example:
   border_radius: $base_border_radius
   # border_width: 0.75
   border_width: 0
-  font_family: Liberation Mono
+  font_family: $codespan_font_family
   # ORIGIN
   # background_color: $page_background_color
   # 20221002 KaiGenGothicTW ADD  

@@ -3,8 +3,9 @@
 
 === CPU
 *CPU*(中央處理器) 無疑是整個電腦系統中最重要的元件。
-今日的 CPU 早已不是單純的處理單元，尤其在嵌入式的 *SoC*(單晶片系統) 之內，涵括了浮點運算、繪圖處理的功能，
-加入了記憶體、匯流排介面等模塊，甚至還封裝了多重的處理器核心。
+今日的 CPU 早已不是單純的一顆處理晶片，除了封裝多重的處理器核心以外，
+還涵括了**浮點處理單元**(FPU)、**繪圖處理單元**(GPU)，甚至未來**神經處理單元**(NPU) 的功能。
+而在嵌入式的 *SoC*(單晶片系統) 中，又包入了記憶體、匯流排介面等模塊。
 
 ==== 基本資訊
 基本的命令是 `lscpu` ，它會提取 `/proc/cpuinfo` 中的資訊來顯示，其中比較特別的項目說明如下：
@@ -38,7 +39,7 @@
 如果開機過程中斷或是偵測不到外接裝置，可以試試加入內核參數 `intel_pstate=disable` 以改回傳統的 `acpi-cpufreq` 模式。
 
 === 晶片裝置
-晶片製程的演進: MOSFET, FinFET, FD-SOI, CFETS。
+晶片製程的演進: MOSFET, FinFET(鰭式場效), FD-SOI(環繞閘極), CFETS(互補場效)。
 
 ==== RTC
 *RTC*(實時時鐘) 通常共存於儲存系統韌體使用者設定值的晶片中，並從中讀寫日期與時間的資料。
@@ -51,7 +52,17 @@
 *EC*(嵌入控制器) 普遍存在於筆記型電腦中，用以統合周邊設備。
 它有自己的韌體，常常與系統韌體連動更新。
 關機狀態下，EC 用來偵測電源按鍵以通知系統開啟電源。
-EC 於部分系統還負責鍵盤控制與風扇，與南橋之間是以 LPC 匯流排相連。
+EC 於部分系統還負責鍵盤控制、指示燈與風扇，與南橋之間是以 LPC 匯流排相連。
+
+系統必要時可以透過 `ec_sys` 內核模組，來讀取 EC 的設定值。
+有些散佈版出於安全的考量，並未將其內建在標準組建的內核中，或是沒有啟用自動載入。
+若要即時變更設定值，必須在內核模組設定檔案內開啟可寫的選項：
+
+./etc/modprobe.d/ec_sys.conf
+....
+options ec_sys write_support=1
+....
+如此就能透過 `/sys/kernel/debug/ec/ec0/io` 虛擬檔案的內容來存取設定值。
 
 ==== TPM
 *TPM*(信賴平臺模組) 是安全密碼的處理裝置。
@@ -85,6 +96,7 @@ Swap:          4.0Gi          0B       4.0Gi
 
 有時候增加系統記憶體反而造成無法開機，也許是 BIOS 開機模式對特定系統的記憶體分配不正確，
 或是與 32 位元作業系統分配給顯示的後段記憶體有關，可以嘗試用內核參數 `mem=` 來限制記憶體容量。
+如果以 `mem_encrypt=on` 內核參數啟用了記憶體的加密功能，也有可能因此造成初始化其他裝置時宕機。
 
 === 匯流排
 **匯流排**(bus) 是指主機板上的一組線路，用於連接多個晶片或埠口。
@@ -172,7 +184,7 @@ root# *echo -n '_01 01 CA 60 00 03 A9_' | xxd -r -p > /dev/_ttyUSB0_*
 *SPI*(序列周邊介面) 由四條線路組成的簡單傳輸匯流排，與 I^2^C 均常見於嵌入式系統。
 
 === 輸入輸出介面
-用來連接外部輸入或輸出裝置的埠口或插槽。
+用來連接外部輸入或輸出裝置的接頭或插槽。
 
 ==== PS/2
 
@@ -184,16 +196,17 @@ root# *echo -n '_01 01 CA 60 00 03 A9_' | xxd -r -p > /dev/_ttyUSB0_*
 
 ==== GPIO
 內核於系統初始化時，如果偵測到 *GPIO*(通用型輸入輸出) 就會產生 `/dev/gpiochip0` 的對應裝置，裝置的資訊則可以從 `/sys/kernel/debug/gpio/` 中得到。
-
-利用 `/sys/class/gpio/` 來初始化與使用 GPIO 的範例：
-====
-root# *echo _5_ > /sys/class/gpio/export* +
-root# *echo in > /sys/class/gpio/_gpio5_/direction* +
-root# *echo out > /sys/class/gpio/_gpio5_/direction* +
-root# *echo 1 > /sys/class/gpio/_gpio5_/value* +
-root# *echo _5_ > /sys/class/gpio/unexport*
-====
 安裝 `libgpiod-utils` 套件（或者名為 `gpiod` ）後，就可以使用其中的 `gpioinfo`, `gpiodetect`, `gpioget`, `gpioset` 等工具程式。
+
+或是利用舊式的 `/sys/class/gpio/` 介面來初始化與使用 GPIO：
+（範例中的腳位編號需要以公式計算出來）
+====
+root# *echo _42_ > /sys/class/gpio/export* +
+root# *echo in > /sys/class/gpio/_gpio42_/direction* +
+root# *echo out > /sys/class/gpio/_gpio42_/direction* +
+root# *echo 1 > /sys/class/gpio/_gpio42_/value* +
+root# *echo _42_ > /sys/class/gpio/unexport*
+====
 
 ==== SDIO
 *SD*(安全數位卡) 是用來取代 *MMC*(多媒體記憶卡) 的標準，而以 SD 介面來連接外部裝置的應用稱之為 *SDIO* 。

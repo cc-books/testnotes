@@ -6,7 +6,7 @@ toc::[]
 
 //include::head/dedication.adoc[]
 
-include::head/preface.adoc[]
+//include::head/preface.adoc[]
 
 include::head/abstract.adoc[]
 
@@ -41,6 +41,8 @@ include::body/chips.adoc[]
 include::body/input.adoc[]
 
 include::body/display.adoc[]
+
+include::body/storage.adoc[]
 
 include::body/network.adoc[]
 

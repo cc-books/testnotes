@@ -16,7 +16,7 @@
 :codedir: {docdir}/data
 :datadir: {docdir}/data
 //:front-cover-image: data/cover.png
-:title-logo-image: data/title.png
+:title-logo-image: data/slat-name.png
 :lang: cmn
 :encoding: utf-8
 :toc: macro

@@ -170,7 +170,7 @@ root# *_./foobar-16.3.2-linux64.bin_*
 每一組封裝起來的軟體稱之為**套件**(package)，而外部提供許多套件的集合則稱為**套件庫**(package repository)。
 
 各類 Linux 系統所使用的主要套件格式包括 RPM 與 DEB 兩種，分別由
-RHEL、Fedora、CentOS、openSUSE,… 以及 Debian、Ubuntu、Mint,… 等散佈版所支持。
+Fedora, openSUSE, Rocky,… 以及 Debian, Ubuntu, Mint,… 等散佈版所支持。
 另外存在許多次要的套件格式，雖然結構邏輯類似，但是組成的細節並不相同，而僅見於小眾的散佈版之中。
 如果類比於適用 Windows 系統的 MSI 格式，那些提供大量 Windows 應用軟體的網站，
 就相當於 Windows 系統的套件庫。

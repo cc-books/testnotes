@@ -20,6 +20,7 @@ font:
       bold: NotoSansMonoCJKtc-Bold.ttf
       italic: NotoSansMonoCJKtc-Italic.ttf
       bold_italic: NotoSansMonoCJKtc-BoldItalic.ttf
+    Taiwan KaiSu: TW-Kai-98_1.ttf
   fallbacks: [Noto Sans CJK TC Mono]
 page:
   background_color: FFFFFF
@@ -88,6 +89,9 @@ horizontal_rhythm: $base_line_height_length
 vertical_spacing: $vertical_rhythm
 link:
   font_color: 428BCA
+mark:
+  font_color: FFFFFF
+  background_color: 000000  
 # literal is currently used for inline monospaced in prose and table cells
 literal:
   font_color: B12146
@@ -115,7 +119,8 @@ heading:
   font_family: $base_font_family
   font_style: bold
   # h1 is used for part titles (book doctype) or the doctitle (article doctype)
-  h1_font_size: floor($base_font_size * 2.6)
+#  h1_font_size: floor($base_font_size * 2.6)
+  h1_font_size: floor($base_font_size * 6.6)
   # h2 is used for chapter titles (book doctype only)
   h2_font_size: floor($base_font_size * 2.15)
   h3_font_size: round($base_font_size * 1.7)
@@ -140,18 +145,21 @@ heading:
 title_page:
   align: right
   logo:
-    top: 10%
+    top: 80%
+    align: center
   title:
-    top: 55%
+    top: 15%
+    font_family: Taiwan KaiSu
     font_size: $heading_h1_font_size
-    font_color: FFFFFF
-    line_height: 0.9
+    line_height: 1.2
+    margin_bottom: $base_font_size * 2
   subtitle:
     font_size: $heading_h3_font_size
     font_style: bold_italic
     line_height: 1
+    font_color: 999999
   authors:
-    margin_top: $base_font_size * 1.25
+    margin_top: $base_font_size * 6
     font_size: $base_font_size_large
     font_color: 181818
   revision:
