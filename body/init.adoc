@@ -36,12 +36,12 @@
 一般而言，達到圖形介面目標需要啟動以下軟體：
 
 . **顯示管理程式**(display manager)：GDM、KDM 或 LightDM
-. **視窗系統**(window system)：X11（Xorg 或 XWayland）
+. **視窗系統**(window system)：X（Xorg 或 XWayland）
 . **接待程式**(greeter)：GDM Greeter 或 LightDM GTK Greeter
 . **桌面環境**(desktop environment)：GNOME、KDE 或 MATE
 . **作業階段管理程式**(session manager)：GNOME Session 或 KDE Session
 . **視窗管理程式**(window manager)：Marco 或 KWin
-. **桌面應面程式**(desktop application)：網頁瀏覽器或終端機擬真器
+. **桌面應面程式**(desktop application)：網頁瀏覽器或終端機仿真器
 
 如果開機前想要進入文字介面，可以利用舊式的內核參數單一數字 `3` 來暫時變更此次的執行層級。
 如果之後都衹想要進入文字介面，就需要執行 `systemctl set-default multi-user` 指令。
@@ -126,8 +126,8 @@ export HISTSIZE HISTCONTROL HISTIGNORE
 ....
 
 ==== 使用者初始化
-當使用者進入命令列模式時（不論是從文字模式的虛擬終端機登入畫面而來，還是開啟自圖形模式的終端機擬真器），
-每次啟動命令殼程式都會讀取並執行使用者家目錄中的 `.bashrc` ，若是使用者登入系統所用的**登入命令殼**(login shell)，則會讀取並執行 `.bash_profile` （有些散佈版是 `.profile` ）檔案。
+當使用者進入命令列互動模式時（不論是從文字模式的虛擬終端機登入畫面而來，還是開啟自圖形模式的終端機仿真器），都會先讀取並執行使用者家目錄中的 `.bashrc` ，
+若是使用者登入系統所用的**登入命令殼**(login shell)，則會讀取並執行 `.bash_profile` （有些散佈版是 `.profile` ）檔案。
 雖然傳統上會區分適合放在兩個檔案中的命令，但是由於散佈版預設 `.bash_profile` 前段會先讀取並執行 `.bashrc` 的內容，
 因此衹需要將命令寫在個人的命令殼規範命令稿 `.bash_profile` 內即可。
 
@@ -148,16 +148,16 @@ alias joe='joe --wordwrap'   <4>
 ==== 圖形階段初始化
 在 `systemd` 的初始系統模式中，是由 `graphical.target` 代表圖形階段的執行目標，並且會啟動**顯示管理程式**(display manager)。
 Linux 系統提供許多不同的顯示管理程式，而使用者所選用的就會軟式鏈結到被啟動的 `display-manager.service` 服務。
-顯示管理程式接著執行 `X` 伺服器命令（通常是 `Xorg` 或 `Xwayland` 的軟式鏈結），以建立 *X11*(X 視窗系統第 11 版)，
+顯示管理程式接著執行 `X` 伺服器命令（通常是 `Xorg` 或 `Xwayland` 的軟式鏈結），以建立 **X 視窗系統** ，
 同時執行 `/etc/X11/xinit/xinitrc` 去呼叫 `/etc/X11/xinit/xinitrc.d/` 中的命令稿程式，用以初始化圖形階段。
 
-使用者在圖形階段下從登入到登出的操作過程，稱之為一次 **X11 作業階段**(X11 session)。
-當顯示管理程式所執行的**接待程式**(greeter) 處理完使用者的登入之後，顯示管理程式就會呼叫登入命令殼，然後在圖形階段的基礎上建立使用者的 X11 作業階段。
-最陽春的 X11 作業階段畫面上，可能除了終端機模擬視窗之外空無一物，但一般的使用者還是期望看見一個能滿足各種需求的**桌面環境**(desktop environment)。
+使用者在圖形階段下從登入到登出的操作過程，稱之為一次 **X 作業階段**(X session)。
+當顯示管理程式所執行的**接待程式**(greeter) 處理完使用者的登入之後，顯示管理程式就會呼叫登入命令殼，然後在圖形階段的基礎上建立使用者的 X 作業階段。
+最陽春的 X 作業階段畫面上，可能除了終端機模擬視窗之外空無一物，但一般的使用者還是期望看見一個能滿足各種需求的**桌面環境**(desktop environment)。
 適用於桌面環境的程式，通常會有一個對應的組態檔(`*.desktop`)，用來指明軟體的名稱、路徑、描述、圖示、綁定類型等資料。
-安裝好的 X11 作業階段在 `/usr/share/xsessions` 目錄中會有對應的組態檔，做為承接顯示管理程式的呼叫，並且後續呼叫其他的組態檔。
+安裝好的 X 作業階段在 `/usr/share/xsessions` 目錄中會有對應的組態檔，做為承接顯示管理程式的呼叫，並且後續呼叫其他的組態檔。
 對於較複雜的桌面環境而言，通常還會執行一個**作業階段管理程式**(session manager)，用來統一管理其中所有的軟體行程。
-以下是一個筆者自製的簡單 X11 作業階段 Thiny
+以下是一個筆者自製的簡單 X 作業階段 Thiny
 footnote:[A Thin and Tiny X Session <https://github.com/bluebat/thiny-session>]的組態檔範例：
 
 ./usr/share/xsession/thiny.desktop (部分)
@@ -169,7 +169,7 @@ Comment=A Thin and Tiny X Session
 Exec=thiny-session
 ....
 
-為了解決軟體在不同的桌面環境之間的**互操作性**(interoperability)，多數的桌面環境都會遵循由 freedesktop.org 組織所倡議的 *XDG*(X11 桌面工作群組) 標準：
+為了解決軟體在不同的桌面環境之間的**互操作性**(interoperability)，多數的桌面環境都會遵循由 freedesktop.org 組織所倡議的 *XDG*(X 桌面工作群組) 標準：
 包括了一些共用的環境變數，以及標準化的檔案名稱與路徑。
 例如 `/etc/xdg/autostart/` 目錄存放了套用於所有桌面環境的自動啟動組態檔，個別的桌面環境還會讀取類似 `/usr/share/_gnome_/autostart/*.desktop` 檔案的內容，
 而使用者自訂的自動啟動組態檔則可以放在 `$HOME/.config/autostart/` 之中。
@@ -178,7 +178,7 @@ Exec=thiny-session
 如果是跳過圖形階段目標與顯示管理程式，直接從文字模式經由 `startx` -> `xinit` -> `X` 的方式進入圖形環境，
 有的散佈版會讀取執行 `/etc/X11/Xsession` 以及 `/etc/X11/Xsession.d/` 目錄中的檔案，
 然後讀取執行使用者家目錄中的 `.xinitrc` 、 `.xsession` 或是 `.Xclients` 命令稿檔案，
-某些散佈版的 X11 作業階段還會支援讀取 `$HOME/.xprofile` 的內容並執行。
+某些散佈版的 X 作業階段還會支援讀取 `$HOME/.xprofile` 的內容並執行。
 使用者需要在以上檔案中自行啟動已安裝的桌面環境，或是手動執行自訂桌面環境所需的個別程式。
 個人圖形環境自動執行命令稿的內容舉例如下：
 

@@ -6,8 +6,9 @@ https://wiki.t-firefly.com/Core-3568J/driver_gpio.html
 boot:
 https://www.tecmint.com/reset-forgotten-root-password-in-rhel-centos-and-fedora/
 
-Shell:
+Init:
 https://linuxtldr.com/interactive-login-and-non-login-shell/
+https://linuxtldr.com/difference-between-bash-profiles/
 
 Input:
 https://discussion.fedoraproject.org/t/way-to-switch-fn-and-right-control-key/
