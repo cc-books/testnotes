@@ -20,3 +20,8 @@ https://www.kernel.org/doc/Documentation/fb/modedb.txt
 https://www.osadl.org/Single-View.111+M57253e83fd1.0.html
 https://wiki.archlinux.org/index.php/Intel_graphics
 https://en.wikipedia.org/wiki/Framebuffer
+https://askubuntu.com/questions/150066/split-monitor-in-two/998435#998435
+https://discussion.fedoraproject.org/t/plymouth-boot-screen-with-three-dots
+
+usb:
+https://www.tecmint.com/reset-usb-device-linux/

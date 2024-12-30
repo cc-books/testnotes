@@ -17,11 +17,17 @@
 * Flags: 具備的功能旗標。
 ** msr: 可以藉由 `msr-tools` 套件中的 `rdmsr` 命令來讀取 CPU 的 MSR 資料。
 ** smep, smap: Intel 產品具備的「Intel OS Guard」功能，可有效防止惡意程式奪取核心權限。
+** vmx/svm: 同樣分別指明 Intel/AMD 的 CPU 是否支援虛擬化技術。
 * Vulnerability: 已知安全漏洞的對策。
 ** Mitigation: 由軟體（通常是內核）提供的緩解方式。
 ** Microcode: 由 CPU 廠商提供給系統韌體供應商，做為公版的不可變部分，用以將機器語言碼轉為更低階的真實 CPU 指令。
 
 `dmidecode -t processor` 指令的輸出中，也有許多由系統韌體所認知的 CPU 相關資訊。
+另外還有一項與虛擬化相關的裝置記憶體虛擬/實體位址轉換功能，在 Intel/AMD 平臺上分別稱為 VT-d/IOMMU。
+由於 `lscpu` 或 `dmidecode` 命令未必能顯示 VT-d/IOMMU 的狀態，因此需要以其他方式進行檢測。
+例如依據指令 `dmesg|grep DMAR` 的輸出，就能夠判斷作業系統是否可以使用此一功能。
+如果沒有輸出或是顯示停用的話，原因可能是 CPU 本身不支援、系統韌體將其關閉，或是設定了內核參數 `iommu=off` 。
+
 
 ==== 溫度
 想要取得 CPU 的溫度以及風扇轉速，可以利用 `lm_sensors` 套件中的 `sensors-detect` 與 `sensors` 命令。
@@ -47,6 +53,9 @@
 關機時 RTC 仍在運作，維持系統時鐘與 CMOS 資料。
 系統時鐘如果不準，可能是晶片過熱所導致。
 如果是電池失效，也可能會造成時間不準或經常重置，甚至無法開機或是軟體運行時驗證相關的動作失敗。
+
+hwclock
+date -Is
 
 ==== EC
 *EC*(嵌入控制器) 普遍存在於筆記型電腦中，用以統合周邊設備。
@@ -77,9 +86,11 @@ root# *tpm2 getrandom --hex _8_* +
 ====
 範例指令會產生 8 位元組的亂數，而這些程式也會被其他的加/解密應用軟體（例如 `clevis` ）所利用。
 
-==== RAM
-記憶體所使用晶片顆粒的等級，由高到低可分為：
-Major(原廠)、eTT(有效測試)、uTT(未測試)，之下則稱為 Downgrade(次級品)。
+==== 主記憶體
+目前主流的主記憶體是使用**同步動態隨機存取記憶體**(SDRAM)，規格發展的版本以第幾代來區分。
+例如 DDR5 表示第五代的雙倍資料速率，而每一代新規格都改進了更低的工作電壓以及更高的傳輸速率。
+記憶體所使用晶片顆粒的等級，由高到低可分為：Major(原廠)、eTT(有效測試)、uTT(未測試)，之下則稱為 Downgrade(次級品)。
+記憶體模組上有一顆**序列存在檢測**(SPD) 晶片，用來記載模組的資訊，讓系統韌體不需存取記憶體就能檢測組態。
 
 基礎命令 `free` 命令整理了 `/proc/meminfo` 中的資訊：
 ====
@@ -89,14 +100,21 @@ Mem:            31Gi       2.4Gi        26Gi       660Mi       2.2Gi        27Gi
 Swap:          4.0Gi          0B       4.0Gi
 ====
 其中最常注意的項目，應該是位於 Mem: 列 total 欄的記憶體總量，以及 free 欄的未使用記憶體總量。
-如果要看個別軟體行程的記憶體用量，則需要由 `top` 命令提供的文字全螢幕動態畫面來提供。
+如果要看個別軟體行程的記憶體用量，則需要由 `top` 命令提供的文字全螢幕動態畫面來提供，而 `nvtop` 則是針對 GPU 的同類程式。
 
-另外非官方套件 `devmem2` 提供讀寫記憶體位址的命令。
-由於主機板上許多晶片的暫存器，都有對映到系統記憶體的區塊，因此依照規格書就可以查到相應的位址，但新版的內核已預設關閉此一讀取 `/dev/mem` 的功能。
 
-有時候增加系統記憶體反而造成無法開機，也許是 BIOS 開機模式對特定系統的記憶體分配不正確，
-或是與 32 位元作業系統分配給顯示的後段記憶體有關，可以嘗試用內核參數 `mem=` 來限制記憶體容量。
+主機板上許多晶片的暫存器，也都有對映到主記憶體的區塊，因此依照規格書就可以查到相應的位址。
+主記憶體除了被內核獨佔一部分，圖形介面卡也會共用/佔用一塊區域，另外還有映射一般輸入輸出裝置的記憶體 MMIO 以及通訊埠 PMIO 機制，通常在系統韌體設定中可以調整用量大小。
+由於此項映射機制，當開機出現螢幕花屏（掃描線段漏失）並附帶宕機時，也有機率是記憶體未插好或是接觸不良所造成。
+非官方套件 `devmem2` 提供讀寫記憶體位址的同名命令，但新版的內核已預設關閉此一讀取 `/dev/mem` 的功能。
+
+有時候增加主記憶體反而造成無法開機，一方面插入多條記憶體模組，可能會出現彼此或是與主機板之間不相容，而造成系統不穩定、畫面閃爍等情形。
+另一方面也許是 BIOS 開機模式對特定系統的記憶體分配不正確，或是與 32 位元作業系統分配給顯示的後段記憶體有關，可以嘗試用內核參數 `mem=` 來限制記憶體容量。
 如果以 `mem_encrypt=on` 內核參數啟用了記憶體的加密功能，也有可能因此造成初始化其他裝置時宕機。
+
+許多散佈版的安裝光碟都包含了 `memtest86+` 這個 UEFI 的應用軟體，用來做為測試記憶體的工具，而進入系統後則有 `memtester` 套件提供的同名命令可以使用。
+萬一開機過程中出現了類似 `Memory corruption detected in low memory` 的錯誤訊息，導致無法啟動作業系統卻又不適合更換記憶體的情況，
+可以先試試加入內核參數 `memory_corruption_check=0` 的變通方案，希望能爭取一些進入系統補救與檢測的機會。
 
 === 匯流排
 **匯流排**(bus) 是指主機板上的一組線路，用於連接多個晶片或埠口。
@@ -122,15 +140,15 @@ user$ *lspci* +
 00:1f.3 SMBus: ...... +
 02:00.0 PCI bridge: ...... +
 ====
-輸出資料的第一欄是插槽編號，由冒號分隔的匯流排編號與裝置編號組成。
-第二欄冒號之前的資料表示裝置所屬的類型，之後則是裝置的名稱（已省略）。
-`lspci` 命令加上選項 `-n` ，會顯示代表裝置硬體識別號(PCI ID) 的供應商代碼與裝置代碼，這也是軟體從識別號列表中找出裝置名稱的依據。
+輸出資料的第一欄是插槽編號，由冒號分隔的匯流排編號與裝置編號組成；第二欄冒號之前的資料表示裝置所屬的類型，之後則是裝置的名稱（已省略）。
+`lspci` 命令加上選項 `-k` ，可以看到目前使用中的內核驅動模組名稱。
+選項 `-n` 則會顯示代表裝置硬體識別號(PCI ID) 的供應商代碼與裝置代碼，這也是軟體從識別號列表中找出裝置名稱的依據。
 識別號列表是名為 `pci.ids` 的文字檔案，可以透過 `update-pciids` 命令從內建的網址隨時更新到本機端。
-如果想要顯示特定裝置的最詳細資訊，可以參考指令範例：
+如果想要顯示特定裝置的詳細資訊，可以參考指令範例：
 ====
 user$ *lspci -s _00:19.0_ -nnvvxxx*
 ====
-NOTE: 以系統管理者身分執行 `lspci` 命令可以獲得更多資訊。
+NOTE: 以超級使用者身分執行 `lspci` 命令可以獲得更多資訊。
 
 `setpci` 命令則是用來設定 PCI 裝置中，特殊暫存器的值。
 例如 `setpci --dumpregs` 指令可以列出可存取的裝置暫存器，用來顯示及設定特定裝置的特定暫存器內容：
@@ -142,88 +160,164 @@ root# *setpci -s _00:14.0_ _7C.W=0108_*
 ====
 三條範例的原本用途分別為：顯示狀態、設定亮度、設定喚醒，實際使用時會依裝置型號而有差異。
 
-==== USB
-*USB*(泛用序列匯流排) 是目前最流行的接頭型式，隨著規格不斷地擴充與演進，大有一統個人電腦周邊設備介面的趨勢。
-主要規格世代與相應的驅動程式（內核模組），以及介面速度理論值如下：
+=== USB
+由於 *USB*(泛用序列匯流排) 支援熱插拔機制，它的外接型式是目前最流行的連接介面，隨著規格不斷地擴充與演進，大有一統個人電腦周邊設備介面的趨勢。
+主要世代與相應的驅動規格，以及介面速度理論值如下：
 
 [square]
-* USB 1.0: ohci 1.5Mbps
-* USB 1.1: ohci 12Mbps
-* USB 2.0: ehci 480Mbps
-* USB 3.0: xhci 5000Mbps
+* USB 1.0: OHCI 1.5Mbps
+* USB 1.1: OHCI 12Mbps
+* USB 2.0: EHCI 480Mbps
+* USB 3.0: XHCI 5000Mbps
 
-==== HID
-USB HID 介面的狀態有可能會受鍵盤的鎖定燈號影響：
+但是由於 USB 技術開發的速度太快，官方的規格名稱也不斷變動，以下列出各種名稱分類的對應表：
+
+[square]
+* USB 3.2 Gen 1×1 (= USB 3.1 Gen 1 = USB 3.0)
+* USB 3.2 Gen 1×2 (= USB 3.0 & Type-C)
+* USB 3.2 Gen 2×1 (= USB 3.1 Gen 2 = USB 3.1)
+* USB 3.2 Gen 2×2 (= USB 3.1 & Type-C)
+
+為了簡化說明，以下僅以 USB1, USB2, USB3 代表主要的不同技術規格。
+
+==== 接頭
+USB1 與 USB2 多使用 Type-A 接頭，還有數種已經過時的型式，而 USB3 裝置則有 Type-A 或 Type-C 兩種型式的區分。
+USB3 Type-A 接頭中除了相容於 USB2 的四支接腳之外，另外還有較小的五支擴充接腳。
+相同 USB 規格的 Type-C 接頭速度規格通常會比 Type-A 快，使用轉接線的結果則可能會變慢。
+Type-A 接頭隔板的顏色是由**個人電腦設計指導**(俗稱 PC97 或 PC2001) 所定義，會依 USB 規格而有所不同：
+
+[square]
+* 黑色：USB2 或以下（標準供電 500mA）
+* 藍色：USB3（標準供電 900mA）
+* 紅色：附加額外電力供應
+
+不過實際在硬體設計時，常會由於協調配色的原因而忽略此項準則，以致於使用者必須察看接頭附近的圖示或標貼，才能確認規格是否匹配。
+由於設計上使用者拿起 USB Type-A 插頭時，是以右手拇指按住有 USB 圖示符號的一側為基準，
+因此主機上具有方向性的插座，如果沒有配合這種操作姿勢來建置，就會產生不方便的使用情境。
+再加上 Type-A 接頭的金屬外框部分，如果材質不好就可能會氧化而造成接觸不良，更加速了從 Type-A 過渡為 Type-C 的趨勢。
+
+==== 控制晶片
+有些單晶片系統中已內含多個 USB 的**主端控制器**(host controller)，而主機板上的控制器晶片則依靠 PCI 匯流排與系統通訊。
+不同規格的 USB 介面，通常是由不同的晶片所控制，並受到不同的內核模組所驅動。
+一個主端控制器可以控制多個**根集線器**(root hub)，後者與外接集線器同被視為 USB 裝置。
+每個根集線器提供多個埠口用來與裝置通訊，而每個埠口之下還包括多組的組態介面，以及不同的設定與端點。
+例如外接的 USB **擴充基座**(docking station)，就是藉由 USB 可以分支並聯的特性，再搭配各種不同的轉換晶片，達到由一個 USB 接頭衍生出多種輸入輸出埠的效果。
+
+雖然設計上已經有考慮相容性，但是不同規格的裝置與接頭有時仍會出現不匹配，需要在驗證時進行交叉測試。
+例如像是以 USB3 的裝置開機後，有可能會發生共用集線器的其他 USB 接頭卻無法使用 USB1 裝置的情況。
+驅動不同規格的內核模組之間，雖然是設計來可以並存使用，但是在少數的情況下，還是會互相影響。
+因此偵錯時可以嘗試在系統韌體設定中，先停用部分的支援規格再進行測試。
+
+USB3 的標準傳輸頻寬為 5Gbps，而其差動訊號(differential signaling) 必須達到 2.5GHz，由於和無線網路的 2.4GHz 頻寬很接近，有可能會引起干擾。
+USB3 除了標準模式之外還定義了許多**替換模式**(alternate mode)，用以支援超高速傳輸、視訊輸出等功能。
+當支援替換模式的設備插入不支援此模式的主機，或是角色對調的情況發生時，依據規格該設備應該要展露出一個**告示牌裝置**(billboard device)，好讓主機端能偵測到並且通知使用者這個模式不匹配的訊息。
+
+==== 裝置資訊
+個別 USB 設備的簡略資料，可以透過 `lsusb` 命令來顯示：
 ====
-root# *usbhid-dump -m VID:PID -es*
+user$ *lsusb* +
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub +
+Bus 001 Device 002: ID 046d:c077 Logitech, Inc. Mouse +
+Bus 001 Device 003: ID 046d:082b Logitech, Inc. Webcam C170 +
+Bus 001 Device 004: ID 04d9:010b Holtek Semiconductor, Inc. USB Keyboard +
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub +
+Bus 002 Device 002: ID 8087:8000 Intel Corp. Integrated Rate Matching Hub +
+Bus 003 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub +
+Bus 004 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub +
+Bus 004 Device 002: ID 8087:8008 Intel Corp. Integrated Rate Matching Hub
+====
+其中的匯流排編號與裝置編號，可以組成位置編號（例如 1-1 或 4-2）；
+而後方的十六進位裝置識別碼欄位，則是由**供應商識別碼**(VID) 與**產品識別碼**(PID) 以冒號分隔所共同組成，兩者在許多其他的指令中都會用到。
+
+`lsusb` 命令加上選項 `-t` 還能看到驅動個別裝置所用的內核模組名稱：
+====
+user$ *lsusb -t* +
+/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/14p, 480M +
+    |__ Port 006: Dev 002, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M +
+    |__ Port 009: Dev 003, If 0, Class=Video, Driver=uvcvideo, 480M +
+    |__ Port 009: Dev 003, If 1, Class=Video, Driver=uvcvideo, 480M +
+    |__ Port 009: Dev 003, If 2, Class=Audio, Driver=snd-usb-audio, 480M +
+    |__ Port 009: Dev 003, If 3, Class=Audio, Driver=snd-usb-audio, 480M +
+    |__ Port 010: Dev 004, If 0, Class=Human Interface Device, Driver=usbhid, 12M +
+    |__ Port 010: Dev 004, If 1, Class=Human Interface Device, Driver=usbhid, 12M +
+    |__ Port 010: Dev 004, If 2, Class=Human Interface Device, Driver=usbhid, 12M +
+/:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=ehci-pci/2p, 480M +
+    |__ Port 001: Dev 002, If 0, Class=Hub, Driver=hub/8p, 480M +
+/:  Bus 003.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/6p, 5000M +
+/:  Bus 004.Port 001: Dev 001, Class=root_hub, Driver=ehci-pci/2p, 480M +
+    |__ Port 001: Dev 002, If 0, Class=Hub, Driver=hub/6p, 480M
 ====
 
-==== VCP
-**虛擬序列埠**(VCP) 介面的 /dev/ttyUSB* 無法以 setserial 設定，而是以 stty 命令：
+圖形介面的檢測工具選擇則有 `usbview` ，能夠顯示個別 USB 裝置之間的連接關係以及詳細資訊。
+
+==== 裝置驅動
+在系統韌體的選單中可以找到是否允許從 USB 裝置開機的選項，連帶地也可以決定相對於其他開機裝置的開機優先順序。
+此項方便的功能有時反而會造成無法開機：如果該裝置上的開機機制安裝或清除不完全，會導致系統誤判而啟動失敗；
+或是主機與設備間的傳輸介面速率，無法協調一致而造成無限迴圈；
+也有可能是裝置的回應速度（由於介面規格、傳輸線、電源供應）太慢，而超過了系統韌體預設的等待時間。
+
+驅動 USB 匯流排的核心內核模組為 `usbcore` ，特殊情況下可以用來設定特定型號 USB 裝置的特定性質。
+例如調整反應延遲的內核參數： `usbcore.quirks=_VID_:_PID_:gn` 。
+
+在內核為了裝置所準備的 `/dev` 虛擬檔案系統中，USB 裝置是依據其功能與相應的內核模組來分配位置。
+當系統連接了多個同類的 USB 裝置（例如外接的音效卡或是轉出的通訊埠）時，裝置的位置代號則會隨 USB 埠被偵測到的順序而變動，甚至每次重新開機後都可能不同。
+如果編寫程式而需要引用某裝置的位置代號，就必須參考裝置所連接的匯流排（PCI 或 USB）編號才能確認。
+
+==== 熱插拔機制
+有些 USB 裝置（尤其透過集線器連接）在啟動初期不會被識別出來，而要等到系統載入完整後才能夠存取。
+可能是因為系統韌體、開機啟動程式或者記憶體檔案系統中，沒有包含適當的驅動模組，必須依賴後續的熱插拔機制才能偵測到。
+
+內核模組原始碼中如果使用了 `MODULE_DEVICE_TABLE` 巨集，就可以藉由 `depmod` 命令將目標裝置登記於熱插拔的自動載入表中，就不需要依靠觸發 `udev` 的規則來被動載入。
+USB 儲存裝置的熱插拔通常都會伴隨著**自動掛載**(automount) 的機制，則是需要藉由 `udev` 的規則來完成。
+
+==== 隨用機制
+USB 的 *OTG*(隨用) 規格，讓裝置可以扮演主控的角色用以連接其他的裝置，或是反過來讓主控裝置扮演附屬裝置的角色用以接受刷寫映像檔。
+通常所謂的 OTG 線材衹是不同接頭規格的轉接線，實際是否連接成功除了規格的支援外，還要考慮：
+足夠的電力供應、支援的檔案系統格式（FAT32 較相容）、USB3 裝置需要中繼一個 USB2 的集線器。
+
+==== 軟體重置
+在某些情況下需要對 USB 裝置進行重置，但是又不適合透過開關機或者熱插拔的物理動作，就要考慮經由軟體命令來達到此一效果。
+
+比較簡單的重置方法是利用 `usbutils` 套件提供的 `usbreset` 命令（如果散佈版套件未含入，可自行從原始碼中取出編譯），執行時加上裝置識別碼做為參數：
 ====
-root# *stty -a -F /dev/ttyUSB0* \#顯示目前設定值 +
-root# *stty -F /dev/ttyUSB0 19200 -parenb cs8 -cstopb -ixon* +
-root# *cat < /dev/ttyUSB0 |xxd -g 1*
+root# *usbreset _供應商識別碼:產品識別碼_*
 ====
-IMPORTANT: 最好先停用或移除 ModemManager 套件以免 VCP 受到影響。
-
-如果想要將十六進位的字元直接寫入裝置中，可參考下面的例子：
+或者使用 `usb_modeswitch` 命令：
 ====
-root# *echo -en _'\x01\x01\xCA\x60\x00\x03\xA9'_ > /dev/_ttyUSB0_*
-====
-或是借助 xxd -r -p 命令，先進行轉換再輸出：
-====
-root# *echo -n '_01 01 CA 60 00 03 A9_' | xxd -r -p > /dev/_ttyUSB0_*
-====
-
-==== I^2^C
-*I^2^C*(積體匯流排電路) 是一種慢速的序列匯流排，內核會將其視為 `/dev/i2c-0` 、 `/dev/i2c-1` 等裝置。
-常見於嵌入式設備中，可以用 `i2c-tools` 套件中的工具來讀寫暫存器值。
-
-==== SPI
-*SPI*(序列周邊介面) 由四條線路組成的簡單傳輸匯流排，與 I^2^C 均常見於嵌入式系統。
-
-=== 輸入輸出介面
-用來連接外部輸入或輸出裝置的接頭或插槽。
-
-==== PS/2
-
-==== Super I/O
-主機板上的 *Super I/O*(超級輸入輸出) 晶片，用來做為低頻寬設備的介面，以往需要透過 ISA 匯流排與 CPU 連接，目前則透過南橋晶片上的 LPC 匯流排。
-常用來偵測溫度，也同時會提供 *Watchdog Timer*(看門狗計時器) 的功能。
-`coreboot-utils` 套件中有 `superiotool` 程式，可以偵測並提供暫存器內容。
-如果在系統啟動時期被 ACPI 占住資源，可以利用內核參數 `acpi_enforce_resources=lax` 來排除問題。
-
-==== GPIO
-內核於系統初始化時，如果偵測到 *GPIO*(通用型輸入輸出) 就會產生 `/dev/gpiochip0` 的對應裝置，裝置的資訊則可以從 `/sys/kernel/debug/gpio/` 中得到。
-安裝 `libgpiod-utils` 套件（或者名為 `gpiod` ）後，就可以使用其中的 `gpioinfo`, `gpiodetect`, `gpioget`, `gpioset` 等工具程式。
-
-或是利用舊式的 `/sys/class/gpio/` 介面來初始化與使用 GPIO：
-（範例中的腳位編號需要以公式計算出來）
-====
-root# *echo _42_ > /sys/class/gpio/export* +
-root# *echo in > /sys/class/gpio/_gpio42_/direction* +
-root# *echo out > /sys/class/gpio/_gpio42_/direction* +
-root# *echo 1 > /sys/class/gpio/_gpio42_/value* +
-root# *echo _42_ > /sys/class/gpio/unexport*
+root# *usb_modeswitch -R -v _供應商識別碼_ -p _產品識別碼_*
 ====
 
-==== SDIO
-*SD*(安全數位卡) 是用來取代 *MMC*(多媒體記憶卡) 的標準，而以 SD 介面來連接外部裝置的應用稱之為 *SDIO* 。
-未來 SDIO 可能會取代 GPIO 的 SPI 傳輸模式介面。
+也可以嘗試藉由寫入虛擬檔案系統的方式，透過開關不同的硬體層級來達成：
+====
+# 透過控制器 +
+root# *echo -n _0000:插槽編號_ > /sys/bus/pci/drivers/ehci\_hcd/unbind* +
+root# *echo -n _0000:插槽編號_ > /sys/bus/pci/drivers/ehci\_hcd/bind* +
+# 透過模組 +
+root# *echo _位置編號_ > /sys/bus/usb/drivers/usb/unbind* +
+root# *echo _位置編號_ > /sys/bus/usb/drivers/usb/bind* +
+# 透過集線器 +
+root# *echo _位置編號_ > /sys/bus/usb/drivers/hub/unbind* +
+root# *echo _位置編號_ > /sys/bus/usb/drivers/hub/bind* +
+# 透過裝置 +
+root# *echo 0 > /sys/bus/usb/devices/_位置編號_/authorized* +
+root# *echo 1 > /sys/bus/usb/devices/_位置編號_/authorized*
+====
 
-==== SATA
-當舊式磁碟裝置所用的 *ATA*(先進技術附件) 介面，已無法跟上整體電腦系統的處理速度時，*SATA*(序列 ATA) 就被提出做為取代的介面。
-Linux 將其視為擴充定義後的 *SCSI*(小型電腦系統介面) 來驅動，對應的裝置目錄則由 `/dev/hd*` 改為 `/dev/sd*` 。
-初期由儲存晶片組成的模組(disk on module) 稱為 SATA DOM，但部分插槽需要外接電源因而較少使用，後來又衍生出 SATA Slim 的形式。
+==== 測試應用
+使用者空間的 USB 功能呼叫是由 `libusb` 函式庫負責，但是版本 0.x 與 1.x 並不相容，因此安裝與使用應用軟體時必須注意。
+如果想使用 Python 語言編寫相關程式，則需要匯入 `pyusb` 模組。
 
-低階格式化程式通常是指硬體廠商提供的私有工具軟體，用來更新、修復或重設控制器上的韌體資料。
-有一些通用指令： `smartctl -i /dev/sda` 或 `hdparm -i /dev/sda` 可以獲得包括韌體版本的資訊。
-如果無法取得專屬工具，就衹能試試 `hdparm`, `setpci`, `sdparm` 等程式，或是 `sg3_utils` 套件中的工具。
+`dmesg` 與 `journalctl` 的輸出中，也會留下 USB 裝置於系統運行時留下的記錄。
+套件 `usbmon` 可以用來嗅探 USB 裝置的資料流。
 
-==== M.2
-*M.2* 舊名為 *NGFF*(次世代形制)，並非是一種匯流排或線路介面，而是新定義的主機板擴充槽規格。
-由於規格定義未限定資料傳輸的協定，因此可以相容 PCIe, miniPCIe, SATA, USB3 等匯流排的訊號，並利用不同的防呆腳位來區分。
-常見的模組型式有 B-Key, E-Key, M-Key，其防呆腳位大略依序為靠左、靠中、靠右。
-存儲裝置通常使用 B-Key 或 M-Key 型式，而無線網路裝置則較常使用 M-Key 型式。
+因為 USB 有一統裝置介面的趨勢，許多特殊的應用也針對它而開發出來。
+例如，原本附屬於遠端桌面軟體的 USB 裝置網路導向功能，如今也有單獨的商業軟體可以使用。
+
+=== I^2^C
+*I^2^C*(積體匯流排電路) 是一種慢速的序列匯流排，和其衍生的 *SMBus*(系統管理匯流排) 均常用於輕量裝置與系統間的通訊。
+常見的內核模組像是 `i2c-i801`, `at24` 等等，內核會將其映射為 `/dev/i2c-0` 、 `/dev/i2c-1` 類型的裝置。
+
+`i2c-tools` 套件中的工具是用來讀寫暫存器的值，例如想要偵測此類裝置是否存在，
+就可以利用其中的 `i2cdetect -l` 指令或是 `lm_sensors` 套件中的 `sensors-detect` 命令。
+而套件 `i2c-tools-perl` 中的 `decode-dimms` 命令，則是藉由 I^2^C 的介面來讀取記憶體的組態資料。
 

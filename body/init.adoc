@@ -51,7 +51,7 @@
 以常見的 6 個虛擬終端機為例，可以透過按下組合鍵 kbd:[Ctrl - Alt - F1] 至 kbd:[Ctrl - Alt - F6] 之一的方式進入，而背後代表虛擬終端機的裝置則是 `/dev/tty1` ～ `/dev/tty6` 。
 
 === 初始化檔案
-系統各階段都有許多的初始化檔案，大部分是由系統內部機制所控制，並不適合由系統管理者或一般使用者去修改。
+系統各階段都有許多的初始化檔案，大部分是由系統內部機制所控制，並不適合由超級使用者或一般使用者去修改。
 另外有一小部分的檔案，預設會在系統各階段自動執行，同時適合進行客製化的編輯：
 
 [square]
@@ -94,7 +94,7 @@ dhclient -6 -nw
 ./etc/systemd/system/foobar.service
 ....
 [Unit]
-Description=_FooBar_
+Description=_FooBar_ Service
 After=network-online.target
 
 [Service]
@@ -146,7 +146,7 @@ alias joe='joe --wordwrap'   <4>
 <4> 設定別名以方便命令輸入
 
 ==== 圖形階段初始化
-在 `systemd` 的初始系統模式中，是由 `graphical.target` 代表圖形階段的執行目標，並且會啟動**顯示管理程式**(display manager)。
+在 `systemd` 的初始系統模式中，是由 `graphical.target` 代表圖形階段的執行目標，並且會啟動顯示管理程式。
 Linux 系統提供許多不同的顯示管理程式，而使用者所選用的就會軟式鏈結到被啟動的 `display-manager.service` 服務。
 顯示管理程式接著執行 `X` 伺服器命令（通常是 `Xorg` 或 `Xwayland` 的軟式鏈結），以建立 **X 視窗系統** ，
 同時執行 `/etc/X11/xinit/xinitrc` 去呼叫 `/etc/X11/xinit/xinitrc.d/` 中的命令稿程式，用以初始化圖形階段。
@@ -185,7 +185,7 @@ Exec=thiny-session
 ....
 xrandr --output HDMI-1 --mode 1920x1080   <1>
 x11vnc -forever -repeat -passwd ******** &   <2>
-rxvt -fg white -bg black -fn "xft:size=20" &   <3>
+rxvt -fg white -bg black -fn xft:size=20 &   <3>
 Telegram -noupdate &   <4>
 ....
 <1> 有些特殊的螢幕配置，無法利用桌面環境的圖形設定介面達成。

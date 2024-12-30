@@ -28,10 +28,15 @@
 例如：
 ====
 user$ *wget _https://www.foobar.org/download/foobar-3.0.zip_* +
-user$ *wget _https://github.com/foo/bar/archive/refs/tags/v2.1.tar.gz_* +
-user$ *mv _v2.1.tar.gz bar-2.1.tar.gz_*
+user$ *wget _https://github.com/foo/bar/archive/refs/tags/v2.1.tar.gz_* -O bar-2.1.tar.gz_*
 ====
-NOTE: 透過瀏覽器下載時，檔案名稱可能會自動變更再儲存。
+萬一開發者或網站未提供適合的封裝檔案，使用者仍然可以利用標準的版本控制系統指令來下載：
+====
+user$ *git clone --recursive _https://github.com/foo/bar.git_*
+====
+所得到的 `bar/` ，即含有原始碼專案的複殖目錄。
+
+NOTE: 透過瀏覽器下載時，檔案名稱可能會自動變更後再儲存。
 
 要進入到下一階段的組建步驟之前，需要先將原始碼展開為原本的檔案目錄型式。
 如果取得的是封裝過的檔案，表示曾經利用 TAR 或 CPIO 之類的格式，將多個原始碼檔案彼此銜接，產生具有相應小寫副檔名的單一檔案。
@@ -93,11 +98,12 @@ user$ *make -C /lib/modules/$(uname -r)/build SUBDIRS=$(pwd) modules*
 常見的上層工具包括：
 
 [square]
-* Autoconf：存在可執行的 `configure` 檔案，執行的命令是 *./configure*
-* CMake：存在 `CMakeLists.txt` 設定檔案，執行的命令是 *cmake  .*
-* QMake：存在檔名類型為 `*.pro` 的設定檔案，執行的命令是 *qmake-qt5*
+* Imake：存在 `Imakefile` 組態檔案，執行的命令是 *xmkmf*
+* Autoconf：存在可執行的 `configure` 檔案，需要直接執行 *./configure*
+* QMake：存在類型為 `*.pro` 的組態檔案，執行的命令是 *qmake*
+* CMake：存在 `CMakeLists.txt` 組態檔案，執行的命令是 *cmake*
 
-實務上常常會加上額外的引數，或是需要更上一層的機制。
+實務上常常會加上額外的引數，甚至還可能存在更上一層的機制。
 
 組建過程中會導致中斷的可能原因有很多，例如：
 
@@ -176,6 +182,13 @@ root# *_./foobar-16.3.2-linux64.bin_*
 有些軟體包還有附帶解除安裝的程式，通常是和安裝動作類似的命令，
 衹是檔名中的 `install` 換成 `uninstall` ，或是原本的安裝命令再加上 `--uninstall` 的選項。
 如果找不到隨附的命令，文件裡面又沒有提到解除安裝的方法，那就衹能依靠經驗，自行去刪除目錄與檔案。
+
+特別要注意的是，有些軟體提供如下的單列指令安裝方法：
+====
+user$ *curl -fsSL _https://www.foobar.net//install.sh_ | bash*
+====
+實際上是直接執行由網路上傳輸而來的不明指令。
+雖然簡單、方便，卻也帶來相當大的安全疑慮，尤其是提出切換成超級使用者身分執行的要求時。
 
 === 來自套件
 目前流行的各類作業系統都會將常用的額外應用軟體以特定的格式封裝起來，

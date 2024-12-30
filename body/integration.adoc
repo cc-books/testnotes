@@ -35,6 +35,7 @@ TIP: 另一個用法類似的命令 `stress-ng`
 ====
 user$ *top*
 ====
+或是第三方 `bottom` 套件中的 `btm` 命令，後者是受到前者所啟發的全視窗華麗版本。
 如果想要看到圖形顯示則可以使用：
 ====
 user$ *gnome-system-monitor*
