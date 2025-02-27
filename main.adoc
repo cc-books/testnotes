@@ -44,6 +44,8 @@ include::body/display.adoc[]
 
 include::body/storage.adoc[]
 
+include::body/audiovideo.adoc[]
+
 include::body/network.adoc[]
 
 include::body/server.adoc[]
@@ -51,10 +53,6 @@ include::body/server.adoc[]
 include::body/wakeup.adoc[]
 
 include::body/integration.adoc[]
-
-include::body/whyfree.adoc[]
-
-include::body/method.adoc[]
 
 :sectnums!:
 

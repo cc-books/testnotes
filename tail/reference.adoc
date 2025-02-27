@@ -2,19 +2,20 @@
 chips:
 https://developer.technexion.com/docs/using-gpio-from-a-linux-shell
 https://wiki.t-firefly.com/Core-3568J/driver_gpio.html
+https://www.tecmint.com/reset-usb-device-linux/
 
 boot:
 https://www.tecmint.com/reset-forgotten-root-password-in-rhel-centos-and-fedora/
 
-Init:
+init:
 https://linuxtldr.com/interactive-login-and-non-login-shell/
 https://linuxtldr.com/difference-between-bash-profiles/
 
-Input:
+input:
 https://discussion.fedoraproject.org/t/way-to-switch-fn-and-right-control-key/
 https://wiki.archlinux.org/title/Tablet_PC
 
-Display:
+display:
 http://www.playtool.com/pages/dvicompat/dvi.htm
 https://www.kernel.org/doc/Documentation/fb/modedb.txt
 https://www.osadl.org/Single-View.111+M57253e83fd1.0.html
@@ -23,5 +24,8 @@ https://en.wikipedia.org/wiki/Framebuffer
 https://askubuntu.com/questions/150066/split-monitor-in-two/998435#998435
 https://discussion.fedoraproject.org/t/plymouth-boot-screen-with-three-dots
 
-usb:
-https://www.tecmint.com/reset-usb-device-linux/
+audiovideo:
+https://wiki.archlinux.org/index.php/Advanced_Linux_Sound_Architecture
+https://www.kernel.org/doc/html/latest/sound/hd-audio/notes.html
+https://forums.raspberrypi.com/viewtopic.php?t=276782
+https://askubuntu.com/questions/615550/on-reboot-headphones-are-muted

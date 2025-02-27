@@ -23,7 +23,7 @@
 ** Microcode: 由 CPU 廠商提供給系統韌體供應商，做為公版的不可變部分，用以將機器語言碼轉為更低階的真實 CPU 指令。
 
 `dmidecode -t processor` 指令的輸出中，也有許多由系統韌體所認知的 CPU 相關資訊。
-另外還有一項與虛擬化相關的裝置記憶體虛擬/實體位址轉換功能，在 Intel/AMD 平臺上分別稱為 VT-d/IOMMU。
+另外還有一項與虛擬化相關功能，利用裝置記憶體虛擬/實體位址轉換來增進虛擬機效能，在 Intel/AMD 平臺上分別稱為 VT-d/IOMMU。
 由於 `lscpu` 或 `dmidecode` 命令未必能顯示 VT-d/IOMMU 的狀態，因此需要以其他方式進行檢測。
 例如依據指令 `dmesg|grep DMAR` 的輸出，就能夠判斷作業系統是否可以使用此一功能。
 如果沒有輸出或是顯示停用的話，原因可能是 CPU 本身不支援、系統韌體將其關閉，或是設定了內核參數 `iommu=off` 。
@@ -148,6 +148,7 @@ user$ *lspci* +
 ====
 user$ *lspci -s _00:19.0_ -nnvvxxx*
 ====
+而內含的 `-x` 選項，表示以十六進位值來顯示裝置的**組態空間**(configuration space)，其中也能找到硬體識別號。
 NOTE: 以超級使用者身分執行 `lspci` 命令可以獲得更多資訊。
 
 `setpci` 命令則是用來設定 PCI 裝置中，特殊暫存器的值。
@@ -169,15 +170,18 @@ root# *setpci -s _00:14.0_ _7C.W=0108_*
 * USB 1.1: OHCI 12Mbps
 * USB 2.0: EHCI 480Mbps
 * USB 3.0: XHCI 5000Mbps
+* USB 3.1: XHCI 10Gbps
+* USB 3.2: XHCI 20Gbps
 
-但是由於 USB 技術開發的速度太快，官方的規格名稱也不斷變動，以下列出各種名稱分類的對應表：
+但是由於 USB 技術開發的速度太快，官方的規格名稱也不斷變動，以下列出目前各種名稱最新分類的對應表：
 
 [square]
-* USB 3.2 Gen 1×1 (= USB 3.1 Gen 1 = USB 3.0)
+* USB 3.2 Gen 1×1 (= USB 3.0 = USB 3.1 Gen 1)
 * USB 3.2 Gen 1×2 (= USB 3.0 & Type-C)
-* USB 3.2 Gen 2×1 (= USB 3.1 Gen 2 = USB 3.1)
+* USB 3.2 Gen 2×1 (= USB 3.1 = USB 3.1 Gen 2)
 * USB 3.2 Gen 2×2 (= USB 3.1 & Type-C)
 
+近期還發表了速度可達 40Gbps 甚至更高的 USB 4.0 規格，未來可能衹以傳輸速度做為分類依據。
 為了簡化說明，以下僅以 USB1, USB2, USB3 代表主要的不同技術規格。
 
 ==== 接頭
@@ -248,6 +252,7 @@ user$ *lsusb -t* +
     |__ Port 001: Dev 002, If 0, Class=Hub, Driver=hub/6p, 480M
 ====
 
+如果 `lsusb` 命令加上了 `-v -d _裝置識別碼_` 選項，就可以列出個別裝置的內容說明。
 圖形介面的檢測工具選擇則有 `usbview` ，能夠顯示個別 USB 裝置之間的連接關係以及詳細資訊。
 
 ==== 裝置驅動

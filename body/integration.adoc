@@ -40,3 +40,8 @@ user$ *top*
 ====
 user$ *gnome-system-monitor*
 ====
+
+=== 方法論
+
+相關不表示因果
+

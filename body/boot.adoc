@@ -122,7 +122,7 @@ localhost.localdomain
 root# *mkfs.vfat /dev/sda1* +
 root# *mount /dev/sda2 /mnt* +
 root# *mount /dev/sda1 /mnt/boot/efi* +
-root# *for i in /dev /dev/pts /proc /run /sys; do mount -B $i /mnt$i; done* +
+root# *for i in dev proc run sys; do mount -B /$i /mnt/$i; done* +
 root# *chroot /mnt* +
 root# *grub2-install /dev/sda* +
 root# *grub2-mkconfig -o /boot/efi/EFI/__散佈版__/grub.cfg*
@@ -273,12 +273,13 @@ root# *mount -vt devpts -o gid=4,mode=620 none /dev/pts*
 ====
 
 使用內核參數 `rd.break enforcing=0` 來強制中斷開機流程，並於載入記憶體檔案系統之後進入緊急模式。
-由於多數系統的單人模式設定需要密碼，如此避過後即可手動掛載磁碟：
+由於多數系統的單人模式預設仍然需要密碼，如此避過後即可手動掛載磁碟：
 ====
 root# *mount -o remount,rw /sysroot* +
 root# *chroot /sysroot* +
 root# *passwd*
 ====
+除了利用 `passwd` 命令來修改密碼之外，必要時還可執行 `dracut` 命令來重建初始記憶體檔案系統。
 如果本來有啟用 SELinux 的話，可能還需要以下的指令（或是衹需要最後一列）來重置它：
 ====
 root# *restorecon -v /etc/shadow* +
