@@ -2,39 +2,277 @@
 
 === 有線通訊
 
+==== 乙太網路
+**乙太網路**(ethernet)目前最普及的有線網路架構。
+乙太網路線通常採用 RJ45 型式的接頭，下方有兩個 LED 顯示燈：
+一個代表「動作」，表示是否正在傳輸資料(電力/活動)；
+一個代表「速度」，表示正在使用的傳輸速度(10/100/1000 Mb/s)。
+
+網路傳輸速度除了網路卡與驅動模組本身的限制以外，還會受到網路基礎建設的影響，特別是路徑中網路線的規格。
+另外像是測量區域網路速度時，要注意使用的是**集線器**(hub) 還是**交換器**(switcher)，前者會依據連接埠數而分散流量，通常會導致速度較慢。
+
+除了以 Mb/s(百萬位元/秒) 為單位的基礎傳輸速度之外，傳輸模式還可分為**全雙工**(duplex full) 或**半雙工**(duplex half)。
+傳輸兩端的裝置如果有開啟**自動協商**(autoneg) 功能，則實際的傳輸速度與傳輸模式會依照雙方的預設值進行調整，以達到彼此都能支援的最大值。
+**最大傳輸單元**(MTU) 也會影響網路傳輸速度，一般乙太網路卡的 MTU 預設為 1500 位元組，但是在全部設備都是 1000Mb/s 的環境中，可以嘗試加大 MTU 的值。
+`ethtool` 是主要的乙太網路裝置命令，整合後的設定指令看起來像是：
+====
+root# *ethtool -s eth0 speed 1000 duplex full autoneg on*
+====
+並非所有的驅動模組都允許使用 `ethtool` 工具來設定各個項目，甚至有些老舊的驅動模組，可能會需要使用過時的 `mii-tool` 工具。
+如果想要測試不同顏色的燈號，就需要固定速度在 100Mb/s 且關閉自動協商功能，但此時對方的作業系統也會依規則自動降為半雙工模式。
+
+**網路線供電**(PoE) 是一種經由有線網路提供系統電力的技術，依然使用原本規格的網路線。
+需要路由器端設定使用某些接腳提供電源，或是利用外接電源再加上併連器。
+網路接收端的電路也需要有些改變，或是使用分歧器將電力導回原本的供電路徑。
+
+==== 光纖網路
+如果主機板配備的是**光纖通道**(fiber channel) 網路裝置，就需要光纖網路的基礎設施。
+否則必須外加一個**小封裝熱插拔收發器**(SFP) 做為轉換器，才能與一般的乙太網路線連接，而此時的網路卡設定值看起來像是：
+====
+root# *ethtool _enp1s0_* +
+Settings for enp1s0: +
+	Supported ports: [ FIBRE ] +
+	Supported link modes:   1000baseKX/Full +
+	Supported pause frame use: Symmetric +
+	Supports auto-negotiation: Yes +
+	Supported FEC modes: Not reported +
+	Advertised link modes:  1000baseKX/Full +
+	Advertised pause frame use: Symmetric +
+	Advertised auto-negotiation: Yes +
+	Advertised FEC modes: Not reported +
+	Speed: 1000Mb/s +
+	Duplex: Full +
+	Auto-negotiation: on +
+	Port: FIBRE +
+	PHYAD: 0 +
+	Transceiver: internal +
+	Supports Wake-on: pumbg +
+	Wake-on: g +
+        Current message level: 0x00000007 (7) +
+                               drv probe link +
+	Link detected: yes +
+====
+以上範例所使用的內核驅動模組為 `igb` ，可以看到支援的傳輸模式衹有一種，因此也就無法以工具程式來改變設定。
+
+
+==== 電力線網路
+當環境不適合佈建有線網路與無線網路時，**電力線網路**(powerline) 便是一種可以考慮的方案。
+在電源插座上安裝一個轉接器，就可以提供乙太網路線藉由電力線傳出與傳入的通道。
+使用時會限制於受同一電表所控制的區域，且儘量不要與其他電器共用插座，以免訊號受到電磁波動影響。
+
 
 === 無線通訊
 電磁波是無線通訊最主要的資訊載體，各類型通訊所使用的頻率範圍如下：
 
 [square]
-* 微波：300 GHz ~ 300 MHz
-* 無線電：300 MHz ~ 3 KHz
-* Wi-Fi: 2.4, 3.6, 5, 60 GHz (不同頻道涵蓋不同的次範圍，頻寬約 20~40 MHz)
-* bluetooth: 2.4 GHz ~ 2.485 GHz (不同頻道涵蓋不同的次範圍，頻寬約 1 MHz)
-* NFC(RFID): 13.56 MHz
-
-GPS 1.1GHZ ~ 1.6 GHz
+* 微波(microwave)：300 GHz ~ 300 MHz
+* 無線電波(radio waves)：300 MHz ~ 3 KHz
+* 無線網路(Wi-Fi): 2.4, 3.6, 5, 60 GHz (不同頻道涵蓋不同的次範圍，頻寬約 20~40 MHz)
+* 藍牙(bluetooth): 2.4 GHz ~ 2.485 GHz (不同頻道涵蓋不同的次範圍，頻寬約 1 MHz)
+* 近場通訊(NFC): 13.56 MHz
+* 全球定位系統(GPS): 1.1GHZ ~ 1.6 GHz
 
 ==== 無線廣域網路
-因行動電話的普及而興起的**無線廣域網路**(WWAN, Wireless Wide Area Network)，
+因行動電話的普及而興起的**無線廣域網路**(WWAN)，
 由於各個通信世代之間的變化太快，並沒有特定的技術標準：
 
 [square]
-* 3G 最多使用的標準為 W-CDMA
-* 3.9G 最多使用的標準為 LTE
-* 4G 最多使用的標準為 LTE-Advanced
+* 3G: 最多使用的標準為 W-CDMA
+* 3.9G: 最多使用的標準為 LTE
+* 4G: 最多使用的標準為 LTE-Advanced
 
-而 4G 及以上的世代，已不再利用傳統電話網路的電路交換機制，而改用網際網路的封包交換機制。
-
-在類 PC 系統中使用無線廣域網路，硬體方面需要增加晶片與 SIM 卡插槽，
+在類 PC 系統中使用無線廣域網路，硬體方面需要增加模組與 *SIM*(使用者身分模組) 卡插槽，但是要注意所使用的 SIM 卡大小規格（SIM > Nano SIM > eSIM > iSIM）；
 軟體部分則需要晶片驅動程式，並且將數據機設定為網路裝置。
+LTE 4G 的無線廣域網路裝置，需要驅動序列埠、數據機以及網路卡的內核模組，而 4G 及以上的世代，已不再利用傳統電話網路的電路交換機制，而改用網際網路的封包交換機制。
+
+安裝後選擇連線的電信網路供應商時，有時要選擇非發卡電信商反而才連得上。
+另外主機板上的 SATA, Wi-Fi, USB 等裝置，也有可能會與無線廣域網路產生簡單整數倍的頻率干擾。
 
 ==== 無線區域網路
+一般所稱的**無線網路**(Wi-Fi) 即指構成**無線區域網路**(WLAN) 的技術。
+安裝 M.2 介面的無線網路模組之前，要注意模組匹配的插口型式（A/B/E/M Key）。
+無線網卡規格會載明支援的頻段，而有些產品支援不衹一種頻段，因此測試時需要配合對應的基地臺分開進行。
+
+無線網路的允許頻段會因地區而有所不同，可以經由軟體設定區碼開啟不同的頻段，可用 `iwlist channel` 或 `iw dev` 指令來檢視頻段。
+如果想要知道目前無線網卡的使用地區，可以利用 `iw reg get` 指令，並以 `iw reg set _區碼_` 指令進行設定。
+儲存區碼的實際位置，則在檔案 `/etc/wpa_supplicant/wpa_supplicant.conf` 中的 `country=` 項目。
+
+大多數地區對於無線網卡發射訊號的強度都有限制，但有些無線網卡確實需要調整發射強度(txpower) 的值才能成功連線。
+以下兩條指令都能夠用來設定發射強度：
+====
+root# *iwconfig wlan0 txpower 20* +
+root# *iw dev wlan0 set txpower fixed 20dBm*
+====
+一般衹允許最高值為 20 dBm，少數地區可到 30 dBm，而提高強度還會有導致晶片過熱的危險。
+
+無線網路卡的韌體會依照模式區分為**基地臺**(AP) 或**站臺**(STA)，前者包含後者但後者則不包含前者的功能。
+要測試不同韌體時，必須要關機後再開，因為單純重置時，韌體未必會被卸載。
+如果系統已有連網的有線網路卡，還可以將無線網路卡做為有線轉無線的**橋接器**(bridge) 使用，該功能大多已內建在桌面環境設定之中。
+無線網路卡支援的介面模式必須包括**虛擬基地臺**(virtual AP)，否則就需要安裝 `hostapd`, `create_ap` 等套件後再進行設定。
+
+`rfkill` 命令是以軟體的方式，用於無線網路裝置的阻斷(block) 與解除阻斷(unblock)，附加選項 `list` 則可以取得接受管理的裝置清單。
 
 ==== 藍牙通訊
+藍牙裝置與系統的連接介面可能為 USB, UART 或 SDIO。
+市售的網路硬體裝置中，也常見無線網路加上藍牙的組合，因此除了 PCIe 介面的無線網路內核驅動模組外，還需要 USB 介面的藍牙模組 `btusb` 。
+
+M.2 插口整合了多種匯流排(PCIe,USB,...)，通常 Wifi+Bluetooth 模組的腳座缺口模式為 B+M key
+因此需要 PCIe 的無線網路驅動程式，以及 USB 的藍牙驅動程式(btusb)。
+
+測試藍牙的外部裝置可用手機或藍牙喇叭/耳機，但要注意某些型號的藍牙耳機可能左右耳分成兩個裝置，並確認測試前耳機已充足了電。
+藍牙音訊輸出的測試步驟一般分為：藍牙裝置列表、藍牙裝置認證、藍牙裝置連線、音效裝置列表、音效裝置播放。
+如果因為某種原因，無法使用圖形操作介面的話：偵測藍牙控制器可用 `bt-adapter -l` 或 `bluetoothctl list` 指令；
+偵測藍牙裝置則需要 `hcitool scan` 或 `bluetoothctl scan on` 指令。
+而以指令連結藍牙裝置的範例如下：
+====
+root# *systemctl restart bluetooth* +
+root# *bluetoothctl discoverable on* +
+root# *bluetoothctl pairable on* +
+root# *bluetoothctl devices* #列出後續命令可用的裝置號碼 +
+root# *bluetoothctl pair _XX:XX:XX:XX:XX:XX_* +
+root# *bluetoothctl connect _XX:XX:XX:XX:XX:XX_*
+====
+
+在兩臺配備藍牙的電腦之間，可以使用 `blueman` 套件來測試藍牙傳檔。
+`gnome-bluetooth` 套件有簡單的傳檔功能，且會顯示即時傳輸速度，可以從設定功能進入。
+實際執行的程式為 `bluetooth-sendto` ，傳檔動作似乎較穩但是較慢。
 
 ==== 近場通訊
-NFC 是基於 RFID 技術(利用相同頻率) 所衍生出來的通訊協定，它可以讀取別人也可以被讀取，因此相容於 RFID 晶片。
+NFC 是基於 RFID(無線射頻辨識) 技術所衍生出來的通訊協定，它可以讀取別人也可以被讀取，因此相容於 RFID 晶片。
 NFC 的有效距離要比單純 RFID 的有效距離略短。
 
 ==== 紅外線通訊
+
+
+=== 軟體使用
+
+==== 裝置韌體
+網路卡的 MAC 位址，可以用 DOS、UEFI 命令殼、Linux 之下的工具程式燒錄。
+如果插著網路線開機時兩個指示燈恆亮，而進入 OS 之後無法連線且無網路裝置，表示是網路卡 MAC 位址燒錄不完全，可能是燒錄完衹有暖開機而未冷開機。
+設定 MAC 位址的 Linux 命令範例：
+====
+root# *ip link set dev eth0 address _XX:XX:XX:XX:XX:XX_*
+====
+
+網路卡的裝置韌體中負責 PXE 開機的部分，必要時可用廠商提供的特殊軟體來更新。
+PXE 開機中斷或失敗後，系統韌體有可能無法初始化網路卡，並導致之後執行的作業系統抓不到裝置，而需要關閉 PXE 功能或調整開機順序。
+
+==== 開機驅動
+有線網路連接座的 LED 亮燈行為模式，是編寫在系統韌體之中。
+
+
+除了一些特殊狀況，例如網路開機之外，GRUB 之類的開機管理程式的網路連線並非必要。
+萬一真的需要確認的話，在 GRUB 的命令模式下還有 `net_dhcp`, `net_ls_addr`, `net_ls_dns` 等指令可以使用。
+
+當使用的是多重開機系統時，Windows 的 Fast Startup 功能如果開啟，可能會在關機時仍然佔據網卡，導致重新以 Linux 開機卻抓不到裝置的情形。
+有時停用系統韌體設定中的 FastBoot 或 ACPI Autoconf 項目也可能會改善。
+
+如果網路裝置是以 PCI 匯流排與系統連結，那麼在 `lspci` 命令的輸出中就會顯示出介面資訊，表示系統能夠偵測到硬體。
+從其中獲取的 PCI 裝置編號，也可以做為直接操作虛擬裝置目錄項目的依據。例如：
+====
+root# *echo 0 > /sys/devices/pci0000:00/_0000:00:19.0_/enabled* +
+root# *echo 1 > /sys/devices/pci0000:00/_0000:00:19.0_/enabled*
+====
+或者是：
+====
+root# *echo 1 > /sys/devices/pci0000:00/_0000:00:19.0_/remove* +
+root# *echo 1 > /sys/devices/pci0000:00/_0000:00:19.0_/rescan*
+====
+都能夠造成類似重置裝置的效果。
+
+==== 內核驅動
+
+正常情況下，藉由 `lsmod` 命令可以看到對應載入的驅動模組名稱，否則就要檢查一下 `dmesg` 命令所輸出的系統記錄，判斷是因為模組缺少或是版本太舊所致。
+也有可能單純是因為模組原始碼中，僅僅沒有包含一列此裝置的編號，進而造成無法自動載入。
+
+內核所支援的網路裝置驅動程式，位於 `/usr/lib/modules/$(uname -r)/kernel/drivers/net/` 目錄之下。
+如果開機時多等了數十秒，而且開機後網路卡沒有驅動，可能是內核無法載入適當的網路卡模組。
+當不同作業系統的驅動結果不同時，除了驅動模組本身版本問題之外，載入的內核韌體數量或版本差異也會有關。
+有些網卡的韌體檔案未能及時更新（例如 zd1211 晶片），需要自行上網頁
+footnote:[zd1211 的 SourceForge 網站 <https://sourceforge.net/projects/zd1211/>]
+下載並替換 `/lib/firmware/` 目錄中的檔案。
+
+Linux 內核隨附的驅動模組，通常經過整合而會支援多個型號的裝置。
+例如 `ath5k`, `ath9k`, `ath10k` 等內核模組，各自支援了多種產自 Atheros 公司的網路卡晶片（目前已被 Qualcomm 收購）。
+又如內核模組 `r8169` 會被網路晶片 RTL8168 或 RTL8125 所觸發而載入，但是從廠商的網站上又可以分別下載得到內核模組 `r8168` 與 `r8125` 的原始碼。
+因此當系統提供的 `r8169` 未能滿足需求時，就可以考慮將它利用黑名單排除，再嘗試載入自行編譯過的廠商版本驅動模組。
+另外由於使用授權或是其他原因，內核無法即時收入所有的開放原始碼驅動模組，因此必要時可能需要自行尋找、下載、編譯與安裝。
+例如網路上開發者提供最新 Realtek 生產的無線網卡驅動模組
+footnote:[RTL 無線網卡驅動模組的 Github 網站 <https://github.com/lwfinger/rtlwifi_new/>]
+，便適合用來補足目前內核的不足，或是向後移植以配合舊版內核使用。
+
+==== 內核參數
+如果使用了正確的內核驅動模組，仍然會出現錯誤訊息或不正常反應時，可試試以下內核參數之一：
+`pcie_aspm=off`, `pci=nomsi`, `acpi_sci=low`, `noapic`, `acpi=noirq` 。
+
+舊版內核均以 eth0, eth1,... 的模式來命名有線網路卡，而以 wlan0, wlan1,... 的模式來命名無線網路卡
+但新版內核採取較複雜的命名規則，基本上有線網路卡均以 en 開頭，無線網路卡則以 wl 開頭
+內核參數 `net.ifnames=0 biosdevname=0` 可以讓網卡名稱固定為 eth0, wlan0,...
+
+有些無線網路的驅動模組具有控制 LED 的模組參數 `led=`, `blink=` 或 `led_mode=` ，可以從模組的 `modinfo` 命令輸出中確認是否支援。
+其他可能調整的驅動模組參數像是： `swenc=1`, `ips=0`, `fwlps=0`, `rtw_power_mgnt=0`, `rtw_enusbss=0`
+
+==== 網路服務
+在傳統的 `init` 系統初始模式下，系統藉由一組**網路初始命令稿**(Network Initscript) 來設定網路服務。
+目前最流行的方式，是利用 `NetworkManager` 套件來提供網路服務，亦即在 `systemd` 系統初始模式下提供同名的服務單元。
+雖然 `systemd` 系統初始模式也有自帶的網路服務 `systemd-networkd` 以及隨附的 `networkctl` 控制命令，但通常不被採用以避免衝突。
+
+
+==== 偵測
+檢查目前網路狀態是否連線，可以利用 `NetworkManager` 套件提供的 `nmcli` 或 `nm-onlne` 命令：
+====
+user$ *nmcli -t -f STATE general* +
+已連線 +
+user$ *nm-online* +
+正在連線...............   30秒 [已上線]
+====
+而 `nmcli` 也可以用來監控網路狀態，例如指令 `nmcli dev wifi` 以及命令 `wavemon` ，都能夠顯示目前的無線網路狀態。
+
+
+如果 `ip addr` 的輸出中有 `inet6` 字串，就表示系統有啟用 IPv6 協定。
+如果不打算使用 IPv6，最好將設定關閉以減少發生問題的機會：
+====
+root# *sysctl -w net.ipv6.conf.all.disable_ipv6=1* +
+root# *sysctl -w net.ipv6.conf.default.disable_ipv6=1*
+====
+
+有許多的方式可以獲取目前系統的 IP 位址，例如指令 `hostname -I` 。
+
+`ping` 是檢查網路上某臺機器狀態最常用的命令，必要的參數為目標主機名稱或網路位址。
+如果是用於命令稿，可能還要加上 `-c1` 與 `-W1` 等選項。
+
+當系統藉由主機名稱或網路位址與其他系統進行資訊溝通時，彼此還要指明輸入與輸出所用的埠號。
+命令 `nmap` 是一款用來掃描網路的工具，可以檢視指定網段、主機/IP、埠號上所發生的網路行為。
+
+
+
+==== 設定
+
+**主機名稱**(hostname) 在 Linux 系統中其實分為三種：
+
+[square]
+* Transient(暫時)：由 DNS 決定的網路識別名稱，可見於 `/etc/hosts` 檔案，相關命令為 `hostnamectl`, `sysctl`, `hostname` 。
+* Static(靜態)：由系統決定的單機識別名稱，可見於 `/etc/hostname` 檔案，相關命令為 `hostnamectl`, `nmcli` 。
+* Pretty(美觀)：由使用者決定的人讀識別名稱，可見於 `/etc/machine-info` 檔案，相關命令為 `hostnamectl` 。
+
+傳統的網路工具包含 `net-tools` 套件中的 `ifconfig`, `route`, `netstat` 等命令，目前有被 `ip`, `ss` 等命令取代的趨勢。
+例如，以往用來顯示網路裝置基本資訊的 `ifconfig` 命令，可以依需求由 `ip address` 或 `ip link` 指令完成；
+而做為顯示路由資訊的 `route` 命令，則可以被 `ip route` 指令代替。
+`ip` 命令除了也支援 `-a` 選項，用來顯示包括離線的所有網路裝置，另外還提供了像是 `-c`, `-br` 等選項，分別可將輸出加上色彩或是予以簡化：
+====
+root# *ip -a -br address* +
+lo               UNKNOWN        127.0.0.1/8 ::1/128 +
+eno1             UP             10.10.3.149/24 fe80::6290:d8f4:8b75:51ef/64 +
+root# *ip -a -br route* +
+default via 10.10.3.254 dev eno1 proto dhcp src 10.10.3.149 metric 100 +
+10.10.3.0/24 dev eno1 proto kernel scope link src 10.10.3.149 metric 100
+====
+
+有一些特定應用範圍的工具，例如 `iw` 套件中同名的命令可以用來顯示與設定無線網路：
+====
+root# *iw list* +
+====
+`iwconfig` 與 `iwlist` 則是另一組不同的命令，來自於第三方套件 `wireless_tools` ，也是用來列出或設定無線裝置的組態。
+同樣包含在其中的 `iwpriv` 命令，則用來執行個別網路驅動程式特有的功能，通常應用於供應商發布的專有驅動程式。
+
+

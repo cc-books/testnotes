@@ -12,9 +12,7 @@ include::head/abstract.adoc[]
 
 :sectnums:
 
-include::body/buildup.adoc[]
-
-include::body/environ.adoc[]
+include::body/prepare.adoc[]
 
 include::body/software.adoc[]
 
@@ -48,9 +46,7 @@ include::body/audiovideo.adoc[]
 
 include::body/network.adoc[]
 
-include::body/server.adoc[]
-
-include::body/wakeup.adoc[]
+include::body/power.adoc[]
 
 include::body/integration.adoc[]
 

@@ -168,12 +168,13 @@ root# *chmod +x _file.ext_* +
 root# *ll _file.ext_* +
 -rwxr-xr-x 1 user   user   3628  5月 14  2023 file.ext
 ====
-NOTE: Linux 還支援另一套獨立於 `chmod` ，但功能強大卻較少使用的屬性命令 `chattr` 。
+NOTE: Linux 還支援另一套獨立但功能強大卻較少使用的屬性，相關的命令包括 `lsattr` 與 `chattr` 。
 
 ==== 鏈結與大小
 **軟式鏈結**(soft/symbolic link) 類似其他作業系統中的捷徑，是僅有一條內容的檔案，註記著建立鏈結的目標檔案或目錄位置。
 軟式鏈結的檔案屬性字串首字元，是以字母 `l` 做為標記。
-設定鏈結是利用 `ln`(link) 命令，而取得鏈結的相關命令為 `realpath` 與 `readlink` 。
+設定軟式鏈結是利用 `ln`(link) 命令加上 `-s` 選項，以及相對於目標的來源路徑與目標路徑，而取得鏈結的相關命令則為 `realpath` 與 `readlink` 。
+較新的 Linux 系統，為了解決多版本軟體要決定預設的問題，所採取的**替代方案**(alternatives) 機制，也是基於軟式鏈結的特性。
 
 屬性列表的第二欄，表示與其他檔案或目錄產生的鏈結數量。
 對於目錄來說，相當於其中所含子目錄的數量（已經加上 `.` 與 `..` 兩者）。
@@ -320,6 +321,6 @@ user$ *find _/usr/lib/modules_ -name _r8169.ko.xz_* +
 
 === 額外工具
 
-* 徹底清除檔案內容：`wipe`, `shred`, `scrub`
+* 徹底抹除檔案內容：`wipe`, `shred`, `scrub`
 * 記憶變更的工作目錄並回復：`pushd`, `popd`
 * 批次更改檔案名稱：`rename`, `mmv`

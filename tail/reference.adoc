@@ -1,3 +1,5 @@
+prepare:
+https://ostechnix.com/understanding-common-port-numbers/
 
 chips:
 https://developer.technexion.com/docs/using-gpio-from-a-linux-shell
@@ -10,6 +12,7 @@ https://www.tecmint.com/reset-forgotten-root-password-in-rhel-centos-and-fedora/
 init:
 https://linuxtldr.com/interactive-login-and-non-login-shell/
 https://linuxtldr.com/difference-between-bash-profiles/
+https://www.bloovis.com/posts/2025-02-27-set-default-browswer/
 
 input:
 https://discussion.fedoraproject.org/t/way-to-switch-fn-and-right-control-key/
@@ -29,3 +32,9 @@ https://wiki.archlinux.org/index.php/Advanced_Linux_Sound_Architecture
 https://www.kernel.org/doc/html/latest/sound/hd-audio/notes.html
 https://forums.raspberrypi.com/viewtopic.php?t=276782
 https://askubuntu.com/questions/615550/on-reboot-headphones-are-muted
+
+ioports:
+https://www.reddit.com/r/linux/comments/9cjxcb/writing_to_cmos_rtc_port_0x70_and_0x71_from_linux/
+
+network:
+https://access.redhat.com/solutions/783533

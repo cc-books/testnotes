@@ -517,8 +517,9 @@ user$ *dd if=/dev/zero of=_testfile_ bs=4M count=1K oflag=dsync*
 user$ *dd if=_testfile_ of=/dev/null bs=4M iflag=dsync*
 ====
 
-`testdisk` 是另外一個文字介面的工具程式，可以修復磁碟或映像檔的分割區問題，其中的 `photorec` 項目還有可能救回已刪除的檔案。
+萬一不小心誤刪了重要檔案，記得先不要再寫入新資料，然後將含有舊檔案的磁碟裝置卸載，再利用 `extundelete` 命令嘗試救回。
 
+`testdisk` 是另外一個文字介面的工具程式，可以修復磁碟或映像檔的分割區問題，其中的 `photorec` 項目還有可能救回已刪除的檔案。
 `fsarchiver` 則是另外一個文字介面的備份/還原程式，主要是以檔案系統為操作對象，所產生的 `.fsa` 檔案與 `dd` 的格式並不相容。
 
 Clonezilla

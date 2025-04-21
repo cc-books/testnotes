@@ -1,0 +1,53 @@
+== 電力供應
+
+=== 裝置省電機制
+
+網路卡驅動程式有可能預設會開啟省電設定，造成網路線於開機、插拔、喚醒時無法連線，而需要手動設定或是更換驅動程式。
+
+當無線網卡的頻段支援穩定度出現問題時，可以試試停用電源管理的功能：
+====
+root# *iwconfig _wlan0_ power off*
+====
+
+=== 系統睡眠機制
+
+如果要停用相關服務，可以執行下列命令：
+====
+root# *systemctl mask sleep.target hybrid-sleep.target* +
+root# *systemctl mask suspend.target hibernate.target*
+====
+
+=== 喚醒機制
+
+==== 周邊喚醒
+
+==== 網路喚醒
+**網路喚醒**(WoL) 的功能需要網路晶片的支援，作用於網路第二層，通常在系統韌體中會有相應的啟用╱停用項目。
+作業系統本身負責設定與儲存此一功能的狀態，但是預設常常因為資訊安全的考量而設為關閉。
+利用指令 `ethtool -i` 加上指定網路卡名稱所顯示的資訊中，項目 `Wake-on:` 如果顯示 `d` 則表示目前關閉。
+開啟以**魔術封包**(magic packet)訊號來喚醒的功能可用指令：
+====
+root# *ethtool -s _eth0_ wol g*
+====
+或是
+====
+root# *nmcli connection modify "Wired connection 1" 802-3-ethernet.wake-on-lan magic*
+====
+如果想要每次開機後都自動設定，就需要寫在開機啟動的命令稿中。
+不過以上設定衹能將系統由 S3 狀態喚醒，對於 S5 狀態則需要在系統韌體中設定才有效。
+
+如果想要偵測網路卡上是否有傳來喚醒的魔術封包訊號，可以利用：
+====
+root# *tcpdump -i _eth0_ port 9 -vvvv -s0 -n*
+====
+
+**無線網路喚醒**(WoWLAN) 是比較少用的功能，除了硬體支援並不充足之外，資訊安全上的考慮也是主要原因。
+以下是一些相關的指令範例：
+====
+root# *iw _wlan0_ wowlan show* +
+root# *iw list | grep WoWLAN* +
+root# *nmcli con show _wlan0_ | grep wake-on-wlan*
+====
+
+==== 定時喚醒
+
