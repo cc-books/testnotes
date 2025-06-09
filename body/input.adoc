@@ -131,6 +131,11 @@ mod3        ISO_Level5_Shift (0xcb) +
 mod4        Super_L (0x85),  Super_R (0x86),  Super_L (0xce),  Hyper_L (0xcf) +
 mod5        ISO_Level3_Shift (0x5c)
 ====
+以下兩條指令所演示的，是將控制鍵(control keys) 的功能停用後，又立刻重新啟用：
+====
+user$ *xmodmap -e "remove control = Control_L" -e "remove control = Control_R"* +
+user$ *xmodmap -e "add control = Control_L" -e "add control = Control_R"*
+====
 
 kbd:[ScrLock]（捲動鎖定鍵）在虛擬終端機的純文字模式中的作用，反而比較像 kbd:[Pause]。例如執行：
 ====

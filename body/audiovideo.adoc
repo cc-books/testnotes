@@ -20,7 +20,7 @@ libcamera
 
 如果是屬於符合 *UVC*(USB 視訊類別) 規格的**網路攝影機**(webcam) 裝置，內核就會以 `uvcvideo` 模組來驅動。
 同時產生一到多個 `/dev/video_N_` 形式的資料裝置，以及 `/dev/media_N_` 形式的控制裝置（_N_ 均由 0 起算）。
-萬一裝置確實有支援 UVC 卻沒有被內核辨認出來，可以利用 `lsusb` 找出它的**裝置識別碼**（參見〈系統裝置：USB：裝置資訊〉），然後嘗試輸入：
+萬一裝置確實有支援 UVC 卻沒有被內核辨認出來，可以利用 `lsusb` 找出它的**裝置識別碼**（參看〈系統裝置：USB：裝置資訊〉），然後嘗試輸入：
 ====
 root# *echo _VID_ _PID_" > /sys/bus/usb/drivers/uvcvideo/new_id*
 ====

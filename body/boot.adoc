@@ -161,7 +161,7 @@ root# *grub2-install --target=i386-pc --root-directory=/mnt _/dev/sda_ --force*
 
 ==== 改為 SYSLINUX
 曾經流行的開機載入程式為 LILO(LInux LOader)，而 rEFInd 雖然支援 UEFI 但較少使用。
-`systemd` 初始系統模式有提供一個簡易開機載入軟體 `systemd-boot` ，也許未來會有較多人使用。
+Systemd 系統初始模式有提供一個簡易開機載入軟體 `systemd-boot` ，也許未來會有較多人使用。
 SYSLINUX 則是多用途的開機載入軟體家族，其中適用於 BIOS 模式的稱為 EXTLINUX。
 安裝換用 EXTLINUX 的步驟：
 ====

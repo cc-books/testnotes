@@ -63,7 +63,7 @@ user$ *cat _file.txt_* +
 [underline]##<FEFF>##覆蓋的內容 [underline]#M# +
 新增的內容 [underline]#M#
 ====
-應該足以提醒使用者要注意，進而採取適當的處理方式：
+應該足以提醒使用者要注意，並採取適當的前處理方式，再進行任何形式的編輯：
 ====
 user$ *file _file.txt_* +
 file.txt: Unicode text, UTF-8 (with BOM) text, with CRLF line terminators +

@@ -35,6 +35,10 @@ https://askubuntu.com/questions/615550/on-reboot-headphones-are-muted
 
 ioports:
 https://www.reddit.com/r/linux/comments/9cjxcb/writing_to_cmos_rtc_port_0x70_and_0x71_from_linux/
+https://qkxu.github.io/2019/04/15/linux%E4%B8%8B%E7%9A%84watchdog.html
 
 network:
 https://access.redhat.com/solutions/783533
+
+wakeup:
+https://bbs.archlinux.org/viewtopic.php?pid=1953760#p1953760

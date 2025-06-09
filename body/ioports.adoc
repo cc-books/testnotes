@@ -24,7 +24,7 @@ root# *printf '\x0b\x83' | dd of=/dev/port oflag=seek_bytes seek=112 conv=notrun
 
 ==== 列印服務
 Linux 上的列印功能，也是基於伺服器－客戶端的架構來完成。
-CUPS(通用 UNIX 列印系統) 是目前的主流列印服務軟體，在 `systemd` 系統初始模式中是以名為 `cups.service` 的單元形式作用：
+CUPS(通用 UNIX 列印系統) 是目前的主流列印服務軟體，在 Systemd 系統初始模式中是以名為 `cups.service` 的單元形式作用：
 ====
 root# *systemctl start cups* +
 root# *systemctl enable cups*
@@ -201,7 +201,7 @@ while true; do echo X > /dev/_ttyS0_; sleep 2; done
 ==== 數據機
 有些使用序列埠的**數據機**(MODEM) 周邊設備，內核會載入 `cdc_acm` 驅動模組，並額外建立形如 `/dev/ttyACM_0_` 的裝置名稱。
 但是當數據機是以 USB 介面連接，裝置就可能同時會具有 `ttyACM_N_` 以及 `ttyUSB_N_` 兩個代號，容易造成應用軟體無法識別或誤判。
-嘗試的解決方法包括：停用初始系統模式下的 `ModemManager` 服務，或者自行設定 `udev` 的規則以正確產生所需裝置的符號鏈結。
+嘗試的解決方法包括：停用系統初始模式下的 `ModemManager` 服務，或者自行設定 `udev` 的規則以正確產生所需裝置的符號鏈結。
 
 
 ==== 錢箱
@@ -260,15 +260,20 @@ root# *echo -n '_01 01 CA 60 00 03 A9_' | xxd -r -p > /dev/_ttyUSB0_*
 
 ==== 指示燈
 電腦系統與周邊設備上，常常會配備基於**發光二極體**(LED) 的指示燈，做為顯示鍵盤、網路、影音、儲存等裝置狀態的人機介面。
-有些指示燈是由裝置直接控制，有些則具備程式可控的介面，例如虛擬的檔案目錄 `/sys/class/leds/` 中，就包含了部分的指示燈資訊。
+有些指示燈是由裝置控制，有些則具備程式可控的系統介面，例如虛擬的檔案目錄 `/sys/class/leds/` 中，就包含了部分的指示燈資訊。
+例如想要停用電源按鈕指示燈的話，可以試試：
+====
+root# *echo 0 > /sys/class/leds/led0/brightness* +
+root# *echo none > /sys/class/leds/led0/trigger*
+====
 
-某些裝置必須透過特定的存取方式，例如硬碟抽取盒的指示燈需要 `ledmon` 套件中的 `ledctl` 命令來控制。
+某些裝置則必須透過特定的存取方式，例如硬碟抽取盒的指示燈需要 `ledmon` 套件中的 `ledctl` 命令來控制。
 
-==== Super I/O
-主機板上的 *Super I/O*(超級輸入輸出) 晶片，用來做為低頻寬設備的介面，以往需要透過 ISA 匯流排與 CPU 連接，目前則透過南橋晶片上的 LPC 匯流排。
-常用來偵測溫度，也同時會提供 *Watchdog Timer*(看門狗計時器) 的功能。
-`coreboot-utils` 套件中有 `superiotool` 程式，可以偵測並提供暫存器內容。
-如果在系統啟動時期被 ACPI 占住資源，可以利用內核參數 `acpi_enforce_resources=lax` 來排除問題。
+==== 守望犬計時器
+**守望犬計時器**(Watchdog Timer) 的內核核心驅動模組即為 `watchdog` ，需要搭配特定的裝置驅動模組，例如 `wdat_wdt`, `iTCO_wdt` 或是軟體模擬的 `softdog` 。
+若是具備 Watchdog 裝置卻無適當的驅動程式，有可能造成開機或關機時延遲，或是系統韌體中啟用該裝置後，系統將正常運行卻會限時重新開機。
+有時內核中雖有相應廠牌的驅動模組，但是型號不支援，可以試著修改模組程式，簡單加入定義與實例，再抽出成為外掛模組後編譯使用。
+如果沒有被黑名單機制阻擋，正確載入驅模組後就會出現 `/dev/watchdog` 虛擬字元裝置。
 
 ==== GPIO
 內核於系統初始化時，如果偵測到 *GPIO*(通用型輸入輸出) 就會產生 `/dev/gpiochip0` 的對應裝置，裝置的資訊則可以從 `/sys/kernel/debug/gpio/` 中得到。

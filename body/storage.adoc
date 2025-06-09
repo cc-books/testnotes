@@ -1,4 +1,4 @@
-== 儲存裝置
+=== 儲存裝置
 電腦系統需要儲存裝置在離線時儲存資料，並且在運作時提供資料的輸入與輸出。
 
 如果將儲存裝置類比於一本書，那麼開機區就像封面、分割區表就像目次、分割區類型就像書頁尺寸，而檔案系統則像排版方式。
@@ -92,14 +92,16 @@ user$ *cat /proc/dma* +
 對於固態磁碟來說，可以試試內核參數 `slice_idle=0` 也許能夠增加部分效能。
 
 === 分割區
-一般而言，容量超過 256GB 的儲存裝置建議使用 GPT 模式來分割磁碟。
+一般而言，容量超過 256GB 的儲存裝置建議要使用 GPT 模式來分割磁碟。
 
 一個儲存體本身可以視為是一個儲存裝置，不過隨著容量日趨增大，就需要將儲存體劃分為若干個**分割區**(partition)，而每個分割區都被系統視為一個獨立的儲存裝置。
 
 `fdisk` 是 BIOS 開機模式適用的傳統分割區工具程式，而 UEFI 開機模式的機型則使用相應的 `gdisk` 命令。
 
 由於 GPT 規格的特意制定，有可能透過使用者手動設定，讓儲存裝置同時支援 MBR 與 GPT 分割區模式。
-雖然可以進一步設定為同時支援 BIOS 與 UEFI 兩種開機模式的 **混合型開機**(hybrid boot)，但也容易使得其他作業系統或工具軟體產生誤判而無法順利存取磁碟。
+首先在 `gdisk` 程式中，按下 kbd:[o] 以建立空的 GPT 分割區模式以及受保護的 MBR 區域，然後再建立個別的分割區。
+接下來進一步利用 kbd:[r] 類別按鍵中的 kbd:[h] 功能，設定為同時支援 BIOS 與 UEFI 兩種開機模式的 **混合型開機**(hybrid boot)。
+不過這樣也會使得其他作業系統或工具軟體，容易產生誤判而無法順利存取磁碟。
 
 ==== 資料分割區
 類似 `/dev/sda` 形式命名的儲存體，尾端加上由 1 開始的編號做為所屬的分割區名稱，例如 `/dev/sda1`, `/dev/sda2` 。
@@ -227,7 +229,7 @@ root# *mount -o remount,size=_16G_,noatime /tmp*
 原始的虛擬檔案來源就是 `/dev/shm` ，預設大小為實體記憶體的一半。
 
 `devfs` 與 `sysfs` 也屬於特殊的虛擬檔案系統，會在系統初始階段自動產生。
-原本是根據 `devfs` 機制產生 `/dev` 虛擬目錄之下的抽象裝置結構，後來被 `sysfs` 機制所取代。
+原本是根據 `devfs` 機制產生 `/dev` 虛擬目錄之下的抽象裝置結構，後來被 `sysfs` 檔案系統所取代。
 而 `/sys` 虛擬目錄則是使用 `systemd` 提供的 `udev` 機制所建立，用來補足 `/dev` 結構中各裝置的資訊，亦即 `udev` 是使用者空間利用 `sysfs` 來實現 `devfs` 功能的機制。
 
 SquashFS 是壓縮過的唯讀檔案系統，通常以單一檔案的形式存在。可以利用指令：
@@ -327,10 +329,11 @@ root# *wipefs -a -f /dev/_sdb_*
 
 
 ==== 分析
-低階格式化程式通常是指硬體廠商提供的私有工具軟體，做為更新、修復或重設控制器上的韌體資料。
 `smartmontools` 套件中的 `smartctl` 命令，是用來檢測磁碟資訊與磁碟健康狀況。
 例如一些通用指令： `smartctl -i /dev/sda` 或 `hdparm -i /dev/sda` 可以獲得包括韌體版本的資訊。
-如果無法取得專屬工具，就衹能試試 `hdparm`, `setpci`, `sdparm` 等程式，或是 `sg3_utils` 套件中的工具。
+
+低階格式化程式通常是指硬體廠商提供的私有工具軟體，做為更新、修復或重設控制器上的韌體資料。
+如果無法取得專屬工具，還可以試試 `hdparm`, `setpci`, `sdparm`, `badblocks` 等程式，或是 `sg3_utils` 套件中的工具。
 
 
 對於 NVMe 固態磁碟來說，目前內核支援的規格版本為 2.1。
@@ -505,16 +508,22 @@ capacity: 1.00Gbyte (1073741824 bytes, 2097152 sectors, 512 bytes each) +
 root# *mmc extcsd read /dev/_mmcblk0_ | grep "Firmware Version:"* +
 eMMC Firmware Version: 68130320QP
 ====
-另外從虛擬檔案 `/sys/kernel/debug/mmc0/ios` 的內容，或是經由 `udevadm info /sys/block/mmcblk0` 指令，都可以獲得更多的裝置資訊。
+另外從系統虛擬檔案中，可以獲得速度規格、產品名稱等資訊：
+====
+user$ *grep timing /sys/kernel/debug/mmc0/ios* +
+timing spec:    10 (mmc HS400) +
+user$ *udevadm info /sys/class/block/mmcblk0 | grep ID_NAME* +
+E: ID_NAME=MV3608
+====
 
 萬一在精簡的系統中未提供以上的工具時，命令 `dd` 也能做為簡單的磁碟讀寫測試工具。
 例如測試寫入速度可以輸入：
 ====
-user$ *dd if=/dev/zero of=_testfile_ bs=4M count=1K oflag=dsync*
+user$ *dd if=/dev/urandom of=_testfile_ bs=4M count=1K oflag=direct*
 ====
 而測試讀取速度的指令則可利用剛剛寫入的檔案：
 ====
-user$ *dd if=_testfile_ of=/dev/null bs=4M iflag=dsync*
+user$ *dd if=_testfile_ of=/dev/null bs=4M iflag=direct*
 ====
 
 萬一不小心誤刪了重要檔案，記得先不要再寫入新資料，然後將含有舊檔案的磁碟裝置卸載，再利用 `extundelete` 命令嘗試救回。

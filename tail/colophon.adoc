@@ -3,7 +3,7 @@
 
 [big]*電腦上試跑 Linux*
 
-　　　　─── [big]#硬體相容性測試筆記#
+　　　　─── [big]#硬體測試筆記#
 
 '''
 
@@ -30,11 +30,11 @@ ISBN：XXXXXXXXXXXXX +
 *國家圖書館出版品預行編目資料*
 [width="66%"]
 |=============================
-|電腦上試跑 Linux：硬體相容性測試筆記 / 趙惟倫 編著 +
+|電腦上試跑 Linux：硬體測試筆記 / 趙惟倫 編著 +
 ─ 初版 ─ 新北市：中華民國軟體自由協會，2025.XX +
 XXX 面，XX 公分 +
 ISBN：XXXXXXXXXXXXX +
-1.作業系統 +
+1.作業系統   2.相容性測試 +
 312.954　　　　　　　　　　　　　　　XXXXXXXX
 |=============================
 
@@ -44,5 +44,5 @@ ISBN：XXXXXXXXXXXXX +
 HDMI 是 HDMI Licensing Administrator, Inc. 的商標或註冊商標。 +
 Linux 是 Linus Torvalds 的註冊商標。 +
 Windows 是 Microsoft Corporation 的商標或註冊商標。 +
-USB Type-C 和 USB-C 是 USB Implementers Forum 的註冊商標。
+USB Type-C 是 USB Implementers Forum 的註冊商標。
 ====

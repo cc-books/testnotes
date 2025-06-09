@@ -1,37 +1,248 @@
 == 電力供應
 
-=== 裝置省電機制
+=== 省電機制
+
+==== 電源供應器
+電源供應線路中如果含有變壓器，應該先將變壓器與裝置連接，再將變壓器插上電源。
+假如變壓器的輸出電壓是 12V(伏特)、輸出電流是 4A(安培)，那麼輸出功率即為 48W(瓦特)。
+雖然不同輸出功率的電源供應器，可能會依靠接頭內外徑的差異來防止插錯，但是使用前仍然要先確認兩方的適用範圍。
+區分電源供應器等級的方法之一，是根據無負載時所消耗的功率，目前常見標準為等級 6。
+使用電源供應器的選擇是以電壓正確為優先，再以機型規格的瓦特數除以電壓而得適當的電流數，使用過大電流數的電源供應器會使得電子元件過熱。
+
+筆記型電腦的電源供應器就是它的電池，其相關資訊可以利用下列指令取得：
+====
+user$ *grep -hsr POWER_SUPPLY /sys/devices/\** +
+POWER_SUPPLY_NAME=BAT0 +
+POWER_SUPPLY_TYPE=Battery +
+POWER_SUPPLY_STATUS=Full +
+POWER_SUPPLY_PRESENT=1 +
+POWER_SUPPLY_TECHNOLOGY=Li-ion +
+POWER_SUPPLY_CYCLE_COUNT=0 +
+POWER_SUPPLY_VOLTAGE_MIN_DESIGN=11100000 +
+POWER_SUPPLY_VOLTAGE_NOW=12171000 +
+POWER_SUPPLY_CURRENT_NOW=0 +
+POWER_SUPPLY_CHARGE_FULL_DESIGN=3280000 +
+POWER_SUPPLY_CHARGE_FULL=1750000 +
+POWER_SUPPLY_CHARGE_NOW=1750000 +
+POWER_SUPPLY_CAPACITY=100 +
+POWER_SUPPLY_CAPACITY_LEVEL=Full +
+POWER_SUPPLY_TYPE=Battery +
+POWER_SUPPLY_MODEL_NAME=AP11D3F +
+POWER_SUPPLY_MANUFACTURER=SANYO +
+POWER_SUPPLY_SERIAL_NUMBER=21320 +
+user$ *cat /sys/class/power_supply/BAT0/capacity* +
+100
+====
+藉由套件 `tlp` 中的 `tlp-stat` 命令，也可以取得電池的狀態。
+
+==== 電源管理
+標準規範中的 *ACPI*(進階組態與電源介面) 是取代舊有的 *APM*(進階電源管理)，做為系統韌體與作業系統之間的介面。
+例如熱插拔與切斷電源的動作，都需要依賴 ACPI 的功能，而舊式不支援 ACPI 的作業系統，就衹能在具備 APM 的機器上才能正常關機。
+
+
+內核藉由 `acpi=force|off|ht|strict|noirq|rsdt|copy_dsdt` 的參數，來影響 ACPI 的表現。
+其中 `irqpoll` 用以檢查所有中斷處理，以處理特殊裝置產生的中斷，另外則是試試較極端的 `force` 或 `noirq` 參數值。
+
+在舊式的 Init 系統初始模式下， `acpid` 是主要的事件守護程式，而相應的工具程式 `acpi` ，衹能查看有關電池與溫度的一些狀態。
+套件 `pm-utils` 則提供了許多與電源管理相關的方便命令，目前也多已過時而遭棄用。
+用來監控電力狀態的 `upowerd` 是與電源管理相關的服務之一，而它的命令列工具 `upower` 加上選項 `-d` 後即可顯示目前資訊。
+
+在使用者空間中是靠著調整**電力模式**(power mode) 來進行電源管理，一般會分為**節約**(efficient)、**平衡**(balance)、**效能**(performance) 三類。
+如果選擇了著重系統效能，就得要付出功耗做為代價。
+桌面環璄如果沒有提供方便的設定介面，也可以藉由 `power-profiles-daemon` 套件中的 `powerprofilesctl` 命令來調整。
+
+==== 裝置供電
+以往的電腦主機除了訊號電壓之外，並不會提供太多的電力給周邊裝置。
+有些主機板設計序列埠時，提供了輸出 5V 電壓的功能，並在系統韌體中設定開關，通常是給**銷售點**(POS) 系統的外接裝置使用。
+但是目前配備了 USB 埠的主機，透過 USB 供電已經成為了標準規格。
+而當全部周邊有可能一齊使用時，就要考慮系統電源供應瓦特數是否足夠，尤其是出現了每到內核開始載入驅動程式時就會重新開機的情形。
+
+有時無法偵測到螢幕的原因，似乎是由於某種電磁問題，可試試將螢幕電源拔除斷電數分鐘之後再接上看看。
+對於衹有出現在多重顯示器或高解析度顯示時的問題，有可能是因為電力不足的關係，太多周邊設備或是加裝轉接器也會導致類似的問題。
+較複雜的視訊介面於連接時會送電給主板，有可能導致即使主機板電源拔除之後，主機板元件仍處於供電狀態，這會使得具備少量記憶體的元件，還會留存關機前的設定。
+
+硬體裝置於暖開機後並未徹底重新初始化，仍然有可能受到前次作業系統的影響。
+甚至某些 Windows 系統的設定會造成多重開機的 Linux 系統無法辨認出裝置，像是將效能設定為節約而非最大效能，或是啟用了快速開機。
+
+對於風扇的控制，在系統韌體或是應用軟體層級都可能會有提供設定的工具。
+CPU 風扇在系統上電時通常會先轉動一下，接著才會被正確載入的驅動程式所控制。
+如果風扇完全不動，除了本身機械故障之外，也有可能是電源供應的功率不足。
+利用 `lm_sensors` 套件中的 `pwmconfig` 程式，能夠暫停一下可控制的風扇，用來確認噪音的來源。
+
+
+USB 供電電源除了注意電壓是否足夠之外，電流如果不足也可能導致無法啟動，通常較粗的 USB 線材能夠提供較大的電流。
+USB Type-C 的規格支援較大的供電，但卻不必然具備充電的功能，與該接頭所支援的瓦特數有關。
+由於 USB 介面有電流過載保護，一旦過載就會觸發錯誤訊息，而在系統記錄中出現類似 `device descriptor read/64, error -32` 的訊息。
+
+從指令 `lsusb -v` 的輸出中，項目 `MaxPower` 表示的是個別埠口能夠提供的最大電流。
+USB 裝置不斷重置通常是電源問題，有可能是電力不足，或是資料流量太大但主機板線路的電容不足。
+如果系統韌體設定中，USB 的電源於關機後仍持續，那麼 USB 磁碟的燈就會一直亮。
+USB 裝置耗電量太大可能造成系統變慢甚至宕機，原因也許是主板供電不足、埠口供電差異、傳輸線過長或是裝置損壞。
+變通方法可以嘗試數分鐘的完全斷電後再啟動，或是中繼使用有外部電源的 USB 集線器。
+
+==== 裝置省電
+裝置初始階段的宕機，如果在暖開機與冷開機的狀況下表現不同的話，有可能是因為系統韌體中對於 CPU 或 PCI 的省電設定所造成。
+萬一機器可以冷開機但是卻無法暖開機，可能是電源開關模組出了問題。
+如果衹是冷/暖開機的速度不同，則可能是 CPU 進入了省電（慢速）模式。
+但若是開機後進入系統的過程變得很慢，就要檢查 CPU 是否過熱或儲存裝置支援不良。
+
+CPU 的省電機制還可以由內核參數所控制，當系統發生不穩定的狀況時，以 `intel_pstate=disable` 將其停用卻有可能會得到改善。
+有時無法利用 PCI 周邊裝置喚醒，是因為 PCI 介面的省電功能被啟用，可以試試 `pcie_aspm=off`, `pcie_aspm=force` 或者 `pcie_aspm.policy=performance` 等內核參數。
+類似的還有 `pci=noaer` ，可以用來取消 PCI 的主動狀態電源管理。
+
+有些系統韌體的設定中，提供了啟用或停用 USB 控制器的選項，可以用來控制 USB 是否維持待機電力，而系統工具 ‵uhubctl‵ 命令能夠用來控制 USB 集線器上各埠的電力供應。
+不過這裡的集線器指的是主機板上的 `root_hub` ，未必適用於外接的 USB 集線器。
+如果設定了維持電力，卻仍然出現因節電而造成的運作中斷，有可能要檢查 UDEV 機制的規則中，是否影響或遺漏了目標 USB 裝置的識別編號。
 
 網路卡驅動程式有可能預設會開啟省電設定，造成網路線於開機、插拔、喚醒時無法連線，而需要手動設定或是更換驅動程式。
-
+例如以下的內核模組參數範例 `rtw89_core.disable_ps_mode=Y` ，用來關閉目標網路卡的省電設定，當然也可以寫在模組設定檔中。
 當無線網卡的頻段支援穩定度出現問題時，可以試試停用電源管理的功能：
 ====
 root# *iwconfig _wlan0_ power off*
 ====
+或是為了降低網路延時，利用另一個工具程式來關閉無線網卡的省電功能：
+====
+root# *iw dev _wlan0_ set power_save off*
+====
 
-=== 系統睡眠機制
+螢幕的省電機制稱為**顯示器電源管理信令**(DPMS)，傳統上透過 X 視窗系統工具程式 `xset` 來設定。
+如果要將相關的螢幕保護、螢幕鎖定也都取消，可以執行下列指令：
+====
+user$ *xset -dpms* +
+user$ *xset s noblank* +
+user$ *xset s off*
+====
+使用者實務上常藉由桌面環境提供的設定軟體來完成此一工作，但是要注意兩者之間是否有重疊或覆寫的關係。
 
-如果要停用相關服務，可以執行下列命令：
+工具程式 `powertop` 會以全畫面的文字模式，顯示系統中行程目前消耗電力的情形。
+
+
+
+=== 睡眠、喚醒與再續
+各層級的介面與裝置，都各自設定是否支援喚醒功能，而設定的位置有可能在系統韌體或內核模組之中，也有可能在系統初始或桌面環境階段。
+
+==== 電源狀態
+這裡所說的電源狀態，雖然與〈環境初始化〉中提到的**執行層級**或是**目標單元**部分重疊，但是主要依據對於系統電源運用的程度而有所區分。
+
+|===================================
+|電源狀態            |fullrun    |standby|freeze|suspend|hibernate|soft off|mechanical off
+|全域狀態(G-state) |G0         |G1(sleep)                       |G2      |G3
+|效能狀態(P-state) |P0|P1|P2|P3|
+|睡眠狀態(S-state) |S0         |S1     |S2    |S3     |S4       |S5      |
+|===================================
+
+另外還有**處理器狀態**(C-state) 是由內核模組 `intel_cstate` 所驅動，特指處理器內部的電源管理。
+其中 C0 表示電源全開的狀態，而數字愈大表示關閉或調降的處理器元件愈多，但並不必然對應到系統電源的某一狀態。
+
+由於進入 S4 狀態時，系統會將當前記憶體的內容暫存於儲存體的 SWAP 區域，因此必須要有大於記憶體容量的 SWAP 檔案或分割區，才能夠支援進入 S4 狀態。
+需要注意的是，有些系統韌體於啟用**安全啟動**時，會自動禁用 S4 狀態的選項。
+
+==== 睡眠機制
+
+罕見的情況下，無法進入睡眠狀態可能需要更換電子零件或調整電路參數。
+系統韌體中的**節能控制**(ErP) 支援如果啟用，系統於 S5 狀態將使用更少的待機電量，這會造成鍵盤開機、滑鼠開機、網路喚醒以及其他會啟動系統的電源管理事件無法使用。
+
+要在 Linux 的 Systemd 系統初始模式下進入 S3 狀態，可以使用 `systemctl suspend` 指令。
+對應的虛擬檔案位置為 `/sys/power/state` ，系統會依照寫入不同的值： `freeze`, `mem`, `disk` 而分別進入 S2, S3, S4。
+如果要停用整個系統的相關服務，可以執行下列命令：
 ====
 root# *systemctl mask sleep.target hybrid-sleep.target* +
 root# *systemctl mask suspend.target hibernate.target*
 ====
 
-=== 喚醒機制
+部分裝置的睡眠狀態設定，位於特殊的服務組態檔內。
+例如當筆記型電腦關上上蓋時，是由 `/etc/systemd/logind.conf` 檔案中的項目，來決定是否要進入懸置狀態。
+將預設的 `HandleLidSwitch=suspend` 改成 `HandleLidSwitch=ignore` ，即可忽略關上上蓋的事件。
+這個設定在開機的內核載入時期，可能還不會發生作用，也許需要修改初始記憶體檔案系統。
+但在桌面環境中，則有方便的 `gnome-tweaks` 圖形設定套件可以應用。
+
+在系統懸置目標的專用設定目錄中加入可執行命令稿，就能在懸置與喚醒時執行額外所需的動作，以確保能夠進入/回復狀態。
+為了適應使用 USB2COM 的舊型滑鼠，額外建立的檔案範例如下：
+
+./usr/lib/systemd/system-sleep/inputattach.sh
+....
+#!/usr/bin/bash
+case $1/$2 in
+  pre/*)
+    pkill inputattach
+    ;;
+  post/*)
+    inputattach --daemon --always -mman /dev/ttyUSB0
+    ;;
+esac
+....
+
+或是自行利用 Systemd 的服務單元，來實作可由懸置目標觸發的服務：
+
+./etc/systemd/system/onwakeup.service
+....
+[Unit]
+Description=Wakeup hook
+Before=sleep.target
+StopWhenUnneeded=yes
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=-/usr/bin/BEFORE
+ExecStop=-/usr/bin/AFTER
+[Install]
+WantedBy=sleep.target
+....
+
+虛擬檔案 `/proc/acpi/wakeup` 的內容，顯示了系統裝置於睡眠狀態是否啟用喚醒的設定。
+例如可以利用 `echo XHC > /proc/acpi/wakeup` 指令，來切換 USB3 裝置喚醒的啟用或停用。
+
+以 USB 介面與系統連接的輸出入擴充座，容易在進入懸置時發生中斷，尤其可能會造成賴以銜接的網路斷線。
+因此可以透過暫時變更 `usbcore` 內核模組的參數值，看看關閉一些節能功能後，是否能夠改善懸置帶來的問題：
+====
+root# *echo -1 > /sys/module/usbcore/parameters/autosuspend* +
+root# *echo -1 > /sys/bus/usb/devices/__1-2__/power/autosuspend_delay_ms* +
+root# *echo Y > /sys/module/usbcore/parameters/old_scheme_first*
+====
+而個別 USB 裝置的設定則位於虛擬檔案 `/sys/bus/usb/devices/__1-2__/power/autosuspend` ，可以依照裝置編號找到相應的位置，再寫入 -1 值來關閉它；
+或是有的裝置接受寫入 1 到 `/sys/bus/usb/devices/__1-2__/power/persist` ，表示需要於懸置時保持裝置通電。
+
+NOTE: 如果想要某個終端裝置啟用某項功能時，可能所有上層裝置也要啟用才會生效。
 
 ==== 周邊喚醒
 
+
+內核可以喚醒大多數的硬體裝置，但是部分裝置由系統韌體進行初始化，由於內核無法直接讀取系統韌體資訊，因此需要經由 ACPI 介面來恢復裝置狀態。
+內核參數 `acpi_sleep=s3_bios|s3_mode|nonvs` 可以用來調整 ACPI 的睡眠機制，適用於周邊喚醒後，系統卻自動關機或重置的狀況。
+如果設定之後系統能夠正常被喚醒，還要注意是否出現裝置本身並未喚醒的副作用。
+
+有時系統無法進入懸置狀態，是因為某些裝置會一直動作，而其上層裝置的喚醒功能已啟用，造成系統懸置之後立即被喚醒。
+因此鍵盤滑鼠等具備喚醒功能且慢速的裝置，不應與這類裝置（例如 USB 顯示器）接在同一個 USB 集線器上。
+鍵盤是系統預設啟用喚醒的裝置，不論是 PS/2 或 USB 介面，可能是由系統韌體繼承而來的機制。
+通常不會預設滑鼠為可喚醒系統的裝置，因為某些靈敏度高的滑鼠會造成系統不易進入睡眠狀態。
+如果想要開機後就啟用 USB 滑鼠的喚醒功能，可以建立下列 UDEV 規則檔：
+
+./etc/udev/rules.d/90-usbhid-wakeup.rules
+....
+SUBSYSTEM=="usb", DRIVER=="usbhid", RUN+="/bin/sh -c 'echo enabled > /sys$env{DEVPATH}/../power/wakeup'"
+....
+
 ==== 網路喚醒
 **網路喚醒**(WoL) 的功能需要網路晶片的支援，作用於網路第二層，通常在系統韌體中會有相應的啟用╱停用項目。
-作業系統本身負責設定與儲存此一功能的狀態，但是預設常常因為資訊安全的考量而設為關閉。
-利用指令 `ethtool -i` 加上指定網路卡名稱所顯示的資訊中，項目 `Wake-on:` 如果顯示 `d` 則表示目前關閉。
+有些系統插上電源後，系統韌體會設定為先上電一次，原因就是為了打開網路晶片中網路喚醒的功能。
+
+如果想確認網路裝置的內核模組，在系統啟動後立即開啟喚醒功能，可以透過該模組的內核參數來設定，例如 `3c59x.enable_wol=1` 。
+或者是利用建立一個 UDEV 規則檔，在系統初始階段就啟用虛擬檔案中的對應值：
+
+./etc/udev/rules.d/90-lan-wakeup.rules
+....
+SUBSYSTEM=="pci", DRIVER=="__r8189__", RUN+="/bin/sh -c 'echo enabled > /sys$env{DEVPATH}/power/wakeup'"
+....
+
+使用者空間負責設定允許觸發喚醒功能的訊號，但是預設常常因為資訊安全的考量而設為關閉。
+利用指令 `ethtool -i` 加上指定網路卡名稱所顯示的資訊中，項目 `Wake-on:` 如果顯示 `d` 則表示目前不接受任何訊號。
 開啟以**魔術封包**(magic packet)訊號來喚醒的功能可用指令：
 ====
 root# *ethtool -s _eth0_ wol g*
 ====
 或是
 ====
-root# *nmcli connection modify "Wired connection 1" 802-3-ethernet.wake-on-lan magic*
+root# *nmcli device modify _eth0_ 802-3-ethernet.wake-on-lan magic*
 ====
 如果想要每次開機後都自動設定，就需要寫在開機啟動的命令稿中。
 不過以上設定衹能將系統由 S3 狀態喚醒，對於 S5 狀態則需要在系統韌體中設定才有效。
@@ -42,12 +253,114 @@ root# *tcpdump -i _eth0_ port 9 -vvvv -s0 -n*
 ====
 
 **無線網路喚醒**(WoWLAN) 是比較少用的功能，除了硬體支援並不充足之外，資訊安全上的考慮也是主要原因。
-以下是一些相關的指令範例：
+如果想要達到無線網路喚醒，除了無線網路晶片、上層匯流排主端、主機板佈線都必須要支援以外，系統韌體與內核驅動模組中的設定
+（通常需要藉由 GPIO 的功能）也要開啟。
+另外再加上一些軟體的設定指令範例：
 ====
+root# *iw _wlan0_ wowlan enable magic-packet disconnect* +
 root# *iw _wlan0_ wowlan show* +
 root# *iw list | grep WoWLAN* +
-root# *nmcli con show _wlan0_ | grep wake-on-wlan*
+root# *nmcli connection show _wlan0_ | grep wake-on-wlan* +
+root# *nmcli nm sleep false*
 ====
 
+
 ==== 定時喚醒
+除了周邊或網路之外，還可以藉由系統內部的**實時時鐘**(RTC) 來觸發喚醒動作，在系統韌體設定選單中有提供定時開機的項目（設定日期、時間、頻率）。
+需要注意的是，RTC 的時間是以系統韌體的時間為準，通常指的是世界協調時間而非本地時間，如果作業系統將系統韌體時間視為本地時間，可能不適用於跨時區的移動裝置。
+虛擬檔案 `/proc/driver/rtc` 的內容包括了 RTC 相關的資訊，其中的電池狀態對於是否足以從 S5 狀態下喚醒系統十分重要。
+
+在使用者空間中提供了 `rtcwake` 設定命令，預設執行之後系統就會進入睡眠狀態。
+透過命令引數可以選擇睡眠狀態的程度（ `standby|freeze|mem|disk` ）之一，以及利用秒數或日期來決定喚醒的時間。
+
+=== 關機與重置
+
+
+==== 電源開關
+主機板上的電源開關接口通常是獨立的一對針腳，如果是包含在一組針腳之中，至少能夠識別紅色標記的是電流來源的火線。
+主機板的設計規格決定了插入電源線是否要立刻開機，以及電源按鈕是否具備喚醒的功能，通常在系統韌體設定中還可以細部調整。
+
+機殼上提供的電源按鈕並不會直接切斷系統電源的線路，而是透過類似鍵盤按鍵的事件來觸發電源管理軟體程序，因此按下鍵盤與電源按鈕的動作，就已經在系統韌體中定義為會觸發 ACPI 的事件。
+虛擬檔案 `/proc/bus/input/devices` 的內容中，可以找到名稱為 "Power Button" 的裝置。
+還可以利用運行自活系統的機會，執行 `od -x /dev/input/event__N__` 命令（其中 _N_ 為從 0 開始的數字）後，按下電源按鈕來確認事件的編號。
+
+開機之後數秒如果會自動關機，表示電源關閉可能一直處於按下的狀況，也許是裝置的機械或是韌體問題。
+按下電源按鈕在 UEFI Shell 中通常會立刻斷電，但在桌面環境中則能夠選擇關機、懸置或無作用。
+
+在 Systemd 系統初始模式中，基本是由 `/etc/systemd/logind.conf` 中的 `HandlePowerKey=` 項目，來決定電源按鈕的行為：
+可能的選項包括 `poweroff`, `suspend`, `hibernate` 或者 `ignore` 。
+但是也會受到使用者空間的設定所覆蓋，例如 GNOME 桌面環境的命令：
+====
+user$ *gsettings set org.gnome.settings-daemon.plugins.power button-power _suspend_*
+====
+除了 `suspend` 選項之外，還可以是 `blank`, `shutdown`, `hibernate`, `interactive`, `nothing` 等等，或者是透過較為方便的圖形控制軟體 `gnome-control-center` 來設定。
+
+
+==== 軟體關機
+傳統的 `shutdown` 關機命令（預設有廣播訊息及一段等待時間），其實可以視為 `halt`, `poweroff`, `reboot` 三種動作的合稱。
+這三個動作也都被 `systemctl` 的軟式鏈結所替代，同時也是 `systemctl` 命令的選項之一。
+Systemd 系統初始模式雖然也以 `systemctl` 的軟式鏈結替代了 `shutdown` 命令，卻沒有提供相應的 `systemctl shutdown` 指令。
+Linux 對於 `halt` 的定義並不十分明確，一般表示在停止作業系統之後，主機板上還有通電，因此晶片裝置仍然可能會發熱。
+
+正常的 Systemd 系統初始模式關機程序，會按照各單元的依存性來停止服務與卸載裝置。
+如果關機過程出現了系統延遲的情形，就要注意系統日誌中是否有某個行程耗時太久，或是某個裝置驅動模組拒絕終止。
+
+減少關機時間的方法之一是修改 `/etc/systemd/system.conf` 設定檔中 `DefaultTimeoutStopSec` 或 `ShutdownWatchdogSec` 項目的值。
+
+有時明明是下達了關機指令，系統卻表現得像是重新開機，可以加入前面提到的內核參數 `acpi=` 各項參數值試試。
+再來是檢查網路喚醒機制，在系統韌體與作業系統中先將喚醒機制關閉，甚至將有線網路拔除或是在關機前利用 `rfkill block all` 指令將無線網路阻斷，然後看看是否還會出現問題。
+
+==== 重新開機
+電腦系統提供了許多重新開機的機制，可以藉由內核參數 `reboot=` 的值 `warm|cold|bios|smp|triple|kbd|acpi|efi|pci|force` 來選擇。
+傳統的預設值 `kbd` 是為了配合 PS/2 裝置用的 i8042 控制器，但是如今已很少使用 PS/2 裝置，而 i8042 晶片也常常被省略。
+因此萬一重新開機的過程不正常，就可以在出現開機選單時，加入不同的參數值試試效果，但要記得以冷開機分隔不同嘗試。
+對於 i8042 是否存在或者相關通訊埠是否開啟的誤判，也有可能會造成睡眠與喚醒功能的不正常。
+此時可以嘗試的內核參數包括： `i8042.direct`, `i8042.dumbkbd`, `i8042.debug=1`, `i8042.nopnp`, `pnpacpi=off` 等等。
+
+傳統的重置命令 `reboot` 已經被 `systemctl` 的軟式鏈結所替代，而 `systemctl` 也有提供相同功能的 `reboot` 命令選項。
+
+組合鍵 kbd:[Ctrl - Alt - Del] 是使用者非常熟悉的重新開機觸發機制，在 Systemd 系統初始模式中則是設置成一種目標單元。
+雖然許多的 Linux 圖形環境已經事先屏蔽了這項按鍵組合，如果使用者在虛擬終端機模式下也想要取消此一功能的話，就可以輸入：
+====
+root# *systemctl mask ctrl-alt-del.target* +
+root# *systemctl daemon-reload*
+====
+
+如果想要重置的 USB 裝置是一種儲存裝置的話，建議必須先進行卸載，待重置後再重新掛載。
+重置方法之一是利用 `udiskctl` 命令：
+====
+root# *udiskctl power-off -b /dev/__sdb__*
+====
+或是
+====
+root# *echo auto >/sys/bus/usb/devices/__1-2__/power/control* +
+root# *echo on >/sys/bus/usb/devices/__1-2__/power/control*
+====
+
+內核本身的一些特殊機制也有重新開機的效果，例如 `kexec-tools` 套件中的 `kexec` 命令，可以直接載入一個新的內核：
+====
+root# *kexec -l /boot/_vmlinuz_ --initrd=/boot/_initramfs.img_ --append=root=/dev/_sda1_ ; kexec -e*
+====
+指令中分別指定了新的內核檔案、初始記憶體檔案系統檔案以及根檔案系統。
+如果是以直接觸發內核的 SysRq 機制來重置系統的話：
+====
+root# *echo 1 > /proc/sys/kernel/sysrq* +
+root# *echo b > /proc/sysrq-trigger*
+====
+CAUTION: 觸發內核機制造成的立即重新開機，由於跳過了同步與裝置卸載，有可能會造成資料的損毀。
+
+重新開機同時也是許多資安攻擊後，用來掩蓋痕跡的手段之一。
+指令 `last reboot` 可以列出之前的開機與重置記錄（如果未被入侵者清除的話）。
+
+==== 守望犬
+做為利用守望犬硬體裝置 `/dev/watchdog` 的應用服務，使用者空間的同名套件 `watchdog` ，是用來監視系統不正常宕機時自動重置的機制，服務的設定檔位於 `/etc/watchdog.conf` 。
+CAUTION: 手動寫入 `/dev/watchdog` 有可能會啟動守望犬機制，甚至觸發硬體重置。
+
+某些內核或內核模組的問題會造成 CPU 的**軟式上鎖**(soft lockup)，接續觸發守望犬機制的錯誤而導致無法正常關機。
+可以試試下列兩條設定之一：
+====
+root# *echo _30_ > /proc/sys/kernel/watchdog_thresh* +
+root# *sysctl -w kernel.watchdog_thresh=__30__*
+====
+用來暫時延長內核的守望犬觸發臨界值為 30 秒，如果有效的話再寫入 `/etc/sysctl.d/` 目錄中的設定檔。
 

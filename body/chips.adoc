@@ -78,6 +78,12 @@ options ec_sys write_support=1
 ....
 如此就能透過 `/sys/kernel/debug/ec/ec0/io` 虛擬檔案的內容來存取設定值。
 
+==== Super I/O
+主機板上的 *Super I/O*(超級輸入輸出) 晶片，用來做為低頻寬設備的介面，以往需要透過 ISA 匯流排，目前則常併入 EC 而透過南橋晶片上的 LPC 匯流排與 CPU 連接。
+`coreboot-utils` 套件中有 `superiotool` 程式，可以偵測並提供暫存器內容。
+如果在系統啟動時期被 ACPI 占住資源，可以利用內核參數 `acpi_enforce_resources=lax` 來排除問題。
+除了常用來提供平行埠、序列埠，以及監測溫度、風扇速度之外，有些型號還會具備守望犬計時器的功能（參看〈輸入輸出埠〉）。
+
 ==== TPM
 *TPM*(信賴平臺模組) 是安全密碼的處理裝置。
 由專用晶片所提供的 TPM 功能稱為 dTPM(discrete TPM)，而由系統韌體所模擬提供的則為 fTPM(firmware TPM)，不論何者通常都可以透過韌體設定啟用或停用。
@@ -324,6 +330,7 @@ root# *echo 1 > /sys/bus/usb/devices/_位置編號_/authorized*
 如果想使用 Python 語言編寫相關程式，則需要匯入 `pyusb` 模組。
 
 `dmesg` 與 `journalctl` 的輸出中，也會留下 USB 裝置於系統運行時留下的記錄。
+過往的記錄則會儲存於 `/var/log/messages*` 或是 `/var/log/syslog` 檔案之中。
 套件 `usbmon` 可以用來嗅探 USB 裝置的資料流。
 
 因為 USB 有一統裝置介面的趨勢，許多特殊的應用也針對它而開發出來。

@@ -521,7 +521,7 @@ user$ *xrandr --output _DisplayPort-0_ --set TearFree on*
 
 如果想要清楚列出已連接的螢幕，可以透過命令殼的管線功能將命令組合後取得：
 ====
-user$ *xrandr | grep "connected" | sed "s/ connected.\*//" | tr "\n" " "*
+user$ *xrandr | grep " connected" | sed "s/ connected.\*//" | tr "\n" " "*
 ====
 而對於列出已點亮的螢幕，`xrandr` 命令提供了現成的選項 `--listactivemonitors` ，就不需要使用者自行去堆砌指令了。
 
@@ -608,7 +608,7 @@ Xft.dpi:	96
 背光調整問題包括了失去作用或作用相反的情況，請先試試內核參數 `acpi_osi=Linux` ，如果沒有作用的話再參考以下的內核參數以及可能的參數值：
 `pcie_aspm=force|off` 或 `acpi_backlight=vendor|video|native|none|legacy` 或 `video.use_native_backlight=1|0。
 
-`systemd` 初始系統模式下有一個服務，提供開機時重設背光值與關機時儲存背光值的功能。
+Systemd 系統初始模式下有一個服務，提供開機時重設背光值與關機時儲存背光值的功能。
 如果使用者的散佈版有啟用它，可以嘗試先將其遮罩起來看看：
 ====
 root# *systemctl mask systemd-backlight@.service*

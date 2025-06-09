@@ -150,7 +150,7 @@ root# *update-alternatives --set x-session-manager _/usr/bin/xfce4-session_*
 ==== firewalld
 網路組態中的**防火牆**(firewall) 設置，主要在日常使用的開放環境系統中，負責阻斷未經允許的網路輸入輸出。
 但是在封閉的測試環境下，有可能因為疏忽反而造成其他伺服程式的不便。
-防火牆的通用服務名稱為 `firewalld` ，在 `systemd` 系統初始模式下可以依照一般使用 `systemctl` 命令的方式，搭配 `stop` 或 `disable` 選項分別予以停止或停用。
+防火牆的通用服務名稱為 `firewalld` ，在 Systemd 系統初始模式下可以依照一般使用 `systemctl` 命令的方式，搭配 `stop` 或 `disable` 選項分別予以停止或停用。
 即使確定之後不會用到防火牆功能，但由於套件依存關係而不方便直接移除，也可以再利用 `systemctl` 命令的 `mask` 選項來阻止它被其他軟體啟動。
 
 === 伺服程式
