@@ -149,9 +149,11 @@ NFC 的有效距離要比單純 RFID 的有效距離略短。
 ==== 裝置韌體
 網路卡的 MAC 位址，可以用 DOS、UEFI 命令殼、Linux 之下的工具程式燒錄。
 如果插著網路線開機時兩個指示燈恆亮，而進入 OS 之後無法連線且無網路裝置，表示是網路卡 MAC 位址燒錄不完全，可能是燒錄完衹有暖開機而未冷開機。
-設定 MAC 位址的 Linux 命令範例：
+想要在作業系統中暫時變更 MAC 位址，可以利用 `macchanger` 命令或是以下的 `ip` 命令範例：
 ====
-root# *ip link set dev eth0 address _XX:XX:XX:XX:XX:XX_*
+root# *ip link set dev _eth0_ down* +
+root# *ip link set dev _eth0_ address _XX:XX:XX:XX:XX:XX_* +
+root# *ip link set dev _eth0_ up*
 ====
 
 網路卡的裝置韌體中負責 PXE 開機的部分，必要時可用廠商提供的特殊軟體來更新。
@@ -277,4 +279,9 @@ root# *iw list* +
 `iwconfig` 與 `iwlist` 則是另一組不同的命令，來自於第三方套件 `wireless_tools` ，也是用來列出或設定無線裝置的組態。
 同樣包含在其中的 `iwpriv` 命令，則用來執行個別網路驅動程式特有的功能，通常應用於供應商發布的專有驅動程式。
 
+==== 效能測試
+測試網際網路的頻寬可以安裝並執行 `speedtest-cli` 命令，就能利用 speedtest.net 提供的服務。
+
+測試區域網路的各類網路效能，需要在伺服端與客戶端分別執行能夠連線溝通的軟體。
+可以提供這種功能的套件，包括： `netperf`, `iperf`, `iperf3` 等等。
 

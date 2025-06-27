@@ -1,4 +1,7 @@
 == 軟體安裝
+____
+軟體的名稱在尚未編寫之前就已決定
+____
 安裝完作業系統之後，代表這臺電腦已經具備基本的功能。
 如果作業系統的安裝程序沒有同時安裝其他的項目，或是內建的應用軟體無法滿足您的需要，
 不論是函式庫、驅動程式、工具程式還是遊戲，就得必須自己想辦法安裝。
@@ -136,7 +139,7 @@ user$ *make uninstall*
 如果真的必須解除安裝的話，衹能參考安裝的詳細過程，然後手動將它們逐一反向操作。
 
 上面提到的組建與安裝步驟，主要源於以 C/C++ 程式語言開發的軟體，下表列出一些其他開發語言也可能採用的機制（已省略部分引數）：
-|===================================
+|====
 |開發語言|判斷依據|組建指令|安裝指令
 |Python|setup.py|python setup.py build|python setup.py install
 |Rust|Cargo.toml|cargo build|cargo install
@@ -145,7 +148,7 @@ user$ *make uninstall*
 |Go|main.go|go build|install
 |Java|build.xml|ant|install
 |Perl|Makefile.PL|perl Makefile.PL|install
-|===================================
+|====
 
 === 來自軟體包
 軟體包通常也是以打包成為單一檔案的型式散佈，內容則為原始碼先經過組建之後，再加上一些方便安裝的機制所構成。
@@ -235,8 +238,8 @@ footnote:[例如筆者所建立的 RPM Sphere <https://rpmsphere.github.io/>]。
 NOTE: `dnf` 命令的前身為 `yum`，而 `apt` 的前身為 `apt-get` 。
 以下列出最常用的命令引數範例：
 
-[width="80%",options="header"]
-|=============================
+[.center,width="80%",options="header"]
+|====
 |套件格式|RPM|DEB
 |套件更新|dnf update|apt update; apt upgrade
 |套件資訊整理|dnf clean all|apt clean all
@@ -252,7 +255,7 @@ NOTE: `dnf` 命令的前身為 `yum`，而 `apt` 的前身為 `apt-get` 。
 |套件內容|rpm -ql __套件名稱__|dpkg -L __套件名稱__
 |套件檔內容|rpm -qlp __套件檔案__|dpkg -c __套件檔案__
 |套件檔安裝╱更新|rpm -U __套件檔案__|dpkg -i __套件檔案__
-|=============================
+|====
 
 不論是套件庫命令或是套件檔案命令，有些動作其實可以透過不衹一種命令完成。例如：
 ====

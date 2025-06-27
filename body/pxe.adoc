@@ -75,6 +75,10 @@ lo          no +
 root# *nmcli connection modify _eth0_ connection.autoconnect yes*
 ====
 相關設定會儲存於 `/etc/NetworkManager/system-connections/` 目錄中的檔案。
+假設如果有需要手動將裝置連線的話，可以輸入：
+====
+root# *nmcli connection up _eth0_*
+====
 
 === 服務需求
 基本的 PXE 技術是由兩項網路服務所組成：DHCP 與 TFTP。
@@ -434,6 +438,5 @@ sanboot --no-describe --drive 0x80
 
 ==== iVentoy
 iVentoy 專案
-footnote:[iVentoy: A new netboot solution <https://www.iventoy.com/>]
+footnote:[iVentoy: 新的網路開機解決方案 <https://www.iventoy.com/>]
 提供免費的 PXE 伺服軟體。
-

@@ -214,6 +214,7 @@ admonition:
     font_style: bold
 blockquote:
   # 20221012 KaiGenGothicTW ADD
+  font_family: Taiwan KaiSu
   font_color: $base_font_color
   font_size: $base_font_size_large
   border_color: $base_border_color
