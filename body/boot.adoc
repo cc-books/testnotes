@@ -256,7 +256,7 @@ root# *$EDITOR /boot/extlinux/linux.conf*
 另外 UEFI 與開機載入程式的軟體位元必須相同，而且內核或使用者空間的軟體位元均不可高於 CPU。
 
 執行中的系統可以經由 `uname -r` 命令取得內核版本，如果要確認目前的內核參數，可以查看 `/proc/cmdline` 的內容。
-NOTE: Ubuntu Linux 並不完全照用基底的內核版本來命名，實際的版本可見 `/proc/version_signature` 的內容。
+NOTE: 有些散佈版的內核並不完全照基底的版本來命名，實際的版本需要參考 `/proc/version` 或 `/proc/version_signature` 的內容。
 
 內核專案中附帶提供的 `perf` 工具程式，可以用來啟用內核的效能監控。
 

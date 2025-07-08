@@ -1,4 +1,4 @@
-=== 儲存裝置
+== 儲存裝置
 電腦系統需要儲存裝置在離線時儲存資料，並且在運作時提供資料的輸入與輸出。
 
 如果將儲存裝置類比於一本書，那麼開機區就像封面、分割區表就像目次、分割區類型就像書頁尺寸，而檔案系統則像排版方式。
@@ -89,7 +89,8 @@ user$ *cat /proc/dma* +
 ====
 如果想要在使用者空間設定 DMA 值，可以試試系統是否有支援 `hdparm -X -d -k` 指令。
 
-對於固態磁碟來說，可以試試內核參數 `slice_idle=0` 也許能夠增加部分效能。
+另外可以藉由設定內核參數 `elevator=deadline|noop|cfq` ，來改變輸出入調度模式，對於不同類型的磁碟可能會有不同的效能影響。
+對於固態磁碟來說，還可以試試內核參數 `slice_idle=0` ，也許能夠增加部分效能。
 
 === 分割區
 一般而言，容量超過 256GB 的儲存裝置建議要使用 GPT 模式來分割磁碟。
@@ -227,6 +228,7 @@ exFAT 如同其名稱所指，是擴展規格的 FAT 檔案系統，內核需要
 root# *mount -o remount,size=_16G_,noatime /tmp*
 ====
 原始的虛擬檔案來源就是 `/dev/shm` ，預設大小為實體記憶體的一半。
+如果在 `/etc/fstab` 檔案中，將選項中的 `noatime` 也運用於一般的資料檔案系統，有可能會加快磁碟的讀寫速度。
 
 `devfs` 與 `sysfs` 也屬於特殊的虛擬檔案系統，會在系統初始階段自動產生。
 原本是根據 `devfs` 機制產生 `/dev` 虛擬目錄之下的抽象裝置結構，後來被 `sysfs` 檔案系統所取代。
@@ -534,9 +536,10 @@ QEMU 軟體計畫提供的 `qemu-img` 程式，包含了許多針對映像檔的
 標準安裝的 GNOME 桌面環境中，就有提供圖形介面的磁碟工具程式 `gnome-disks` 。
 除了顯示所選磁碟的基本資料、提供基本的格式化與映像檔操作外，也可以進行讀取與寫入的速度測試。
 
+image::gnome-disks.png[width=60%,align="center"]
 
 `hdparm` 命令用來取得或設定磁碟裝置的資訊，其中 `-i` 選項用來顯示磁碟的內核相關項目，而 `-I` 選項則是顯示硬體的相關內容。
-由於 `hdparm` 的資訊功能衹支援 `/dev/sd*` 而不支援 `/dev/mmcblk*` 類型的磁碟裝置，因此對於後者則需要執行 `mmc-utils` 套件中的 `mmc` 指令：
+由於 `hdparm` 的資訊功能衹支援 `/dev/sd*` 而不支援 `/dev/mmcblk*` 類型的磁碟裝置，因此對於後者就需要執行 `mmc-utils` 套件中的 `mmc` 指令：
 ====
 root# *mmc csd read /sys/class/mmc\_host/_mmc0_/_mmc0_:0001* +
 type: 'MMC' +
@@ -561,20 +564,23 @@ root# *hdparm -t /dev/__mmcblk0__* +
 /dev/mmcblk0: +
  Timing buffered disk reads: 974 MB in  3.00 seconds = 324.62 MB/sec
 ====
+但是當測試對象為分割區時，要注意結果可能會依分割區上的檔案系統而有差異。
 
 
 萬一在精簡的系統中未提供以上的工具時，命令 `dd` 也能做為簡單的磁碟讀寫測試工具。
 例如測試寫入速度可以輸入：
 ====
-user$ *dd if=/dev/urandom of=_testfile_ bs=4M count=1K oflag=direct*
+user$ *dd if=/dev/urandom of=_testfile_ bs=4M count=256 oflag=direct*
 ====
 而測試讀取速度的指令則可利用剛剛寫入的檔案：
 ====
 user$ *dd if=_testfile_ of=/dev/null bs=4M iflag=direct*
 ====
+效能測試結果可能會依資料量不同而有差異，而上述指令所用的 1GB 是比較建議的資料量。
 
 萬一不小心誤刪了重要檔案，記得先不要再寫入新資料，然後將含有舊檔案的磁碟裝置卸載，再利用 `extundelete` 命令嘗試救回。
 
 `testdisk` 是另外一個文字介面的工具程式，可以修復磁碟或映像檔的分割區問題，其中的 `photorec` 項目還有可能救回已刪除的檔案。
 `fsarchiver` 則是另外一個文字介面的備份/還原程式，主要是以檔案系統為操作對象，所產生的 `.fsa` 檔案與 `dd` 的格式並不相容。
+對於檔案系統與磁碟裝置，套件 `bonnie++` 提供多方面的讀寫效能測試。
 

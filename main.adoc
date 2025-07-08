@@ -36,19 +36,19 @@ include::body/swinstall.adoc[]
 
 include::body/chips.adoc[]
 
-include::body/input.adoc[]
+include::body/ioports.adoc[]
+
+include::body/storage.adoc[]
 
 include::body/display.adoc[]
 
-include::body/storage.adoc[]
+include::body/input.adoc[]
 
 include::body/audiovideo.adoc[]
 
 include::body/network.adoc[]
 
 include::body/power.adoc[]
-
-include::body/integration.adoc[]
 
 :sectnums!:
 

@@ -12,9 +12,12 @@
 內核運行進入第二階段後，第一個執行的外部命令為 `init` ，同時也獲得了**行程編號**(PID) 1。
 傳統 SysV 作業系統沿續下來的 `init` 版本，會呼叫一連串、分門別類的 rc(run commands) 檔案，內容由命令稿組成。
 目前較流行的實作，是將 `/usr/sbin/init` 鏈結到 `/usr/lib/systemd/systemd` 這個**守護程式**(daemon)，然後觸發各類型的**服務**(service)。
+Systemd 系統初始模式還提供了 `systemd-analyze blame` 指令，可以顯示開機時各服務啟動所消耗的時間，做為改進系統開機效能的參考。
+
 每項服務大致對應之前的 rc 檔案，呼叫一到多個能夠共同完成特定任務的程式，舊式的服務控制命令，則被導向並轉換為流行版本的 `systemctl` 命令。
 例如啟動網站伺服器的 `service _httpd_ start` 指令，在 Systemd 模式下的寫法為 `systemctl start _httpd_` ；
 而設定成自動啟用的 `chkconfig _httpd_ on` 指令，則需要改為執行 `systemctl enable _httpd_` 以達到作用。
+
 
 ==== 目標狀態
 傳統的 SysV 模式將系統狀態分為不同的**執行層級**(runlevel)，而在 Systemd 模式的軟體架構下則稱之為**目標**(target)。

@@ -88,7 +88,8 @@ local_enable=YES
 write_enable=YES
 local_umask=022
 ....
-FTP 的客戶端程式可選用文字模式的 `lftp` 或是圖形模式的 `gftp` 。
+其他的可選 FTP 伺服軟體，還包括 `proftpd` 或 `pure-ftpd` 。
+FTP 的客戶端程式則可選用文字模式的 `lftp` 或是圖形模式的 `gftp` 。
 
 
 HTTP/HTTPS
@@ -107,10 +108,31 @@ user$ *openssl s_client -connect __網站網路位址__:443 -tls1_2*
 
 SMB 服務在新版內核中已經成為一個模組。
 
-GIT 是一種**原始碼管理**(SCM) 軟體，提供分散式地控制與管理原始碼版本的服務。
-可安裝 gitlab 或 gogs, Gitea 網頁應用
-最好還是利用 github 服務，如果有保密疑慮可購買私有服務
-
+GIT 是一種**原始碼管理**(SCM) 軟體，提供分散式控制與管理原始碼版本的服務。
+如果測試環境能連接網際網路的話，不妨直接利用 Github.com 的服務，甚至考慮購買私有服務以增強保密安全。
+若要自行建立網頁伺服服務，則有 Gitlab, Gogs, Gitea 等開放原始碼軟體選擇。
+在客戶端安裝完 `git` 套件之後，先進行以下設定：
+====
+user$ *git config --global user.name _使用者姓名_* +
+user$ *git config --global user.email _使用者電子郵箱_*
+====
+當獲得了伺服器端的登入賬號之後，可以先建立一個空的專案，接著在客戶端變更工作目錄到想要放置各專案的地方（例如 `mkdir Git;cd Git` ）並輸入：
+====
+user$ *git clone https://__GIT網頁伺服器位址__/__使用者賬號__/__專案名稱__.git*
+====
+然後就可以進入新建立的專案目錄中開發，新增或編輯任何檔案或將已有檔案拷貝到這裡。
+修改到一個階段時，就應該將成果提交回伺服器，而不需要特別執著於一定的時間間隔或修改數量。
+在專案目錄中輸入：
+====
+user$ *git add .* +
+user$ *git commit -m 'create files and fix bugs'* +
+user$ *git push origin master*
+====
+然後依照指示輸入賬號與密碼，就會將本地的變更整合、壓縮並上傳到伺服器中。
+下次要繼續開發之前，最好先匯入伺服器中其他開發者的提交，以保持版本同步：
+====
+user$ *git pull origin*
+====
 
 
 ==== 遠端登入
@@ -165,9 +187,9 @@ user$ *vncviewer -DotWhenNoCursor -passwd _密碼檔案_ _網路位址_*
 
 如果遠端連線的性能要求不高，伺服端又不想安裝完整的伺服軟體，客戶端也希望衹需要網頁瀏覽器就能連線，那就可以考慮採用遠端桌面閘道服務：
 例如開放原始碼的 DWService
-footnote:[DWS 遠端桌面閘道服務<https://www.dwservice.net/>]，免費註冊時還可選擇「傳統字漢語」網頁介面，而於伺服端安裝自動執行的代理程式後即可分享控制；
+footnote:[DWS 遠端桌面閘道服務 <https://www.dwservice.net/>]，免費註冊時還可選擇「傳統字漢語」網頁介面，而於伺服端安裝自動執行的代理程式後即可分享控制；
 或是嘗試自行架設 Apache Guacamole
-footnote:[Apache Guacamole 遠端桌面閘道軟體<https://www.dwservice.net/>]，當然也必須面對有可能被防火牆擋住，而無法提供外部連線的問題。
+footnote:[Apache Guacamole 遠端桌面閘道軟體 <https://www.dwservice.net/>]，當然也必須面對有可能被防火牆擋住，而無法提供外部連線的問題。
 
 ==== 網路相關
 網路組態中的**防火牆**(firewall) 設置，主要在日常使用的開放環境系統中，負責阻斷未經允許的網路輸入輸出。
@@ -242,6 +264,25 @@ user$ *growisofs -M /dev/sr0 -J -R data/*
 
 安裝合用編輯器
 
+一般散佈版的官方套件庫中，可以找到 `phoronix-test-suite` 這套開放原始碼的自動測試框架。
+它是以 PHP 程式語言所編寫的效能評測軟體，能夠自動進行多種軟硬體的質化與量化分析，並以網頁的形式輸出結果。
+雖然得到的資料豐富，但是需要自行從中提取有用訊息，才能夠整合到個別的測試報告之中。
+
+==== 專屬軟體
+許多測試軟體公司也提供適用於 Linux x86_64 的套裝軟體，甚至有免費的試用版本。
+例如 PassMark Software 出品的燒機測試軟體 BurnInTest
+footnote:[BurnInTest Linux x86 FAQ <https://www.passmark.com/support/bitlinux_faq.php>] 與效能測試軟體 PerformanceTest
+footnote:[PerformanceTest Linux FAQ <https://www.passmark.com/support/pt_linux_faq.php>] 。
+
+以及 Greeks3D 釋出的 GPU 壓力測試軟體 FurMark 2
+footnote:[FurMark <https://www.geeks3d.com/furmark/>] 與較舊版本的 GpuTest
+footnote:[GpuTest <https://www.geeks3d.com/gputest/>] 。
+
+還有由 Primate Labs Inc. 所製作的處理基準測試軟體 Geekbench
+footnote:[Downloading Geekbench 6 for Linux <https://www.geekbench.com/download/linux/>] ，會將評測結果發布於網頁，方便和不同平臺、不同組態的系統比較。
+
+另外像是 UNIGINE 3D 繪圖引擎軟體開發商，也有提供多種不同的 3D 場景評測軟體
+footnote:[UNIGINE Benchmarks <https://benchmark.unigine.com/>] ，讓使用者測試整機硬體在極致壓力下的繪圖表現。
 
 
 === 個人準備

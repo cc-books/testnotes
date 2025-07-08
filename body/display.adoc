@@ -307,7 +307,22 @@ user$ *LIBGL_DEBUG=verbose glxinfo |& grep DRI* +
 libGL: Using DRI3 for screen 0
 ====
 由同樣的 `glx-utils` 套件所提供的 `glxgears` ，可以說是最基本的顯示效能測試程式。
-另外，相對於 OpenGL 的 `glxgears` ，Vulkan 也有 `vkcube` 程式可供測試應用。
+但是要注意的是，必須先設定環境變數 `vblank_mode` 為 0，才不會受到螢幕垂直掃描頻率的影響：
+====
+user$ *vblank_mode=0 glxgears*
+ATTENTION: default value of option vblank_mode overridden by environment. +
+5955 frames in 5.0 seconds = 1190.864 FPS +
+6183 frames in 5.0 seconds = 1236.481 FPS +
+6189 frames in 5.0 seconds = 1237.793 FPS +
+6189 frames in 5.0 seconds = 1237.705 FPS +
+...
+====
+此時終端機畫面每 5 秒鐘會計算一次 FPS，可以取第一次之外的若干次數值來求平均值，同時在桌面還會出現 3 個齒輪旋轉的視窗。
+
+image::glxgears.png[width=40%,align="center"]
+
+想要結束執行時，可以關閉齒輪視窗或按下 kbd:[Esc] ，也可以在終端機中按下 kbd:[Ctrl - C] 來強制終止程式。
+另外，相對於 OpenGL 還可以選擇的 `glmark2` 之外，Vulkan 也有 `vkcube` 程式可供測試應用。
 
 與顯示相關的函式庫堆疊中，與一般應用軟體關係最接近的是影音函式庫（例如 `gstreamer`, `ffmpeg` ）。
 如果前段所說的硬體驅動程式有支援的話，套件 `gstreamer1-vaapi` 就可以讓 `gstreamer` 使用到 `libva` 的 API。
@@ -443,14 +458,14 @@ EndSection
 另外還有一些選項，在多數顯示模組設定中都適用：
 
 ....
-        ⋮        ⋮
+...
 #    Option "Present" "false"
 #    Option "TearFree" "true"
 #    Option "XvPreferOverlay" "true"
 #    Option "Tiling" "false"
 #    Option "LinearFramebuffer" "true"
 #    Option "Throttle" "false"
-        ⋮        ⋮
+...
 ....
 
 調整以上選項有可能解決的問題包括：畫面被分割、畫面破碎、出現橫紋、文字缺筆、鏡像滑鼠位置不一致、擴展螢幕中的視窗拉動殘影、無法調整螢幕亮度…等等。

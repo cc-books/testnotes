@@ -59,10 +59,9 @@ user$ *cat _file.txt_* +
 
 將檔名做為參數來打開有相容問題的文字檔時，每種文字編輯器的表現也可能不盡相同。
 以〈文字檔：文字檔類型〉中所提到含有 BOM 的 DOS 換列格式為例，就有可能看到以下的編輯畫面：
-====
-[underline]##<FEFF>##覆蓋的內容 [underline]#M# +
-新增的內容 [underline]#M#
-====
+
+image::joe.png[width=80%,align="center"]
+
 應該足以提醒使用者要注意，並採取適當的前處理方式，再進行任何形式的編輯：
 ====
 user$ *file _file.txt_* +

@@ -1,4 +1,7 @@
 == 輸入裝置
+輸入裝置是一類特殊的字元裝置，由專門的驅動程式負責鍵盤、指標這類裝置。
+
+=== 控制軟體
 各類輸入裝置雖然依功能可分為鍵盤裝置與指標裝置，但在使用者空間都會受到 `libevdev` 與 `libinput` 函式庫的管理。
 `libevdev` 透過系統守護程式 `systemd-udevd` 來管理裝置事件，參考檔案位於 `/usr/lib/udev/hwdb.d/*.hwdb` （或是 `/lib/udev/keymaps/*` ）。
 如果想要即時更新，可以執行 `systemd-hwdb update` 指令以取得最新的硬體資料庫。
