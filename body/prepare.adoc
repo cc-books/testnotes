@@ -57,11 +57,6 @@
 
 
 
-
-
-
-
-
 === 伺服服務/程式
 Port Number	Service	Use Case
 20, 21	FTP	File Transfer
@@ -73,8 +68,8 @@ Port Number	Service	Use Case
 5900	VNC	Remote Desktop Access
 
 有些情況網路服務無法使用的原因，是由於本機時間與伺服器差別太大。
-須先確認來源機器 IP 並與目標機器連網且無防火牆 (可用 ping 程式測試)
-測試出問題的可能原因有以下設定：語區、主動╱被動、SELinux、防火牆、使用配額。
+須先確認來源機器 IP 並與目標機器連網且無防火牆 (可用 `iputils` 套件中的 `ping` 命令測試)
+測試出問題的可能原因，可能需要以下設定：語區、主動╱被動、SELinux、防火牆、使用配額。
 
 ==== 檔案服務
 由於 FTP 協定規格中對於資訊安全的防護較弱，因此有逐漸減少這類服務的趨勢。
@@ -89,10 +84,13 @@ write_enable=YES
 local_umask=022
 ....
 其他的可選 FTP 伺服軟體，還包括 `proftpd` 或 `pure-ftpd` 。
-FTP 的客戶端程式則可選用文字模式的 `lftp` 或是圖形模式的 `gftp` 。
+FTP 的客戶端程式則可選用文字模式的 `lftp` 或是圖形模式的 `gftp`, `filezilla` 。
 
 
-HTTP/HTTPS
+標準的 HTTP/HTTPS 伺服器安裝，可參考下一章〈開機前執行環境〉中相關的說明。
+如果衹是為了一般測試的目的，也可以考慮安裝 `lighttpd` 套件。
+它的組態檔案位於 `/etc/lighttpd.conf` ，相較於標準網頁伺服器會簡單許多。
+
 測試網站是否支援 TLS 1.2：
 ====
 user$ *openssl s_client -connect __網站網路位址__:443 -tls1_2*
@@ -100,43 +98,46 @@ user$ *openssl s_client -connect __網站網路位址__:443 -tls1_2*
 
 除了啟動正式的網頁伺服服務之外，也可以執行臨時的網頁伺服程式來提供檔案分享。
 假設伺服器中想要分享的檔案位於當前的目錄，在安裝並執行 `mongoose` 命令之後，就可以在客戶端利用 `wget http://__網路位址__:8000/__檔案名稱__` 來取得檔案。
-另外一個在伺服端建立臨時網頁伺服器的方法，是利用 `python` 語言提供的模組來執行 `python3 -m http.server` 指令。
-客戶端若要取得臨時分享目錄中的所有檔案，則可用指令 `wget -r -nH wget http://__網路位址__:8000/` 。
+另外一個在伺服端建立臨時網頁伺服器的方法，是利用 `python` 語言提供的模組來執行 `python3 -m http.server` 敘述。
+客戶端若要取得臨時分享目錄中的所有檔案，則可用敘述 `wget -r -nH wget http://__網路位址__:8000/` 。
 
 
 
 
 SMB 服務在新版內核中已經成為一個模組。
 
-GIT 是一種**原始碼管理**(SCM) 軟體，提供分散式控制與管理原始碼版本的服務。
+*Git* 是一種**原始碼管理**(SCM) 軟體，提供分散式控制與管理原始碼版本的服務。
 如果測試環境能連接網際網路的話，不妨直接利用 Github.com 的服務，甚至考慮購買私有服務以增強保密安全。
-若要自行建立網頁伺服服務，則有 Gitlab, Gogs, Gitea 等開放原始碼軟體選擇。
+若要自行建立網頁伺服服務，則有 Gitlab, Gogs, Gitea 等開放原始碼軟體可供選擇。
 在客戶端安裝完 `git` 套件之後，先進行以下設定：
 ====
 user$ *git config --global user.name _使用者姓名_* +
 user$ *git config --global user.email _使用者電子郵箱_*
 ====
-當獲得了伺服器端的登入賬號之後，可以先建立一個空的專案，接著在客戶端變更工作目錄到想要放置各專案的地方（例如 `mkdir Git;cd Git` ）並輸入：
+當獲得了伺服器端的登入賬號之後，可以先建立一個空的專案，接著在客戶端變更工作目錄到想要放置各專案的地方：
 ====
-user$ *git clone https://__GIT網頁伺服器位址__/__使用者賬號__/__專案名稱__.git*
+user$ *mkdir _Git_* +
+user$ *cd _Git_* +
+user$ *git clone https://__GIT網頁伺服器位址__/__使用者賬號__/__專案名稱__.git* +
+user$ *cd _專案名稱_*
 ====
-然後就可以進入新建立的專案目錄中開發，新增或編輯任何檔案或將已有檔案拷貝到這裡。
-修改到一個階段時，就應該將成果提交回伺服器，而不需要特別執著於一定的時間間隔或修改數量。
+進入新建立的專案目錄中就可以開始開發作業：新增或編輯任何檔案，或將已有檔案拷貝到這裡。
+修改到一個功能階段時，應該將成果儘快提交回伺服器，而不需要特別執著於一定的時間間隔或修改數量。
 在專案目錄中輸入：
 ====
 user$ *git add .* +
 user$ *git commit -m 'create files and fix bugs'* +
 user$ *git push origin master*
 ====
-然後依照指示輸入賬號與密碼，就會將本地的變更整合、壓縮並上傳到伺服器中。
-下次要繼續開發之前，最好先匯入伺服器中其他開發者的提交，以保持版本同步：
+然後依照指示輸入賬號與密碼，就會將本地原始碼庫中的變更整合、壓縮並上傳到伺服器。
+下次要繼續開發之前，應該先匯入伺服器中其他開發者的提交記錄，以保持與最新的版本同步：
 ====
 user$ *git pull origin*
 ====
 
 
 ==== 遠端登入
-同樣附屬於 SSH 協定的還有 SFTP 服務，預設伺服器端的設定是禁止以管理者身分登入。
+同樣附屬於 SSH 協定的還有 SFTP 服務，預設伺服器端的設定是禁止以超級使用者身分登入。
 無法登入時還要先確定不是因為鍵盤接觸不良所導致的輸入亂碼，還有可能是使用者登入後自動執行過程出現錯誤。
 
 Linux 系統是以 `xrdp` 套件來提供使用 RDP 協定的遠端桌面，安裝後即會啟動 `xrdp` 服務。
@@ -170,12 +171,12 @@ Enable=true
 Port=177
 ....
 並且可能要刪除檔案 `/usr/share/polkit-1/org.freedesktop.color.policy` ，以避免連線時要求建立色彩描述檔。
-客戶端的連線指令範例如下：
+客戶端的連線敘述範例如下：
 ====
 user$ *Xephyr :1 -fullscreen -br -bs -render default -dpi 96 +xinerama -reset -terminate -query _伺服端網路位址_*
 ====
 
-如果衹有單純的遠端桌面需求，可以安裝支援 VNC/RFB 協定的 `x11vnc` 伺服程式，然後輸入指令：
+如果衹有單純的遠端桌面需求，可以安裝支援 VNC/RFB 協定的 `x11vnc` 伺服程式，然後輸入敘述：
 ====
 user$ *x11vnc -forever -repeat -passwd _連線密碼_ &*
 ====
@@ -191,15 +192,11 @@ footnote:[DWS 遠端桌面閘道服務 <https://www.dwservice.net/>]，免費註
 或是嘗試自行架設 Apache Guacamole
 footnote:[Apache Guacamole 遠端桌面閘道軟體 <https://www.dwservice.net/>]，當然也必須面對有可能被防火牆擋住，而無法提供外部連線的問題。
 
-==== 網路相關
+==== 防火牆
 網路組態中的**防火牆**(firewall) 設置，主要在日常使用的開放環境系統中，負責阻斷未經允許的網路輸入輸出。
 但是在封閉的測試環境下，有可能因為疏忽反而造成其他伺服程式的不便。
 防火牆的通用服務名稱為 `firewalld` ，在 Systemd 系統初始模式下可以依照一般使用 `systemctl` 命令的方式，搭配 `stop` 或 `disable` 選項分別予以停止或停用。
 即使確定之後不會用到防火牆功能，但由於套件依存關係而不方便直接移除，也可以再利用 `systemctl` 命令的 `mask` 選項來阻止它被其他軟體啟動。
-
-iperf
-
-
 
 ==== 檔案傳送
 偶爾需要拷貝別臺電腦中的檔案時，通常是以**隨身碟**(Flash Stick) 做為交換的媒介，
@@ -219,14 +216,14 @@ user$ *nc _網路位址_ < _檔案名稱_*
 ====
 user$ *nc -l -p 31337 | tar xvf -*
 ====
-相應的發送端指令範例則是：
+相應的發送端敘述範例則是：
 ====
 user$ *tar cvf - _目錄路徑_ | nc _網路位址_ 31337*
 ====
 如果命令與輸入資料都正確，卻出現無法連線的錯誤訊息，有可能是被接收端的防火牆所阻擋。
 
 有些散佈版還會提供工具軟體 `croc` ，可以很方便地在區域網路中傳檔，而且是由發送端先啟動。
-輸入指令 `croc send --code _臨時密碼_ _檔案或目錄_` 之後，發送端就進入等待傳輸狀態，然後再由接收端輸入 `croc _臨時密碼_` 即可開始傳送。
+輸入敘述 `croc send --code _臨時密碼_ _檔案或目錄_` 之後，發送端就進入等待傳輸狀態，然後再由接收端輸入 `croc _臨時密碼_` 即可開始傳送。
 
 
 === 外部測試系統
@@ -243,7 +240,7 @@ footnote:[Ventoy: 新的可開機 USB 解決方案 <https://www.ventoy.net/>]
 footnote:[SystemRescue: 系統救援工具箱 <https://www.system-rescue.org/>]
 為例：首先準備好 `systemrescue-12.01-amd64.iso` 並編輯所需的 `data/autorun` 與 `data/datafile` 檔案；
 然後利用十六進位編輯程式（ `hexedit` 或 `ghex` ），將 ISO 檔案中的 `timeout=90` 字串改為 `timeout=0 ` ；
-接著執行指令：
+接著執行敘述：
 ====
 user$ *growisofs -Z /dev/sr0=systemrescue-12.01-amd64.iso* +
 user$ *growisofs -M /dev/sr0 -J -R data/*

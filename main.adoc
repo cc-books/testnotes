@@ -14,11 +14,11 @@ include::head/abstract.adoc[]
 
 include::body/prepare.adoc[]
 
+include::body/pxe.adoc[]
+
 include::body/software.adoc[]
 
 include::body/bios.adoc[]
-
-include::body/pxe.adoc[]
 
 include::body/osinstall.adoc[]
 
