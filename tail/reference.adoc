@@ -42,6 +42,7 @@ https://forums.raspberrypi.com/viewtopic.php?t=64702
 
 network:
 https://access.redhat.com/solutions/783533
+https://askubuntu.com/questions/337775/how-do-i-get-a-rt2800usb-wireless-device-working
 
 wakeup:
 https://bbs.archlinux.org/viewtopic.php?pid=1953760#p1953760

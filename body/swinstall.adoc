@@ -34,7 +34,7 @@ ____
 user$ *wget _https://www.foobar.org/download/foobar-3.0.zip_* +
 user$ *wget _https://github.com/foo/bar/archive/refs/tags/v2.1.tar.gz_* -O bar-2.1.tar.gz_*
 ====
-萬一開發者或網站未提供適合的封裝檔案，使用者仍然可以利用標準的版本控制系統敘述來下載：
+萬一開發者或網站未提供適合的封裝檔案，使用者仍然可以利用標準的版本控制系統指令來下載：
 ====
 user$ *git clone --recursive _https://github.com/foo/bar.git_*
 ====
@@ -93,7 +93,7 @@ user$ *make*
 如果目錄中存在名為 `makefile` 或 `GNUmakefile` 的檔案，同樣預設會被讀取，當然也支援藉由引數來指定的設定檔名稱。
 
 有些𠩤始碼需要特別的組建參數，萬一開發者沒有將適當的 `Makefile` 附上，安裝者衹能依據文件與經驗自行嘗試。
-例如組建內核模組的敘述範例：
+例如組建內核模組的指令範例：
 ====
 user$ *make -C /lib/modules/$(uname -r)/build SUBDIRS=$(pwd) modules*
 ====
@@ -130,12 +130,12 @@ user$ *make -C /lib/modules/$(uname -r)/build SUBDIRS=$(pwd) modules*
 user$ *make install*
 ====
 如果原始碼軟體包不支援 Make 的安裝目標，也沒有其他可用的機制或安裝命令稿，就衹能手動在系統中建立目錄，再將需要的檔案拷貝過去。
-標準的做法是呼叫 `install` 命令，利用選項來設定檔案權限，並以來源路徑與目標路徑做為參數，而這也是大部分 `make install` 敘述所實際執行的動作。
-通常安裝目標位於系統目錄，因此就需要切換為超級使用者身分。安裝一般工具程式的敘述範例如下：
+標準的做法是呼叫 `install` 命令，利用選項來設定檔案權限，並以來源路徑與目標路徑做為參數，而這也是大部分 `make install` 指令所實際執行的動作。
+通常安裝目標位於系統目錄，因此就需要切換為超級使用者身分。安裝一般工具程式的指令範例如下：
 ====
 root# *install -Dm755 _檔案路徑_ /usr/bin/__命令名稱__*
 ====
-而手動安裝內核驅動模組的敘述則像是：
+而手動安裝內核驅動模組的指令則像是：
 ====
 root# *install -d * +
 root# *install -m744 _模組名稱_.ko /lib/modules/$(uname -r)/updates/_模組名稱_.ko*
@@ -150,7 +150,7 @@ user$ *make uninstall*
 
 上面提到的組建與安裝步驟，主要源於以 C/C++ 程式語言開發的軟體，下表列出一些其他開發語言也可能採用的機制（已省略部分引數）：
 |====
-|開發語言|判斷依據|組建敘述|安裝敘述
+|開發語言|判斷依據|組建指令|安裝指令
 |Python|setup.py|python setup.py build|python setup.py install
 |Rust|Cargo.toml|cargo build|cargo install
 |Ruby|Rakefile|rake|rake install
@@ -198,11 +198,11 @@ root# *_./foobar-16.3.2-linux64.bin_*
 衹是檔名中的 `install` 換成 `uninstall` ，或是原本的安裝命令再加上 `--uninstall` 的選項。
 如果找不到隨附的命令，文件裡面又沒有提到解除安裝的方法，那就衹能依靠經驗，自行去刪除目錄與檔案。
 
-特別要注意的是，有些軟體提供如下的單列敘述安裝方法：
+特別要注意的是，有些軟體提供如下的單列指令安裝方法：
 ====
 user$ *curl -fsSL _https://www.foobar.net//install.sh_ | bash*
 ====
-實際上是直接執行由網路上傳輸而來的不明敘述。
+實際上是直接執行由網路上傳輸而來的不明指令。
 雖然簡單、方便，卻也帶來相當大的安全疑慮，尤其是提出切換成超級使用者身分執行的要求時。
 
 === 來自套件

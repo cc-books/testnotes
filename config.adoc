@@ -9,7 +9,7 @@
 :doctype: book
 :doctitle: 電腦上試跑 Linux: ──── 硬體測試筆記
 :producer: 中華民國軟體自由協會
-:creator: 趙惟倫
+//:creator: 趙惟倫 編著
 //:description: Linux 硬體測試筆記
 :keywords: linux, hardware, compatibility
 :imagesdir: {docdir}/data
