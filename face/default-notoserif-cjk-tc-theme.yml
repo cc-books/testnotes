@@ -10,7 +10,7 @@ font:
       italic: LiberationMono-Italic.ttf
       bold_italic: LiberationMono-BoldItalic.ttf
     Noto Serif CJK TC:
-      normal: NotoSerifCJKtc-Normal.ttf
+      normal: NotoSerifCJKtc-Regular.ttf
       bold: NotoSerifCJKtc-Bold.ttf
       italic: NotoSerifCJKtc-Italic.ttf
       bold_italic: NotoSerifCJKtc-BoldItalic.ttf
@@ -20,6 +20,7 @@ font:
       bold: NotoSansMonoCJKtc-Bold.ttf
       italic: NotoSansMonoCJKtc-Italic.ttf
       bold_italic: NotoSansMonoCJKtc-BoldItalic.ttf
+    Taiwan KaiSu: TW-Kai-98_1.ttf
   fallbacks: [Noto Sans Mono CJK TC]
 page:
   background_color: FFFFFF
@@ -31,7 +32,7 @@ page:
   margin_outer: 0.59in
   size: B5
 base:
-  text_align: left
+  text_align: justify
   # color as hex string (leading # is optional)
   font_color: 333333
   # color as RGB array
@@ -57,6 +58,7 @@ base:
   #font_size: 11.25
   #line_height_length: 18
   line_height: $base_line_height_length / $base_font_size
+  font_size_lead: round($base_font_size * 1.5)
   font_size_large: round($base_font_size * 1.25)
   font_size_small: round($base_font_size * 0.85)
   font_size_min: $base_font_size * 0.75
@@ -68,7 +70,7 @@ base:
   align: left
 role:
   lead:
-    font_size: $base_font_size_large
+    font_size: $base_font_size_lead
   line-through:
     text_decoration: line-through
   underline:
@@ -147,6 +149,7 @@ title_page:
     top: 10%
   title:
     top: 55%
+    font_family: Taiwan KaiSu
     font_size: $heading_h1_font_size
     font_color: $role_subtitle_font_color
     line_height: 0.9
@@ -198,14 +201,16 @@ admonition:
     text_transform: uppercase
     font_style: bold
 quote:
+  font_family: Taiwan KaiSu
   font_size: $base_font_size_large
   # 20221002 KaiGenGothicTW ADD    
   font_color: $base_font_color  
   border_color: $base_border_color
   # ORIGIN
-  # border_width: 0
-  border_width: 5  
-  border_left_width: $horizontal_rhythm / 3
+  # border_width: 5
+  border_width: 0
+  # border_left_width: $horizontal_rhythm / 3
+  border_left_width: 0
   padding: [$vertical_rhythm / 4, $horizontal_rhythm, $vertical_rhythm / 4, $horizontal_rhythm + $quote_border_left_width / 2]
   cite:
     font_size: $base_font_size_small    

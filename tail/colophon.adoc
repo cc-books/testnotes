@@ -1,9 +1,9 @@
 [discrete]
 <<<
-
-[big]*電腦上試跑 Linux*
-
-　　　　─── [big]#硬體測試筆記#
+____
+[lead]*電腦上試跑 Linux*
+____
+　　　　　　　　　　　　─── [big]*硬體測試筆記*
 
 '''
 
@@ -11,18 +11,17 @@
 編著：趙惟倫 +
 發行人：翁佳驥 +
 發行所：中華民國軟體自由協會 +
-地址：X +
-電話：X +
-網址：X +
+地址：新北市汐止區汐萬路三段 199 巷 26 弄 4 號 +
+電話：(02)5593-3701 +
+網址：https://slat.org.tw/ +
 出版事業登記證：X +
 印刷：XX 印刷事業有限公司 +
-版次：2025 年 X 月初版 +
+版次：2025 年 12 月預印版 +
 ISBN：XXXXXXXXXXXXX +
 使用授權：CC BY-SA +
-建議售價：NT$XXX
+建議售價：NT$???
 --
 
-{empty} +
 {empty} +
 {empty} +
 
@@ -30,18 +29,16 @@ ISBN：XXXXXXXXXXXXX +
 [width="66%"]
 |=============================
 |電腦上試跑 Linux：硬體測試筆記 / 趙惟倫 編著 +
-─ 初版 ─ 新北市：中華民國軟體自由協會，2025.XX +
+─ 初版 ─ 新北市：中華民國軟體自由協會，2026.2 +
 XXX 面，XX 公分 +
 ISBN：XXXXXXXXXXXXX +
-1.作業系統   2.相容性測試 +
+1.作業系統　　2.相容性測試 +
 312.954　　　　　　　　　　　　　　　XXXXXXXX
 |=============================
 
 '''
 
 ====
-HDMI 是 HDMI Licensing Administrator, Inc. 的商標或註冊商標。 +
-Linux 是 Linus Torvalds 的註冊商標。 +
-Windows 是 Microsoft Corporation 的商標或註冊商標。 +
-USB Type-C 是 USB Implementers Forum 的註冊商標。
+本書所引用之國內外公司各商標與產品名稱，其權利分屬各合法註冊公司所有，絕無侵權之意，特此聲明。 +
+本著作採用「姓名標示─相同方式分享 4.0 國際」授權。閱讀授權條款，請造訪 http://creativecommons.org/licenses/by-sa/4.0/ 。
 ====

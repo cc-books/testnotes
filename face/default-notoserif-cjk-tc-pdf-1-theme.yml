@@ -10,7 +10,7 @@ font:
       italic: LiberationMono-Italic.ttf
       bold_italic: LiberationMono-BoldItalic.ttf
     Noto Serif CJK TC:
-      normal: NotoSerifCJKtc-Normal.ttf
+      normal: NotoSerifCJKtc-Regular.ttf
       bold: NotoSerifCJKtc-Bold.ttf
       italic: NotoSerifCJKtc-Italic.ttf
       bold_italic: NotoSerifCJKtc-BoldItalic.ttf
@@ -21,6 +21,7 @@ font:
       italic: NotoSansMonoCJKtc-Italic.ttf
       bold_italic: NotoSansMonoCJKtc-BoldItalic.ttf
     Taiwan KaiSu: TW-Kai-98_1.ttf
+    Iansui Regular: Iansui-Regular.ttf
   fallbacks: [Noto Sans CJK TC Mono]
 page:
   background_color: FFFFFF
@@ -35,7 +36,7 @@ base:
   # ORG
   # align: justify
   # 20221012 KaiGenGothicTW ADD  
-  align: left
+  align: justify
   # color as hex string (leading # is optional)
   font_color: 000000
   # color as RGB array
@@ -61,6 +62,7 @@ base:
   #font_size: 11.25
   #line_height_length: 18
   line_height: $base_line_height_length / $base_font_size
+  font_size_lead: round($base_font_size * 1.5)
   font_size_large: round($base_font_size * 1.25)
   font_size_small: round($base_font_size * 0.85)
   font_size_min: $base_font_size * 0.75
@@ -73,6 +75,8 @@ role:
     text_decoration: line-through
   underline:
     text_decoration: underline
+  lead:
+    font_size: $base_font_size_lead
   big:
     font_size: $base_font_size_large
   small:
@@ -113,6 +117,7 @@ mark:
 menu:
   caret_content: " <font size=\"1.15em\"><color rgb=\"b12146\">\u203a</color></font> "
 heading:
+  chapter_break_before: always
   align: left
   font_color: $base_font_color
   # 20221012 KaiGenGothicTW ADD
@@ -149,7 +154,7 @@ title_page:
     align: center
   title:
     top: 15%
-    font_family: Taiwan KaiSu
+    font_family: Iansui Regular
     font_size: $heading_h1_font_size
     line_height: 1.2
     margin_bottom: $base_font_size * 2
@@ -183,7 +188,7 @@ caption:
   # margin_inside: $vertical_rhythm / 4
   margin_outside: 0
 lead:
-  font_size: $base_font_size_large
+  font_size: $base_font_size_lead
   line_height: 1.4
 abstract:
   font_color: 5C6266
@@ -214,15 +219,16 @@ admonition:
     font_style: bold
 blockquote:
   # 20221012 KaiGenGothicTW ADD
-  font_family: Taiwan KaiSu
+  font_family: Iansui Regular
   font_color: $base_font_color
   font_size: $base_font_size_large
   border_color: $base_border_color
   # ORG
   # border_width: 0
+  # border_left_width: 5
   # 20221012 KaiGenGothicTW ADD
-  border_width: 5  
-  border_left_width: 5
+  border_width: 0  
+  border_left_width: 0
   # FIXME disable negative padding bottom once margin collapsing is implemented
   padding: [0, $horizontal_rhythm, $block_margin_bottom * -0.75, $horizontal_rhythm + $blockquote_border_left_width / 2]
   cite_font_size: $base_font_size_small
@@ -237,6 +243,7 @@ verse:
   cite_font_color: $blockquote_cite_font_color
 # code is used for source blocks (perhaps change to source or listing?)
 code:
+  align: left
   font_color: $base_font_color
   font_family: $literal_font_family
   font_size: ceil($base_font_size)
@@ -255,6 +262,7 @@ conum:
   line_height: 4 / 3
   glyphs: circled
 example:
+  align: left
   border_color: $base_border_color
   border_radius: $base_border_radius
   # border_width: 0.75

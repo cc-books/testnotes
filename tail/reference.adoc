@@ -5,6 +5,10 @@ chips:
 https://developer.technexion.com/docs/using-gpio-from-a-linux-shell
 https://wiki.t-firefly.com/Core-3568J/driver_gpio.html
 https://www.tecmint.com/reset-usb-device-linux/
+https://www.daniloaz.com/en/differences-between-physical-cpu-vs-logical-cpu-vs-core-vs-thread-vs-socket/
+
+osinstall:
+https://www.tecmint.com/su-vs-sudo-and-how-to-configure-sudo-in-linux/
 
 boot:
 https://www.tecmint.com/reset-forgotten-root-password-in-rhel-centos-and-fedora/
@@ -13,6 +17,12 @@ init:
 https://linuxtldr.com/interactive-login-and-non-login-shell/
 https://linuxtldr.com/difference-between-bash-profiles/
 https://www.bloovis.com/posts/2025-02-27-set-default-browswer/
+
+command:
+https://speakerdeck.com/bluebat/bash-basics
+
+file-dir:
+https://talk.ltn.com.tw/article/paper/1445039
 
 input:
 https://discussion.fedoraproject.org/t/way-to-switch-fn-and-right-control-key/
@@ -32,17 +42,24 @@ https://wiki.archlinux.org/index.php/Advanced_Linux_Sound_Architecture
 https://www.kernel.org/doc/html/latest/sound/hd-audio/notes.html
 https://forums.raspberrypi.com/viewtopic.php?t=276782
 https://askubuntu.com/questions/615550/on-reboot-headphones-are-muted
+https://www.tanstaafl.co.uk/2013/11/linux-support-for-imaging-source-usb-ccd-astronomy-cameras/
+https://faq.yamaha.com/tw/s/article/000027826
 
 ioports:
 https://www.reddit.com/r/linux/comments/9cjxcb/writing_to_cmos_rtc_port_0x70_and_0x71_from_linux/
 https://qkxu.github.io/2019/04/15/linux%E4%B8%8B%E7%9A%84watchdog.html
+https://forums.linuxmint.com/viewtopic.php?t=278312
 
 storage:
 https://forums.raspberrypi.com/viewtopic.php?t=64702
+https://docs.voidlinux.org/config/ssd.html
 
 network:
 https://access.redhat.com/solutions/783533
 https://askubuntu.com/questions/337775/how-do-i-get-a-rt2800usb-wireless-device-working
+https://stackoverflow.com/questions/62864421/toggling-the-wi-fi-with-xf86wlan-and-script
 
-wakeup:
+power:
 https://bbs.archlinux.org/viewtopic.php?pid=1953760#p1953760
+https://discourse.ubuntu.com/t/disable-screen-dimming-ubuntu-unity-24-04/60615
+https://www.techbang.com/posts/17396-power-states-know-how-many-g-p-t-s-c-read

@@ -1,6 +1,6 @@
-all: makedate pdf showpdf
+all: date pdf show
 
-makedate:
+date:
 	touch main.adoc
 
 pdf:
@@ -15,5 +15,5 @@ orig:
 test:
 	asciidoctor-pdf -a pdf-style=default-notoserif-cjk-tc-pdf-1 -r asciidoctor-pdf-cjk -r ./remove-section-trailing-dot.rb test.adoc -o /tmp/main.pdf
 
-showpdf:
+show:
 	mupdf /tmp/main.pdf || evince /tmp/main.pdf &

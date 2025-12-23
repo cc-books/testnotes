@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e0eafc" />
+      <stop offset="100%" stop-color="#cfdef3" />
+    </linearGradient>
+    
+    <linearGradient id="screenGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4facfe" />
+      <stop offset="100%" stop-color="#00f2fe" />
+    </linearGradient>
+    
+    <linearGradient id="penguinBody" x1="30%" y1="20%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#3a3a3a" />
+      <stop offset="100%" stop-color="#1a1a1a" />
+    </linearGradient>
+
+    <linearGradient id="beakGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f1c40f" />
+      <stop offset="100%" stop-color="#f39c12" />
+    </linearGradient>
+
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="2" dy="4" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" fill="url(#bgGradient)" />
+  
+  <!-- Floor Shadow -->
+  <ellipse cx="256" cy="460" rx="200" ry="20" fill="#000" opacity="0.1" />
+
+  <!-- The Pile of Computers -->
+  <g transform="translate(0, 50)">
+    <!-- Back Layer: Server Towers -->
+    <rect x="50" y="250" width="80" height="150" rx="4" fill="#2c3e50" />
+    <rect x="60" y="260" width="60" height="10" rx="2" fill="#34495e" />
+    <rect x="60" y="280" width="60" height="10" rx="2" fill="#34495e" />
+    <rect x="60" y="300" width="60" height="10" rx="2" fill="#34495e" />
+    <circle cx="120" cy="265" r="2" fill="#e74c3c" />
+    <circle cx="120" cy="285" r="2" fill="#2ecc71" />
+
+    <rect x="380" y="220" width="90" height="180" rx="4" fill="#34495e" />
+    <rect x="395" y="240" width="60" height="140" fill="#2c3e50" />
+    <rect x="400" y="250" width="50" height="5" fill="#95a5a6" />
+    <rect x="400" y="265" width="50" height="5" fill="#95a5a6" />
+
+    <!-- Middle Layer: Monitors and Desktops -->
+    <!-- Old Beige Monitor -->
+    <path d="M100,380 L220,380 L210,280 L110,280 Z" fill="#dcdde1" stroke="#bdc3c7" stroke-width="2"/>
+    <rect x="120" y="295" width="80" height="60" rx="2" fill="#2c3e50" />
+    <rect x="125" y="300" width="70" height="50" fill="url(#screenGlow)" />
+    <!-- Code lines -->
+    <path d="M130,310 h20 M130,320 h40 M130,330 h30" stroke="#fff" stroke-width="2" opacity="0.5" />
+    
+    <!-- Modern Monitor (Center Base) -->
+    <rect x="180" y="350" width="160" height="100" rx="5" fill="#2c3e50" />
+    <rect x="190" y="360" width="140" height="80" fill="#000" />
+    <rect x="190" y="360" width="140" height="80" fill="url(#screenGlow)" opacity="0.8" />
+    <path d="M200,380 L240,380 L250,390 L200,390 Z" fill="#fff" opacity="0.3" />
+    <rect x="240" y="450" width="40" height="10" fill="#7f8c8d" />
+    <path d="M220,460 L300,460 L310,470 L210,470 Z" fill="#95a5a6" />
+
+    <!-- Laptop (Right) -->
+    <path d="M320,400 L450,400 L430,320 L340,320 Z" fill="#bdc3c7" />
+    <path d="M350,330 L420,330 L435,390 L335,390 Z" fill="#2c3e50" /> <!-- Screen Bezel -->
+    <path d="M360,340 L410,340 L420,380 L350,380 Z" fill="url(#screenGlow)" /> <!-- Screen -->
+    <path d="M310,400 L460,400 L470,420 L300,420 Z" fill="#95a5a6" /> <!-- Keyboard Base -->
+    
+    <!-- Cables -->
+    <path d="M150,380 Q160,420 200,420" stroke="#34495e" stroke-width="3" fill="none" />
+    <path d="M400,410 Q380,440 320,440" stroke="#34495e" stroke-width="3" fill="none" />
+  </g>
+
+  <!-- The Running Penguin -->
+  <g transform="translate(20, -20)">
+    <!-- Motion Lines -->
+    <path d="M100,200 L180,200" stroke="#3498db" stroke-width="4" stroke-linecap="round" opacity="0.6" />
+    <path d="M120,220 L160,220" stroke="#3498db" stroke-width="3" stroke-linecap="round" opacity="0.4" />
+    <path d="M90,180 L140,180" stroke="#3498db" stroke-width="3" stroke-linecap="round" opacity="0.5" />
+
+    <!-- Back Leg (Right) -->
+    <g transform="rotate(-10, 240, 330)">
+      <path d="M230,310 L230,340 L250,340 L255,335 Z" fill="#f39c12" stroke="#e67e22" stroke-width="2" />
+    </g>
+
+    <!-- Body -->
+    <g filter="url(#dropShadow)">
+      <!-- Main Shape -->
+      <ellipse cx="260" cy="250" rx="60" ry="90" transform="rotate(25, 260, 250)" fill="url(#penguinBody)" />
+      
+      <!-- White Belly -->
+      <path d="M230,200 Q280,200 290,250 Q300,300 260,320 Q220,340 210,290 Q200,240 230,200" fill="#fff" transform="rotate(25, 260, 250)" />
+      
+      <!-- Head Area -->
+      <circle cx="290" cy="190" r="35" fill="#1a1a1a" />
+      
+      <!-- Eye -->
+      <circle cx="300" cy="185" r="8" fill="#fff" />
+      <circle cx="302" cy="185" r="3" fill="#000" />
+      
+      <!-- Beak -->
+      <path d="M315,190 L350,185 L315,205 Z" fill="url(#beakGradient)" />
+      
+      <!-- Wing (Flipper) - Swept back for speed -->
+      <path d="M250,230 Q220,250 200,230 Q180,210 230,220 Z" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="2" transform="rotate(10, 250, 230)" />
+    </g>
+
+    <!-- Front Leg (Left) - High Step -->
+    <g transform="translate(280, 290) rotate(-20)">
+      <path d="M0,0 Q10,20 30,10 L35,15 L10,30 Q-10,20 0,0 Z" fill="#f39c12" stroke="#e67e22" stroke-width="2" />
+    </g>
+    
+    <!-- Scarf (Optional detail for motion) -->
+    <path d="M270,215 Q250,220 230,210 L210,215 L230,225 L270,225 Z" fill="#e74c3c" />
+  </g>
+
+  <!-- Foreground Elements (to create depth) -->
+  <g transform="translate(0, 50)">
+    <!-- Scattered Keyboard Keys -->
+    <rect x="150" y="450" width="20" height="20" rx="2" fill="#ecf0f1" transform="rotate(15, 160, 460)" />
+    <rect x="350" y="460" width="20" height="20" rx="2" fill="#ecf0f1" transform="rotate(-10, 360, 470)" />
+    
+    <!-- Mouse -->
+    <path d="M400,450 Q420,450 420,470 Q420,490 400,490 Q380,490 380,470 Q380,450 400,450" fill="#fff" stroke="#bdc3c7" stroke-width="1" />
+    <path d="M400,450 L400,470" stroke="#bdc3c7" stroke-width="1" />
+  </g>
+</svg>
