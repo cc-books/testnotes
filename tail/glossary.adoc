@@ -1,5 +1,376 @@
 [glossary]
-== 名詞對照
+== 名詞縮寫
 
-[glossary]
-WWAN:: Wireless Wide Area Network
+3
+====
+*3GPP*　　3rd Generation Partnership Project
+====
+
+A
+====
+*AC97*　　Audio Codec '97 +
+*ACM*　　 Abstract Control Model +
+*ACPI*　　Advanced Configuration and Power Interface +
+*ACS*　　 Advanced Card Systems +
+*AHCI*　　Advanced Host Controller Interface +
+*ALSA*　　Advanced Linux Sound Architecture +
+*AMD*　　 Advanced Micro Devices, inc. +
+*AP*　　　Access Point +
+*API*　　 Application Programming Interface +
+*APM*　　 Advanced Power Management +
+*ASCII*　 American Standard Code for Information Interchange +
+*AT*　　　Advanced Technology +
+*ATA*　　 Advanced Technology Attachment +
+*ATX*　　 Advanced Technology eXtended
+====
+
+B
+====
+*BASH*　　Bourne-Again SHell +
+*BIOS*　　Basic Input/Output System +
+*BOM*　　 Byte-Order Mark +
+*bpc*　　 bits per component
+====
+
+C
+====
+*CCD*　　 Charge-Coupled Device +
+*CCFL*　　Cold Cathode Fluorescent Lamp +
+*CCID*　　Chip Card Interface Device +
+*CD*　　　Compact Disc +
+*CDFS*　　Compact Disc File System +
+*CDMA*　　Code-Division Multiple Access +
+*CF*　　　Compact Flash +
+*CFET*　　Complementary Field-Effect Transistor +
+*CIFS*　　Common Internet File System +
+*CISC*　　Complex Instruction Set Computer +
+*CLI*　　 Command-Line Interface +
+*CMOS*　　Complementary Metal-Oxide-Semiconductor
+====
+
+====
+*Codec*　 Coder/decoder +
+*COM*　　 COMmunication port +
+*CPIO*　　CoPy In and Out +
+*CPU*　　 Central Processing Unit +
+*CRC*　　 Cyclic Redundancy Check +
+*CRLF*　　Carriage Return & Line Feed +
+*CRT*　　 Cathode Ray Tube +
+*CRTC*　　Cathode Ray Tube Controller +
+*CSM*　　 Compatibility Support Module +
+*CTIA*　　Cellular Telecommunications and Internet Association +
+*CUPS*　　Common Unix Printing System +
+*CVT*　　 Coordinated Video Timing
+====
+
+D
+====
+*DAC*　　 Digital-to-Analog Converter +
+*DDR*　　 Double Data Rate +
+*DHCP*　　Dynamic Host Configuration Protocol +
+*DIMM*　　Dual In-line Memory Module +
+*DM*　　　Display Manager +
+*DMA*　　 Direct Memory Access +
+*DMI*　　 Direct Media Interface +
+*DNS*　　 Domain Name System +
+*DOM*　　 Disk On Module +
+*DOS*　　 Disk Operating System +
+*DP*　　　DisplayPort +
+*DPI*　　 Dots Per Inch +
+*DPMS*　　Display Power Management Signaling +
+*DRI*　　 Direct Rendering Infrastructure +
+*DRM*　　 Direct Rendering Manager | Digital Rights Management +
+*DSI*　　 Display Serial Interface +
+*DTE*　　 Data Terminal Equipment +
+*dTPM*　　discrete Trusted Platform Module +
+*DVD*　　 Digital Versatile Disc +
+*DVI*　　 Digital Visual Interface +
+*DVMT*　　Dynamic Video Memory Technology
+====
+
+E
+====
+*EAN*　　 European/international Article Number +
+*EC*　　　Embedded Controller +
+*EDID*　　Extended Display Identification Data +
+*eDP*　　 embedded DisplayPort
+====
+====
+*EEPROM*　Electrically-Erasable Programmable Read-Only Memory +
+*EETI*　　eGalax_eMPIA Technology Inc. +
+*EFI*　　 Extensible Firmware Interface +
+*EHCI*　　Enhanced Host Controller Interface +
+*eMMC*　　embedded Multi Media Card +
+*ErP*　　 Energy-related Products +
+*ESC*　　 Epson Standard Code +
+*ESP*　　 EFI system partition +
+*eTT*　　 effectively TesTed +
+*eUFS*　　embedded Universal Flash Storage
+====
+
+F
+====
+*FAT*　　 File Allocation Table +
+*FD*　　　Floppy Disk +
+*FinFET*　Fin Field-Effect Transistor +
+*FPS*　　 Frames Per Second +
+*FPU*　　 Floating-Point Unit +
+*FTDI*　　Future Technology Devices International +
+*FTP*　　 File Transfer Protocol +
+*fTPM*　　firmware Trusted Platform Module +
+*FUSE*　　Filesystem in USErspace
+====
+
+G
+====
+*GAAFET*　Gate-All-Around Field Effect Transistor +
+*GDI*　　 Graphics Device Interface +
+*GNU*　　 GNU's Not Unix! +
+*GOP*　　 Graphics Output Protocol +
+*GPIO*　　General-Purpose Input/Output +
+*GPS*　　 Global Positioning System +
+*GPT*　　 GUID Partition Table +
+*GPU*　　 Graphics Processing Unit +
+*GRUB*　　GRand Unified Bootloader +
+*GUI*　　 Graphical User Interface
+====
+
+H
+====
+*HAL*　　 Hardware Abstraction Layer +
+*HCI*　　 Host Controller Interface +
+*HD*　　　Hard Disk +
+*HDA*　　 intel High Definition Audio +
+*HDMI*　　High Definition Multimedia Interface +
+*HID*　　 Human Interface Device
+====
+====
+*HPD*　　 Hot Plug Detect +
+*HTTP*　　HyperText Transfer Protocol +
+*HTTPS*　 HyperText Transfer Protocol Secure
+====
+
+I
+====
+*IA-32*　 Intel Architecture, 32-bit +
+*IA-64*　 Intel Architecture, 64-bit +
+*ICMP*　　Internet Control Message Protocol +
+*IDE*　　 Integrated Drive Electronics +
+*I^2^C*　　　Inter-Integrated Circuit +
+*I^2^S*　　　Inter-Integrated Circuit Sound +
+*IIO*　　 Industrial Input/Output +
+*IOMMU*　 Input–Output Memory Management Unit +
+*IP*　　　Internet Protocol +
+*IPP*　　 Internet Printing Protocol +
+*IR*　　　InfraRed +
+*IrDA*　　Infrared Data Association +
+*IRQ*　　 Interrupt ReQuest +
+*ISA*　　 Industry Standard Architecture +
+*ISBN*　　International Standard Book Number +
+*ISO*　　 International Organization for Standardization
+====
+
+K
+====
+*KMS*　　 Kernel Mode-Setting +
+*KVM*　　 Kernel-based Virtual Machine
+====
+
+L
+====
+*LCD*　　 Liquid-Crystal Display +
+*LED*　　 Light-Emitting Diode +
+*LILO*　　LInux LOader +
+*LPC*　　 Low Pin Count Bus +
+*LPT*　　 Line Printer Terminal +
+*LTE*　　 Long-Term Evolution +
+*LTS*　　 Long-Term Support +
+*LVDS*　　Low-Voltage Differential Signaling +
+*LVFS*　　Linux Vendor Firmware Service +
+*LVM*　　 Logical Volume Manager
+====
+
+M
+====
+*MAC*　　 Media Access Control +
+*MBR*　　 Master Boot Record
+====
+====
+*MFA*　　 Multi-Factor Authentication +
+*ME*　　　intel Management Engine +
+*MMC*　　 Multi Media Card +
+*MMIO*　　Memory-Mapped Input/Output +
+*MODEM*　 MOdulator-DEModulator +
+*MOSFET*　Metal-Oxide-Semiconductor Field-Effect Transistor +
+*MPRIS*　 Media Player Remote Interfacing Specification +
+*MSIX*　　MicroSoft Installer neXt +
+*MSR*　　 Model-Specific Register +
+*MST*　　 Multi-Stream Transport +
+*MTU*　　 Maximum Transmission Unit
+====
+
+N
+====
+*NFC*　　 Near Field Communication +
+*NFS*　　 Network File System +
+*NGFF*　　Next Generation Form Factor +
+*NVMe*　　Non-Volatile Memory express +
+*NVRAM*　 Non-Volatile Random-Access Memory
+====
+
+O
+====
+*OHCI*　　Open Host Controller Interface +
+*OLED*　　Organic Light-Emitting Diode +
+*OMTP*　　Open Mobile Terminal Platform +
+*OS*　　　Operating System +
+*OSD*　　 On-Screen Display +
+*OSS*　　 Open Sound System +
+*OTG*　　 On-The-Go
+====
+
+P
+====
+*PAM*　　 Pluggable Authentication Module +
+*PCI*　　 Peripheral Component Interconnect +
+*PCIe*　　Peripheral Component Interconnect express +
+*PCM*　　 Pulse-Code Modulation +
+*PC/SC*　 Personal Computer/Smart Card +
+*PDF*　　 Portable Document Format +
+*PHP*　　 PHP: Hypertext Preprocessor +
+*PID*　　 Process IDentifier | Product IDentifier +
+*PIO*　　 Programmable Input/Output +
+*PLC*　　 Programmable Logic Controller +
+*PMIO*　　port-mapped Input/Output +
+*PoE*　　 Power over Ethernet
+====
+====
+*POS*　　 Point of Sale +
+*POSIX*　 Portable Operating System Interface +
+*POST*　　Power On Self Test +
+*PPD*　　 Postscript Printer Description +
+*PPI*　　 Pixels Per Inch +
+*PSU*　　 Power Supply Unit +
+*PS/2*　　Personal System/2 +
+*PWD*　　 Print Working Directory +
+*PXE*　　 Preboot eXecution Environment
+====
+
+Q
+====
+*QEMU*　　Quick EMUlator +
+*QR-Code* Quick-Response Code
+====
+
+R
+====
+*RADVD*　 Router ADVertisement Daemon +
+*RAID*　　Redundant Array of Independent Disks +
+*RandR*　 Resize and Rotate +
+*RDP*　　 Remote Desktop Protocol +
+*REPL*　　Read-Eval-Print Loop +
+*RFB*　　 Remote FrameBuffer +
+*RFID*　　Radio-Frequency IDentification +
+*RISC*　　Reduced Instruction Set Computer +
+*ROM*　　 Read-Only Memory +
+*RPM*　　 RPM Package Manager +
+*RST*　　 Rapid Storage Technology +
+*RTC*　　 Real-Time Clock
+====
+
+S
+====
+*SANE*　　Scanner Access Now Easy +
+*SATA*　　Serial Advanced Technology Attachment +
+*SBC*　　 Single-Board Computer +
+*SCM*　　 Source Control Management +
+*SCSI*　　Small Computer System Interface +
+*SD*　　　Secure Digital memory card +
+*SDIO*　　Secure Digital Input/Output +
+*SDM*　　 Smart Display Module +
+*SDRAM*　 Synchronous Dynamic Random-Access Memory +
+*SFP*　　 Small Form-factor Pluggable +
+*SIM*　　 Subscriber Identity Module +
+*SMB*　　 Server Message Block
+====
+====
+*SMBIOS*　System Management BIOS +
+*SMBus*　 System Management Bus +
+*SoC*　　 System-on-Chip +
+*SoM*　　 System-on-Module +
+*SPD*　　 Serial Presence Detect +
+*SPI*　　 Serial Peripheral Interface +
+*SPICE*　 Simple Protocol for Independent Computing Environments +
+*SSD*　　 Solid-State Drive +
+*SSH*　　 Secure SHell +
+*SVG*　　 Scalable Vector Graphics
+====
+
+T
+====
+*TCP*　　 Transmission Control Protocol +
+*TFT*　　 Thin-Film Transistor +
+*TFTP*　　Trivial File Transfer Protocol +
+*TPM*　　 Trusted Platform Module +
+*TRRS*　　Tip-Ring-Ring-Sleeve +
+*TTY*　　 TeleTYpewriter +
+*TUI*　　 Text User Interface
+====
+
+U
+====
+*U2F*　　 Universal 2nd Factor +
+*UART*　　Universal Asynchronous Receiver/Transmitter +
+*UCM*　　 Use Case Manager +
+*UDEV*　　Userspace /dev +
+*UDMA*　　Ultra Direct Memory Access +
+*UEFI*　　Unified Extensible Firmware Interface +
+*UFS*　　 Universal Flash Storage +
+*UMA*　　 Unified Memory Architecture +
+*UNDI*　　Universal Network Driver Interface +
+*URI*　　 Uniform Resource Identifier +
+*URL*　　 Uniform Resource Locator +
+*USB*　　 Universal Serial Bus +
+*UTC*　　 Coordinated Universal Time +
+*UTF-8*　 8-bit Unicode Transformation Format +
+*uTT*　　 unTesTed +
+*UUID*　　Universally Unique IDentifier +
+*UVC*　　 USB Video device Class +
+*UVD*　　 Unified Video Decoder
+====
+
+{empty} +
+
+V
+====
+*V4L*　　 Video for Linux +
+*VA*　　　Video Acceleration +
+*VBE*　　 VESA BIOS Extensions +
+*VCP*　　 Virtual COM Port +
+*VESA*　　Video Electronics Standards Association +
+*VFD*　　 Vacuum Fluorescent Display +
+*VFS*　　 Virtual File System +
+*VGA*　　 Video Graphics Array +
+*VID*　　 Vendor IDentifier +
+*VMD*　　 Volume Management Device +
+*VNC*　　 Virtual Network Computing +
+*VT*　　　Virtual Terminal +
+*VT-d*　　Virtualization Technology for Directed i/o
+====
+
+W
+====
+*WLAN*　　Wireless Local Area Network +
+*WMI*　　 Windows Management Instrumentation +
+*WoL*　　 Wake-on-LAN +
+*WoWLAN*　Wake-on-WLAN +
+*WWAN*　　Wireless Wide Area Network
+====
+
+X
+====
+*XDG*　　 X Desktop Group +
+*XDMCP*　 X Display Manager Control Protocol +
+*XHCI*　　eXtensible Host Controller Interface +
+*XPM*　　 X PixMap
+====

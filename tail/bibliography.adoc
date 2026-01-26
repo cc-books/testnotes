@@ -1,10 +1,94 @@
 [bibliography]
 == 參考資料
 
-* 陳鍾誠 (2013)。《系統程式》。臺北：旗標。
+* Chris Simmonds (2015)。《精通嵌入式 Linux 程式設計》。錢亞宏譯。新北：博碩文化。
 * 邱世華 (2009)。《Linux 作業系統之奧義》。臺北：悅知文化。
 * 邱世華 (2015)。《Linux 硬體架構與指令之解析》。臺北：悅知文化。
-* Chris Simmonds (2015)。《精通嵌入式 Linux 程式設計》。錢亞宏譯。新北：博碩文化。
-* Discussion Fedora <\https://discussion.fedoraproject.org/>
-* Stack Overflow <\https://stackoverflow.com/>
-* Stack Exchange <\https://unix.stackexchange.com/>
+* 陳鍾誠 (2013)。《系統程式》。臺北：旗標。
+
+[big]*準備工作* +
+[small]*https://saucelabs.com/amp/blog/simulators-vs-emulators-whats-the-difference-anyway* +
+[small]*https://ostechnix.com/understanding-common-port-numbers/* +
+[small]*https://blog.mozilla.org/security/2021/07/20/stopping-ftp-support-in-firefox-90/*
+
+[big]*開機前執行環境* +
+[small]*https://www.linuxbabe.com/desktop-linux/boot-from-iso-files-using-grub2-boot-loader* +
+[small]*https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/advanced/Network_based_Installations/* +
+[small]*https://docs.harvesterhci.io/v1.7/install/pxe-boot-install/* +
+[small]*https://support.hpe.com/hpesc/public/docDisplay?docId=a00112595en_us&page=t_config_DHCP_svc.html*
+
+[big]*系統韌體* +
+[small]*https://blog.thomasmarcussen.com/unified-extensible-firmware-interface-uefi/* +
+[small]*https://unix.stackexchange.com/questions/636263/how-to-verify-signed-uefi-binaries*
+
+[big]*作業系統安裝* +
+[small]*https://www.tecmint.com/su-vs-sudo-and-how-to-configure-sudo-in-linux/*
+
+[big]*軟體開機* +
+[small]*https://www.tecmint.com/reset-forgotten-root-password-in-rhel-centos-and-fedora/* +
+[small]*https://medium.com/@shubhangorei/title-a-step-by-step-guide-changing-the-root-password-in-rhel-d18ec2944923*
+
+[big]*環境初始化* +
+[small]*https://medium.com/swlh/negative-rings-in-intel-architecture-the-security-threats-youve-probably-never-heard-of-d725a4b6f831* +
+[small]*https://linuxtldr.com/interactive-login-and-non-login-shell/* +
+[small]*https://linuxtldr.com/difference-between-bash-profiles/* +
+[small]*https://www.bloovis.com/posts/2025-02-27-set-default-browswer/*
+
+[big]*命令列模式* +
+[small]*https://speakerdeck.com/bluebat/bash-basics* +
+[small]*https://www.gnu.org/software/bash/manual/bash.html*
+
+[big]*檔案與目錄* +
+[small]*https://talk.ltn.com.tw/article/paper/1445039*
+
+[big]*軟體安裝* +
+[small]*https://www.gnu.org/software/make/manual/html_node/index.html* +
+[small]*https://makefiletutorial.com/*
+
+[big]*系統裝置* +
+[small]*https://developer.technexion.com/docs/using-gpio-from-a-linux-shell* +
+[small]*https://wiki.t-firefly.com/Core-3568J/driver_gpio.html* +
+[small]*https://www.tecmint.com/reset-usb-device-linux/* +
+[small]*https://www.daniloaz.com/en/differences-between-physical-cpu-vs-logical-cpu-vs-core-vs-thread-vs-socket/*
+
+[big]*輸入輸出介面* +
+[small]*https://www.reddit.com/r/linux/comments/9cjxcb/writing_to_cmos_rtc_port_0x70_and_0x71_from_linux/* +
+[small]*https://qkxu.github.io/2019/04/15/linux%E4%B8%8B%E7%9A%84watchdog.html* +
+[small]*https://forums.linuxmint.com/viewtopic.php?t=278312*
+
+[big]*儲存裝置* +
+[small]*https://forums.raspberrypi.com/viewtopic.php?t=64702* +
+[small]*https://docs.voidlinux.org/config/ssd.html*
+
+[big]*顯示裝置* +
+[small]*http://www.playtool.com/pages/dvicompat/dvi.htm* +
+[small]*https://www.kernel.org/doc/Documentation/fb/modedb.txt* +
+[small]*https://www.osadl.org/Single-View.111+M57253e83fd1.0.html* +
+[small]*https://wiki.archlinux.org/index.php/Intel_graphics* +
+[small]*https://en.wikipedia.org/wiki/Framebuffer* +
+[small]*https://askubuntu.com/questions/150066/split-monitor-in-two/998435#998435* +
+[small]*https://discussion.fedoraproject.org/t/plymouth-boot-screen-with-three-dots*
+
+[big]*輸入裝置* +
+[small]*https://discussion.fedoraproject.org/t/way-to-switch-fn-and-right-control-key/* +
+[small]*https://wiki.archlinux.org/title/Tablet_PC*
+
+[big]*影音裝置* +
+[small]*https://wiki.archlinux.org/index.php/Advanced_Linux_Sound_Architecture* +
+[small]*https://www.kernel.org/doc/html/latest/sound/hd-audio/notes.html* +
+[small]*https://forums.raspberrypi.com/viewtopic.php?t=276782* +
+[small]*https://askubuntu.com/questions/615550/on-reboot-headphones-are-muted* +
+[small]*https://www.tanstaafl.co.uk/2013/11/linux-support-for-imaging-source-usb-ccd-astronomy-cameras/* +
+[small]*https://faq.yamaha.com/tw/s/article/000027826*
+
+[big]*網路裝置* +
+[small]*https://access.redhat.com/solutions/783533* +
+[small]*https://askubuntu.com/questions/337775/how-do-i-get-a-rt2800usb-wireless-device-working* +
+[small]*https://stackoverflow.com/questions/62864421/toggling-the-wi-fi-with-xf86wlan-and-script* +
+[small]*https://askubuntu.com/questions/909213/ethernet-fails-to-initialize*
+
+[big]*電力供應* +
+[small]*https://www.phoenixcontact.com/zh-tw/company/all-electric-society/zhi-liu-dian* +
+[small]*https://bbs.archlinux.org/viewtopic.php?pid=1953760#p1953760* +
+[small]*https://discourse.ubuntu.com/t/disable-screen-dimming-ubuntu-unity-24-04/60615* +
+[small]*https://www.techbang.com/posts/17396-power-states-know-how-many-g-p-t-s-c-read*

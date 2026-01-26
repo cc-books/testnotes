@@ -13,9 +13,9 @@
 //:description: Linux 硬體測試筆記
 :keywords: linux, hardware, compatibility
 :imagesdir: {docdir}/data
-:codedir: {docdir}/data
-:datadir: {docdir}/data
-//:front-cover-image: data/cover.png
+//:codedir: {docdir}/data
+//:datadir: {docdir}/data
+//:front-cover-image: data/front-cover.png
 :title-logo-image: data/slat-name.png
 :lang: cmn
 :encoding: utf-8

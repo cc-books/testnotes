@@ -48,18 +48,17 @@ include::body/power.adoc[]
 
 :sectnums!:
 
-include::tail/appendix.adoc[]
-
-include::tail/shortcuts.adoc[]
+//include::tail/appendix.adoc[]
 
 include::tail/glossary.adoc[]
 
-include::tail/qanda.adoc[]
+//include::tail/qanda.adoc[]
 
 include::tail/bibliography.adoc[]
 
-include::tail/index.adoc[]
+//include::tail/index.adoc[]
 
+//:nofooter:
 //:pagenums!:
 
 include::tail/colophon.adoc[]

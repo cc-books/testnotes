@@ -105,7 +105,7 @@ user$ *cat /proc/dma* +
 由於 Windows 作業系統預設會隱藏 ESP 代號的分割區，可以避免使用者轉換系統時不慎寫入。
 *ESP* 目前要求具備 vFAT 檔案系統格式，Linux 通常會將它掛載到實際運作系統中的 `/boot/efi` 目錄。
 
-在更複雜的系統中，基於歷史習慣、分散容量、平臺權限…等原因，還會將個別的分離儲存裝置，掛載到 `/boot` 、 `/home` 或其他的目錄上。
+在更複雜的系統中，基於歷史習慣、分散容量、平臺權限…等原因，還會將個別的分離儲存裝置，掛載到 `/boot/` 、 `/home/` 或其他的目錄上。
 
 ==== 置換分割區
 除了用來儲存資料的分割區之外，額外建立一個**置換分割區**(swap partition) 也是常見的組態。
@@ -120,10 +120,10 @@ user$ *cat /proc/dma* +
 然後利用命令 `mkswap` 與 `swapon` 來格式化並開啟置換功能，確認正常後再記錄到 `/etc/fstab` 檔案。
 也可以利用**置換檔**(swap file) 來代替置換分割區，相對應的指令範例如下：
 ====
-root# *dd if=/dev/zero of=/_SWAPFILE_ bs=4k count=1M* +
-root# *mkswap /_SWAPFILE_* +
-root# *swapon /_SWAPFILE_* +
-root# *echo "/_SWAPFILE_ swap swap defaults 0 0" >> /etc/fstab*
+root# *dd if=/dev/zero of=/_置換檔_ bs=4k count=1M* +
+root# *mkswap /_置換檔_* +
+root# *swapon /_置換檔_* +
+root# *echo "/_置換檔_ swap swap defaults 0 0" >> /etc/fstab*
 ====
 
 如果置換分割區的內容出現混亂而需要重新整理時，必須先以命令 `swapoff` 停用，然後再同樣利用 `dd` 命令以零值將分割區填滿。
@@ -223,8 +223,8 @@ root# *mount -o remount,size=_16G_,noatime /tmp*
 如果在 `/etc/fstab` 檔案中，將選項中的 `noatime` 也運用於一般的資料檔案系統，有可能會加快磁碟的讀寫速度。
 
 DevFS 與 SysFS 都屬於特殊的假擬檔案系統，會在系統初始階段自動在記憶體中產生。
-原本是根據 DevFS 機制產生 `/dev` 目錄之下節點以外的抽象裝置結構，後來被 SysFS 檔案系統所取代。
-而 `/sys` 假擬目錄則是使用 `systemd` 提供的 UDEV 機制所建立，用來補足 `/dev` 結構中各裝置的資訊，亦即 UDEV 是使用者空間利用 SysFS 來實現 DevFS 功能的機制。
+原本是根據 DevFS 機制產生 `/dev/` 目錄之下節點以外的抽象裝置結構，後來被 SysFS 檔案系統所取代。
+而 `/sys/` 假擬目錄則是使用 `systemd` 提供的 UDEV 機制所建立，用來補足 `/dev/` 結構中各裝置的資訊，亦即 UDEV 是使用者空間利用 SysFS 來實現 DevFS 功能的機制。
 
 SquashFS 是壓縮過的唯讀檔案系統，通常以單一檔案的形式存在。可以利用指令：
 ====
@@ -235,7 +235,7 @@ root# *mount -t squashfs -o loop _FOOBAR_.squash /_mnt_*
 user$ *squashfuse _FOOBAR_.squash /_mnt_*
 ====
 
-另外有一類適用網路儲存空間的檔案系統，包括普遍用於 UNIX 類作業系統的 *NFS*(網路檔案系統)，以及 Windows 類作業系統常用的 *CIFS*(網路檔案分享系統)…等等，後者的名稱原本是 *SMB*(伺服器訊息區塊)。
+另外有一類適用網路儲存空間的檔案系統，包括普遍用於 Unix 類作業系統的 *NFS*(網路檔案系統)，以及 Windows 類作業系統常用的 *CIFS*(網路檔案分享系統)…等等，後者的名稱原本是 *SMB*(伺服器訊息區塊)。
 假設 NFS 伺服器已經提供可用的服務，將其掛載上來的指令範例如下：
 ====
 root# *mount -t nfs _xxx.xxx.xxx.xxx:/var/nfs_ /_mnt_*
@@ -260,10 +260,10 @@ root# *tar cf - . | tar xvf - -C /_mnt_*
 假設原本的系統位於 `/dev/sda` ，並且有兩個分割區 `/dev/sda1` 與 `/dev/sda2` ，那麼以外接的隨身碟 `/dev/sdb` 開機後，封裝的命令範例如下：
 ====
 root# *mount /dev/sda1 /_mnt_* +
-root# *tar cJvf _/root/image1.txz_ /mnt/.[a-z]* /_mnt_/* * +
+root# *tar cJvf _/root/封裝檔一.txz_ /mnt/.[a-z]* /_mnt_/* * +
 root# *umount /_mnt_* +
 root# *mount /dev/sda2 /_mnt_* +
-root# *tar cJvf _/root/image2.txz_ /_mnt_/.[a-z]* /_mnt_/* * +
+root# *tar cJvf _/root/封裝檔二.txz_ /_mnt_/.[a-z]* /_mnt_/* * +
 root# *umount /_mnt_*
 ====
 當然在製作前要先確認，隨身碟中還有足夠的儲存空間，如此便可得到兩個封裝了檔案系統的壓縮檔。
@@ -276,10 +276,10 @@ root# *umount /_mnt_*
 root# *mkfs.vfat /dev/sda1* +
 root# *mkfs.ext4 /dev/sda2* +
 root# *mount /dev/sda1 /_mnt_* +
-root# *tar xvf _/root/image1.txz_ -C /_mnt_* +
+root# *tar xvf _/root/封裝檔一.txz_ -C /_mnt_* +
 root# *umount /_mnt_* +
 root# *mount /dev/sda2 /_mnt_* +
-root# *tar xvf _/root/image2.txz_ -C /_mnt_* +
+root# *tar xvf _/root/封裝檔二.txz_ -C /_mnt_* +
 root# *umount /_mnt_*
 ====
 還原檔案系統後，先用 `blkid` 命令取得兩個分割區各自的 UUID，然後編輯目標系統中 `/etc/fstab` 以及 `/boot/loader/entries/*.conf` 各檔案的相應內容。
@@ -313,7 +313,7 @@ root# *cat /sys/block/_sda_/queue/discard_granularity* +
 
 ==== 檢查與修復
 儲存裝置出問題的原因，可能是儲存晶片讀寫壽命已至造成的結果，也有可能是控制晶片或韌體出差錯；有時是外力造成的毀損，例如溫度過高或是接觸到靜電、磁性物質。
-檔案系統的修復是由 `fsck` 命令系列所負責，它會自動依照檔案系統的類型來呼叫適當的附屬命令，例如適用於 Ext4 檔案系統的 `fsck.ext4` 程式。
+檔案系統的修復是由 `fsck`(file system check) 命令系列所負責，它會自動依照檔案系統的類型來呼叫適當的附屬命令，例如適用於 Ext4 檔案系統的 `fsck.ext4` 程式。
 ====
 root# *fsck.ext4 -cfpv /dev/_sda1_*
 ====
@@ -349,11 +349,10 @@ root# *blkid | sort* +
 
 當磁碟經歷各種的分割與寫入、進行過 LVM 或 RAID 格式的設定，或是被映像檔覆寫過，
 其中的非資料區會存有一些特殊的標記，可能會影響後續的正常使用。
-利用以下的指令範例：
+利用以下的指令範例，就可以除去裝置上的特殊標記，執行後最好先經過物理性重置（重開機或重插拔）再開始使用：
 ====
 root# *wipefs -a -f /dev/_sdb_*
 ====
-就可以除去裝置上的特殊標記，執行後最好先經過物理性重置（重開機或重插拔）再開始使用。
 
 每個分割區還有一個較少使用的旗標，會將裝置設定為唯讀。
 萬一裝置發生了不明原因的無法寫入問題，可以試試 `blockdev --setrw` 或 `hdparm -r0` 加上裝置節點做為參數的指令。
@@ -379,20 +378,21 @@ root# *wipefs -a -f /dev/_sdb_*
 更有不少應用軟體，在此原始資料的基礎上加入了檔頭、檔尾，或是額外的編碼、壓縮等動作，所以必須注意這些細微的差異，以免遇到不相容的情況。
 
 ==== 容量
-指令 `fdisk -l /dev/__sdb__` 可以檢視磁碟裝置的基本資訊，包括分割區表模式與真實大小。
-指令 `blockdev --getsize64 /dev/__mmcblk0__` 則可以直接取得裝置的容量，適合應用於命令稿之中。
+指令 `fdisk -l /dev/_sdb_` 可以檢視磁碟裝置的基本資訊，包括分割區表模式與真實大小。
+指令 `blockdev --getsize64 /dev/_mmcblk0_` 則可以直接取得裝置的容量，適合應用於命令稿之中。
 標示同樣容量的磁碟，不同廠牌不同型號也可能會有些微差異。
-規格書上的標示容量，很少會符合以 GiB 為計算單位，部分勉強符合以 GB 為計算單位，而有些產品連後者的規格都無法達到
+規格書上的標示容量，很少會符合以 GiB(Gibibyte) 為計算單位，部分勉強符合以 GB(Gigabyte) 為計算單位，而有些產品連後者的規格都無法達到
 （雖然都會解釋還要加上保留給控制專用的記憶體數量）。例如，同樣標示容量為 8GB 的儲存裝置：
 
 [square]
 * F*e 廠牌某型 mSATA: 8075870208 位元組
 * I*k 廠牌某型 mSATA: 8012390400 位元組
-* S*k 廠牌某型 eMMC:  7820083200 位元組
-* S*g 廠牌某型 eMMC:  7818182656 位元組
-* K*n 廠牌某型 eMMC:  7818182656 位元組
+* S*k 廠牌某型 eMMC: 7820083200 位元組
+* S*g 廠牌某型 eMMC: 7818182656 位元組
+* K*n 廠牌某型 eMMC: 7650410496 位元組
 
-其實都達不到 8GiB 所代表的 8589934592 位元組。
+資料儲存空間都未達到 8GiB 所代表的 8589934592 位元組。
+以 eMMC 而言，除了控制器韌體所佔用的空間之外，部分可能會做為**快取**(cache) 的緩衝區使用。
 
 ==== 基本操作
 `dd` 能夠讀取與寫入磁碟的原始資料，因此成為映像檔的標準操作工具。
@@ -422,9 +422,9 @@ root# *dd if=/dev/sdb of=/dev/sdc bs=4M status=progress*
 輸入或輸出對象也可以透過管線機制，導向為壓縮過的映像檔，甚至直接來自網路檔案系統或網路鏈結：
 ====
 root# *ssh _192.168.0.10_* +
-root> *dd if=/dev/_sdb_ | gzip -c > _/var/www/html/DISKIMG.dd.gz_* +
+root> *dd if=/dev/_sdb_ | gzip -c > _/var/www/html/磁碟映像.dd.gz_* +
 root> *exit* +
-root# *curl _http://192.168.0.10/DISKIMG.dd.gz_ | gunzip -c | dd of=/dev/_sdb_*
+root# *curl _http://192.168.0.10/磁碟映像.dd.gz_ | gunzip -c | dd of=/dev/_sdb_*
 ====
 其中的 `gzip`, `gunzip` 如果用 `zip`, `unzip` 替換，後面的命令選項當然也要隨之更動。
 
@@ -436,8 +436,8 @@ root# *curl _http://192.168.0.10/DISKIMG.dd.gz_ | gunzip -c | dd of=/dev/_sdb_*
 ==== 其他工具
 命令 `bmaptool` 來自於套件 `bmap-tools` ，可以視為是 `dd` 命令輸出部分的加強版，拷貝映像檔的操作範例如下：
 ====
-user$ *bmaptool create -o _DISKIMG_.bmap _DISKIMG.dd.zst_* +
-root# *bmaptool copy --bmap _DISKIMG_.bmap _DISKIMG.dd.zst_ /dev/_sdb_*
+user$ *bmaptool create -o _磁碟映像_.bmap _磁碟映像.dd.zst_* +
+root# *bmaptool copy --bmap _磁碟映像_.bmap _磁碟映像.dd.zst_ /dev/_sdb_*
 ====
 做為指令參數的映像檔，與 `dd` 命令所產生的相同，更可以直接使用壓縮過的檔案。
 副檔名為 `.bmap` 的**區塊圖**(block map) 檔案，是一種 XML 格式的磁碟映像描述檔。
@@ -450,7 +450,7 @@ root# *bmaptool copy --bmap _DISKIMG_.bmap _DISKIMG.dd.zst_ /dev/_sdb_*
 
 ==== 檢查
 由於映像檔是磁碟裝置內容的完全複製，因此原本針對磁碟裝置的指令，也可以將參數替換為映像檔名稱來使用。
-例如，指令 `file -s _DISKIMG.dd_` 會顯示磁碟映像前段開機記錄的狀態（如果存在的話）。
+例如，指令 `file -s _磁碟映像.dd_` 會顯示磁碟映像前段開機記錄的狀態（如果存在的話）。
 
 
 由於映像檔的大小已經不適合使用逐一檢查位元組的比對方式，因此會利用產生**總和檢查碼**(checksum) 的程式來協助。
@@ -467,12 +467,12 @@ root# *bmaptool copy --bmap _DISKIMG_.bmap _DISKIMG.dd.zst_ /dev/_sdb_*
 ==== 掛載
 如果是從單一分割區製作出來的映像檔，可以利用**迴圈**(loop) 模式掛載：
 ====
-root# *mount -o loop _PARTIMG.dd_ /_mnt_*
+root# *mount -o loop _分割區映像.dd_ /_mnt_*
 ====
 不過大部分的映像檔都是來自整個磁碟裝置，因而無法如此直接掛載。
 以往的方法需要先算出目標分割區前方的**偏移值**(offset)，再將其指定於 `mount` 命令的選項之中，但是新的掛載程序較為簡單：
 ====
-root# *losetup --partscan --find --show _DISKIMG.dd_* +
+root# *losetup --partscan --find --show _磁碟映像.dd_* +
 /dev/loop0 +
 root# *mount -rw /dev/loop0p1 /_mnt_*
 ====
@@ -486,7 +486,7 @@ root# *losetup --detach /dev/loop0*
 映像檔當然也繼承了輸入對象的開機模式，尤其是利用虛擬機器來運行磁碟映像時，
 不像實體機器的系統韌體那樣具有雙重開機模式的容錯機制，而需要在指令中指定：
 ====
-user$ *qemu-system-x86_64 -m _2G_ -drive file=_DISKIMG.dd_*
+user$ *qemu-system-x86_64 -m _2G_ -drive file=_磁碟映像.dd_*
 ====
 上述指令是以 BIOS 開機模式為例，如果要仿真 UEFI 開機模式，必須再加上 `-bios /usr/share/edk2/ovmf/OVMF_CODE.fd` 選項。
 
@@ -502,13 +502,13 @@ user$ *qemu-system-x86_64 -m _2G_ -drive file=_DISKIMG.dd_*
 
 以虛擬機器來運行光碟映像的方式與磁碟映像類似：
 ====
-user$ *qemu-system-x86_64 -m _2G_ -cdrom _DVDIMG.iso_*
+user$ *qemu-system-x86_64 -m _2G_ -cdrom _光碟映像.iso_*
 ====
 如果同時也有掛載可開機的磁碟映像，就需要額外加上 `-boot d` 選項以指定優先從光碟開機。
 
 由於影音光碟與資料光碟不同，可以接受某種程度的有損(lossy) 複製，因此對於受到刮傷而無法順利讀取的光碟，可以試試用 `ddrescue` 來拷貝映像檔：
 ====
-user$ *ddrescue -dR -r 3 -b 2048 /dev/sr0 _DVDIMG.iso_ _DVDIMG.map_*
+user$ *ddrescue -dR -r 3 -b 2048 /dev/sr0 _光碟映像.iso_ _光碟映像.map_*
 ====
 該指令會重覆三次逐段讀取光碟上的資料，讀到的資料將儲存到 `.iso` 檔案相應的位置，而讀取記錄則儲存在 `.map` 檔案。
 即使指令結束後將光碟拿去物理性清潔或修補，重新執行指令時也能依據記錄跳過已經成功讀取的部分。
@@ -555,12 +555,12 @@ root# *hdparm -i /dev/_sda_* +
 
 由於 `hdparm` 的存取資訊功能衹支援 `/dev/sd__X__` 而不支援 `/dev/mmcblk__N__` 類型的磁碟裝置，因此對於後者就需要執行 `mmc-utils` 套件中的 `mmc` 指令（舊名 `lsmmc` ）：
 ====
-root# *mmc csd read /sys/class/mmc\_host/__mmc0/mmc0__:0001* +
+root# *mmc csd read /sys/class/mmc\_host/_mmc0/mmc0_:0001* +
 type: 'MMC' +
 version: MMC v4.0-v4.3 +
 card classes: 11, 7, 6, 5, 4, 2, 0, +
 capacity: 1.00Gbyte (1073741824 bytes, 2097152 sectors, 512 bytes each) +
-root# *mmc extcsd read /dev/__mmcblk0__ | grep "Firmware Version:"* +
+root# *mmc extcsd read /dev/_mmcblk0_ | grep "Firmware Version:"* +
 eMMC Firmware Version: 68130320QP
 ====
 另外從系統假擬檔案中，可以獲得 MMC 裝置的速度規格、產品名稱等資訊：
@@ -574,20 +574,20 @@ MV3608
 ==== 讀寫效能 
 一般會利用 `hdparm` 來測試磁碟的讀取速度：
 ====
-root# *hdparm -t /dev/__mmcblk0__* +
+root# *hdparm -t /dev/_mmcblk0_* +
 /dev/mmcblk0: +
 {nbsp} Timing buffered disk reads: 974 MB in  3.00 seconds = 324.62 MB/sec
 ====
 但是當測試對象為分割區時，要注意結果可能會依分割區上的檔案系統而有差異。
 
 萬一在精簡的系統中未提供上述工具時，命令 `dd` 也能做為簡單的磁碟讀寫測試工具。
-例如測試寫入速度可以輸入：
+例如在掛載了分割區並且變更到掛載目錄之後，測試寫入速度可以輸入：
 ====
-user$ *dd if=/dev/urandom of=_TEST_ bs=4M count=256 oflag=direct*
+user$ *dd if=/dev/urandom of=_暫時檔_ bs=4M count=256 oflag=direct*
 ====
 而測試讀取速度的指令，就可以利用剛剛寫入的檔案：
 ====
-user$ *dd if=_TEST_ of=/dev/null bs=4M iflag=direct*
+user$ *dd if=_暫時檔_ of=/dev/null bs=4M iflag=direct*
 ====
 效能測試結果可能會依資料量不同而有差異，而上述指令所用的 1GB 是較為建議的資料量。
 對於檔案系統與磁碟裝置，套件 `bonnie++` 或第三方套件 `iozone` 則提供了多方面的讀寫效能測試。
