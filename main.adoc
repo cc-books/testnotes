@@ -6,6 +6,8 @@ toc::[]
 
 //include::head/dedication.adoc[]
 
+//include::head/epigraph.adoc[]
+
 include::head/preface.adoc[]
 
 include::head/abstract.adoc[]

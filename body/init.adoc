@@ -234,12 +234,14 @@ Exec=Telegram %U   <1>
 Icon=telegram   <2>
 Terminal=false   <3>
 StartupNotify=false
-Categories=Network;Application;
-MimeType=x-scheme-handler/tg;
+Categories=Network;Application;   <4>
+MimeType=x-scheme-handler/tg;   <5>
 ....
-<1> `Telegram` 可執行程式應該安裝於環境變數 `$PATH` 所含的目錄中，否則需使用絕對路徑。
-<2> 做為圖示的圖片檔案 `telegram.*` 應該安裝於系統會搜尋的圖示目錄中，否則需使用絕對路徑。
+<1> `Telegram` 可執行程式應該安裝於環境變數值 `$PATH` 所含的目錄中，否則須使用絕對路徑。
+<2> 做為圖示的圖片檔案 `telegram.*` 應該安裝於系統會搜尋的圖示目錄中，否則須使用絕對路徑。
 <3> 如果要執行的程式是文字介面，這裡就應該設為 `Terminal=true` 。
+<4> 軟體出現於啟動選單中的位置，分類層級應該由小到大排列。
+<5> 定義應由**多用途網際網路郵件擴展**(MIME) 標準中的何種 URI 首字所觸發。
 
 ==== 語區初始化
 豐富的**語區**(locale) 支援是自由軟體的特色之一，同樣一套系統就可以依照不同的語言與地區做出介面的改變。
@@ -295,23 +297,23 @@ passwd：所有認證符記都已成功更新。
 root# *passwd -d _user_*
 ====
 
-如果希望固定以使用者 `user` 的身分自動登入，那麼依照顯示管理程式的不同，需要修改各自的組態檔：
+假設希望固定以使用者 `autouser` 的身分自動登入，那麼依照顯示管理程式的不同，需要修改各自的組態檔：
 
 ./etc/gdm3/custom.conf
 ....
 [daemon]
 AutomaticLoginEnable=true
-AutomaticLogin=user
+AutomaticLogin=autouser
 ...
 ....
 ./etc/lightdm/lightdm.conf
 ....
-autologin-user=user
+autologin-user=autouser
 ...
 ....
 ./etc/lxdm/lxdm.conf
 ....
-autologin=user
+autologin=autouser
 ...
 ....
 

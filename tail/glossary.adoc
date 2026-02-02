@@ -3,7 +3,7 @@
 
 3
 ====
-*3GPP*　　3rd Generation Partnership Project
+*3GPP*　　3rd Generation Partnership Project +
 ====
 
 A
@@ -13,6 +13,7 @@ A
 *ACPI*　　Advanced Configuration and Power Interface +
 *ACS*　　 Advanced Card Systems +
 *AHCI*　　Advanced Host Controller Interface +
+*AIO*　　 All-In-One +
 *ALSA*　　Advanced Linux Sound Architecture +
 *AMD*　　 Advanced Micro Devices, inc. +
 *AP*　　　Access Point +
@@ -21,7 +22,7 @@ A
 *ASCII*　 American Standard Code for Information Interchange +
 *AT*　　　Advanced Technology +
 *ATA*　　 Advanced Technology Attachment +
-*ATX*　　 Advanced Technology eXtended
+*ATX*　　 Advanced Technology eXtended +
 ====
 
 B
@@ -29,7 +30,7 @@ B
 *BASH*　　Bourne-Again SHell +
 *BIOS*　　Basic Input/Output System +
 *BOM*　　 Byte-Order Mark +
-*bpc*　　 bits per component
+*bpc*　　 bits per component +
 ====
 
 C
@@ -45,10 +46,7 @@ C
 *CIFS*　　Common Internet File System +
 *CISC*　　Complex Instruction Set Computer +
 *CLI*　　 Command-Line Interface +
-*CMOS*　　Complementary Metal-Oxide-Semiconductor
-====
-
-====
+*CMOS*　　Complementary Metal-Oxide-Semiconductor +
 *Codec*　 Coder/decoder +
 *COM*　　 COMmunication port +
 *CPIO*　　CoPy In and Out +
@@ -60,7 +58,7 @@ C
 *CSM*　　 Compatibility Support Module +
 *CTIA*　　Cellular Telecommunications and Internet Association +
 *CUPS*　　Common Unix Printing System +
-*CVT*　　 Coordinated Video Timing
+*CVT*　　 Coordinated Video Timing +
 ====
 
 D
@@ -85,7 +83,7 @@ D
 *dTPM*　　discrete Trusted Platform Module +
 *DVD*　　 Digital Versatile Disc +
 *DVI*　　 Digital Visual Interface +
-*DVMT*　　Dynamic Video Memory Technology
+*DVMT*　　Dynamic Video Memory Technology +
 ====
 
 E
@@ -93,9 +91,7 @@ E
 *EAN*　　 European/international Article Number +
 *EC*　　　Embedded Controller +
 *EDID*　　Extended Display Identification Data +
-*eDP*　　 embedded DisplayPort
-====
-====
+*eDP*　　 embedded DisplayPort +
 *EEPROM*　Electrically-Erasable Programmable Read-Only Memory +
 *EETI*　　eGalax_eMPIA Technology Inc. +
 *EFI*　　 Extensible Firmware Interface +
@@ -105,7 +101,7 @@ E
 *ESC*　　 Epson Standard Code +
 *ESP*　　 EFI system partition +
 *eTT*　　 effectively TesTed +
-*eUFS*　　embedded Universal Flash Storage
+*eUFS*　　embedded Universal Flash Storage +
 ====
 
 F
@@ -118,7 +114,7 @@ F
 *FTDI*　　Future Technology Devices International +
 *FTP*　　 File Transfer Protocol +
 *fTPM*　　firmware Trusted Platform Module +
-*FUSE*　　Filesystem in USErspace
+*FUSE*　　Filesystem in USErspace +
 ====
 
 G
@@ -132,7 +128,8 @@ G
 *GPT*　　 GUID Partition Table +
 *GPU*　　 Graphics Processing Unit +
 *GRUB*　　GRand Unified Bootloader +
-*GUI*　　 Graphical User Interface
+*GSM*　　 Global System for Mobile communications +
+*GUI*　　 Graphical User Interface +
 ====
 
 H
@@ -142,12 +139,10 @@ H
 *HD*　　　Hard Disk +
 *HDA*　　 intel High Definition Audio +
 *HDMI*　　High Definition Multimedia Interface +
-*HID*　　 Human Interface Device
-====
-====
+*HID*　　 Human Interface Device +
 *HPD*　　 Hot Plug Detect +
 *HTTP*　　HyperText Transfer Protocol +
-*HTTPS*　 HyperText Transfer Protocol Secure
+*HTTPS*　 HyperText Transfer Protocol Secure +
 ====
 
 I
@@ -167,13 +162,13 @@ I
 *IRQ*　　 Interrupt ReQuest +
 *ISA*　　 Industry Standard Architecture +
 *ISBN*　　International Standard Book Number +
-*ISO*　　 International Organization for Standardization
+*ISO*　　 International Organization for Standardization +
 ====
 
 K
 ====
 *KMS*　　 Kernel Mode-Setting +
-*KVM*　　 Kernel-based Virtual Machine
+*KVM*　　 Kernel-based Virtual Machine +
 ====
 
 L
@@ -187,17 +182,16 @@ L
 *LTS*　　 Long-Term Support +
 *LVDS*　　Low-Voltage Differential Signaling +
 *LVFS*　　Linux Vendor Firmware Service +
-*LVM*　　 Logical Volume Manager
+*LVM*　　 Logical Volume Manager +
 ====
 
 M
 ====
 *MAC*　　 Media Access Control +
-*MBR*　　 Master Boot Record
-====
-====
+*MBR*　　 Master Boot Record +
 *MFA*　　 Multi-Factor Authentication +
 *ME*　　　intel Management Engine +
+*MIME*　　Multipurpose Internet Mail Extensions +
 *MMC*　　 Multi Media Card +
 *MMIO*　　Memory-Mapped Input/Output +
 *MODEM*　 MOdulator-DEModulator +
@@ -206,7 +200,7 @@ M
 *MSIX*　　MicroSoft Installer neXt +
 *MSR*　　 Model-Specific Register +
 *MST*　　 Multi-Stream Transport +
-*MTU*　　 Maximum Transmission Unit
+*MTU*　　 Maximum Transmission Unit +
 ====
 
 N
@@ -214,8 +208,9 @@ N
 *NFC*　　 Near Field Communication +
 *NFS*　　 Network File System +
 *NGFF*　　Next Generation Form Factor +
+*NR*　　　New Radio +
 *NVMe*　　Non-Volatile Memory express +
-*NVRAM*　 Non-Volatile Random-Access Memory
+*NVRAM*　 Non-Volatile Random-Access Memory +
 ====
 
 O
@@ -226,7 +221,7 @@ O
 *OS*　　　Operating System +
 *OSD*　　 On-Screen Display +
 *OSS*　　 Open Sound System +
-*OTG*　　 On-The-Go
+*OTG*　　 On-The-Go +
 ====
 
 P
@@ -242,9 +237,7 @@ P
 *PIO*　　 Programmable Input/Output +
 *PLC*　　 Programmable Logic Controller +
 *PMIO*　　port-mapped Input/Output +
-*PoE*　　 Power over Ethernet
-====
-====
+*PoE*　　 Power over Ethernet +
 *POS*　　 Point of Sale +
 *POSIX*　 Portable Operating System Interface +
 *POST*　　Power On Self Test +
@@ -253,13 +246,13 @@ P
 *PSU*　　 Power Supply Unit +
 *PS/2*　　Personal System/2 +
 *PWD*　　 Print Working Directory +
-*PXE*　　 Preboot eXecution Environment
+*PXE*　　 Preboot eXecution Environment +
 ====
 
 Q
 ====
 *QEMU*　　Quick EMUlator +
-*QR-Code* Quick-Response Code
+*QR-Code* Quick-Response Code +
 ====
 
 R
@@ -275,7 +268,7 @@ R
 *ROM*　　 Read-Only Memory +
 *RPM*　　 RPM Package Manager +
 *RST*　　 Rapid Storage Technology +
-*RTC*　　 Real-Time Clock
+*RTC*　　 Real-Time Clock +
 ====
 
 S
@@ -289,11 +282,10 @@ S
 *SDIO*　　Secure Digital Input/Output +
 *SDM*　　 Smart Display Module +
 *SDRAM*　 Synchronous Dynamic Random-Access Memory +
+*SELinux* Security-Enhanced Linux +
 *SFP*　　 Small Form-factor Pluggable +
 *SIM*　　 Subscriber Identity Module +
-*SMB*　　 Server Message Block
-====
-====
+*SMB*　　 Server Message Block +
 *SMBIOS*　System Management BIOS +
 *SMBus*　 System Management Bus +
 *SoC*　　 System-on-Chip +
@@ -303,7 +295,7 @@ S
 *SPICE*　 Simple Protocol for Independent Computing Environments +
 *SSD*　　 Solid-State Drive +
 *SSH*　　 Secure SHell +
-*SVG*　　 Scalable Vector Graphics
+*SVG*　　 Scalable Vector Graphics +
 ====
 
 T
@@ -314,7 +306,7 @@ T
 *TPM*　　 Trusted Platform Module +
 *TRRS*　　Tip-Ring-Ring-Sleeve +
 *TTY*　　 TeleTYpewriter +
-*TUI*　　 Text User Interface
+*TUI*　　 Text User Interface +
 ====
 
 U
@@ -336,10 +328,8 @@ U
 *uTT*　　 unTesTed +
 *UUID*　　Universally Unique IDentifier +
 *UVC*　　 USB Video device Class +
-*UVD*　　 Unified Video Decoder
+*UVD*　　 Unified Video Decoder +
 ====
-
-{empty} +
 
 V
 ====
@@ -355,7 +345,7 @@ V
 *VMD*　　 Volume Management Device +
 *VNC*　　 Virtual Network Computing +
 *VT*　　　Virtual Terminal +
-*VT-d*　　Virtualization Technology for Directed i/o
+*VT-d*　　Virtualization Technology for Directed i/o +
 ====
 
 W
@@ -364,7 +354,7 @@ W
 *WMI*　　 Windows Management Instrumentation +
 *WoL*　　 Wake-on-LAN +
 *WoWLAN*　Wake-on-WLAN +
-*WWAN*　　Wireless Wide Area Network
+*WWAN*　　Wireless Wide Area Network +
 ====
 
 X
@@ -372,5 +362,5 @@ X
 *XDG*　　 X Desktop Group +
 *XDMCP*　 X Display Manager Control Protocol +
 *XHCI*　　eXtensible Host Controller Interface +
-*XPM*　　 X PixMap
+*XPM*　　 X PixMap +
 ====

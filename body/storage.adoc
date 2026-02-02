@@ -250,7 +250,7 @@ root# *mount /dev/_sdb1_ /_opt_* +
 root# *mount /dev/_mmcblkp1_ /_mnt_* +
 root# *cd /_opt_* +
 root# *rm -rf /_mnt_/** +
-root# *tar cf - . | tar xvf - -C /_mnt_*
+root# *tar -cf - . | tar -xvf - -C /_mnt_*
 ====
 如果是跨機器的操作，就需要分開執行管線前後的指令，並將短橫線所代表的標準輸出入改為封存檔案的名稱。
 
@@ -260,10 +260,10 @@ root# *tar cf - . | tar xvf - -C /_mnt_*
 假設原本的系統位於 `/dev/sda` ，並且有兩個分割區 `/dev/sda1` 與 `/dev/sda2` ，那麼以外接的隨身碟 `/dev/sdb` 開機後，封裝的命令範例如下：
 ====
 root# *mount /dev/sda1 /_mnt_* +
-root# *tar cJvf _/root/封裝檔一.txz_ /mnt/.[a-z]* /_mnt_/* * +
+root# *tar -cJvf _/root/封裝檔一.txz_ /mnt/.[a-z]* /_mnt_/* * +
 root# *umount /_mnt_* +
 root# *mount /dev/sda2 /_mnt_* +
-root# *tar cJvf _/root/封裝檔二.txz_ /_mnt_/.[a-z]* /_mnt_/* * +
+root# *tar -cJvf _/root/封裝檔二.txz_ /_mnt_/.[a-z]* /_mnt_/* * +
 root# *umount /_mnt_*
 ====
 當然在製作前要先確認，隨身碟中還有足夠的儲存空間，如此便可得到兩個封裝了檔案系統的壓縮檔。
@@ -276,10 +276,10 @@ root# *umount /_mnt_*
 root# *mkfs.vfat /dev/sda1* +
 root# *mkfs.ext4 /dev/sda2* +
 root# *mount /dev/sda1 /_mnt_* +
-root# *tar xvf _/root/封裝檔一.txz_ -C /_mnt_* +
+root# *tar -xvf _/root/封裝檔一.txz_ -C /_mnt_* +
 root# *umount /_mnt_* +
 root# *mount /dev/sda2 /_mnt_* +
-root# *tar xvf _/root/封裝檔二.txz_ -C /_mnt_* +
+root# *tar -xvf _/root/封裝檔二.txz_ -C /_mnt_* +
 root# *umount /_mnt_*
 ====
 還原檔案系統後，先用 `blkid` 命令取得兩個分割區各自的 UUID，然後編輯目標系統中 `/etc/fstab` 以及 `/boot/loader/entries/*.conf` 各檔案的相應內容。

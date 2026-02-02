@@ -323,13 +323,13 @@ root# *dracut -a "network nfs" --add-drivers "_r8169_ nfsv4" initramfs.img $(una
 ====
 root# *mount /dev/_sda2_ /mnt* +
 root# *cd /mnt* +
-root# *tar zcvf _/root/rootfs-for-nfs.tar.gz_* *
+root# *tar -czvf _/root/rootfs-for-nfs.tar.gz_* *
 ====
 然後再於 NFS 伺服器上掛載隨身碟，接著解開整個檔案系統打包檔，並匯入 NFS 根目錄中預定分享的目錄：
 ====
 root# *mount /dev/_sdb2_ /mnt* +
 root# *cd _/var/nfs/linux_* +
-root# *tar xvf _/mnt/root/rootfs-for-nfs.tar.gz_*
+root# *tar -xvf _/mnt/root/rootfs-for-nfs.tar.gz_*
 ====
 
 無碟系統的內核與初始記憶體檔案系統，已經藉由 PXE 技術載入，而開機載入的相關檔案在這裡也不會用到，因此如果空間有限的話，可以將分享目錄中原系統的 `/boot/` 子目錄移除。

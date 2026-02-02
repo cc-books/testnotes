@@ -131,7 +131,7 @@ user$ *xmodmap -e "keycode 132 = NoSymbol NoSymbol yen bar"*
 |鎖定捲動|Scroll_Lock|KEY_SCROLLLOCK
 |====
 
-`xmodmap` 的預設選項 `-pm` 即為顯示目前修飾鍵的定義狀況，如果要顯示一般按鍵的定義狀況則需使用 `-pk` ：
+`xmodmap` 的預設選項 `-pm` 即為顯示目前修飾鍵的定義狀況，如果要顯示一般按鍵的定義狀況則須使用 `-pk` ：
 ====
 user$ *xmodmap* +
 xmodmap:  up to 4 keys per modifier, (keycodes in parentheses): +

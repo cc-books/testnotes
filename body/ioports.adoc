@@ -19,7 +19,7 @@ root# *printf '\x0b\x83' | dd of=/dev/port oflag=seek_bytes seek=112 conv=notrun
 
 === 列印裝置
 列印裝置是電腦系統中不可或缺的輸出設備，提供將資訊實體化與可攜化的方式。
-硬體類型包括標籤印表機、點陣印表機、噴墨印表機與雷射印表機，但以下並未涉及運作機制略有不同但潛力無窮的 3D 列印機。
+硬體類型包括點陣印表機、噴墨印表機、熱感印表機與雷射印表機，但以下並未涉及運作機制略有不同但潛力無窮的 3D 列印機。
 
 ==== 連接介面
 早期印表機的標準連接介面是**平行埠**(parallel port)，內核所賦予的裝置名稱為 `/dev/parport__N__` 。
@@ -46,7 +46,7 @@ root# *systemctl enable cups*
 CUPS 服務的組態檔位於 `/etc/cups/printers.conf` ，負責將印表機映射到列印裝置的節點。
 利用工具程式 `lpadmin` ，或是透過它的網頁介面 `https://localhost:631/admin` 來進行管理，訪問 `http://localhost:631/` 則如同執行 `lpstat -t` 指令，可以獲得列印服務的一般資訊。
 
-CUPS 支援多種列印協定，並提供**統一資源識別碼**(URI) 做為連接的形式：
+CUPS 支援多種列印協定，並提供**均一資源識別碼**(URI) 做為連接的形式：
 
 [square]
 * Linux 列印伺服器(LPD)：<lpd://伺服器位址/佇列名稱> 相容於舊式 Linux 系統的列印服務。
@@ -350,7 +350,7 @@ GPIO 在嵌入式系統中，常以 *SPI*(序列周邊介面) 做為傳輸介面
 由於各類裝置的歧異度很大，因此需要的驅動軟體也有多種形式，常常衹適用於特定的裝置與環境。
 
 ==== 指紋辨識器
-一般的指紋辨識器需要 `fprintd-pam`, `fprintd`, `libfprint` 等套件，分別提供了認證模組、系統服務、函式庫的功能。
+指紋辨識器的硬體可分為電容式與光學式兩大類，軟體則需要 `fprintd-pam`, `fprintd`, `libfprint` 等套件，分別提供了認證模組、系統服務、函式庫的功能。
 其中還包括了一些工具程式，例如利用 `fprintd-enroll` 來登錄指紋資料（通常是刷右手食指五次）。
 
 ==== 安全鑰匙
@@ -361,7 +361,7 @@ GPIO 在嵌入式系統中，常以 *SPI*(序列周邊介面) 做為傳輸介面
 下列指令是 Yubico
 footnote:[Yubico 網站 <https://www.yubico.com/>] 銷售的安全鑰匙裝置設定範例：
 ====
-root# *tar xvf yubico-authenticator-7.1.1-linux.tar.gz* +
+root# *tar -xvf yubico-authenticator-7.1.1-linux.tar.gz* +
 root# *cd yubico-authenticator-7.1.1-linux* +
 root# *./authenticator* +
 ... +
