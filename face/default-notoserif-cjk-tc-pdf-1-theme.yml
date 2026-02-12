@@ -27,11 +27,15 @@ page:
   background_color: FFFFFF
   layout: portrait
   initial_zoom: FitH
-  margin: [0.5in, 0.67in, 0.67in, 0.67in]
+##  margin: [0.5in, 0.67in, 0.67in, 0.67in]
+  margin: [16mm, 0mm, 18mm, 0mm]
   # margin_inner and margin_outer keys are used for recto/verso print margins when media=prepress
-  margin_inner: 0.75in
-  margin_outer: 0.59in
-  size: B5
+##  margin_inner: 0.75in
+  margin_inner: 22mm
+##  margin_outer: 0.59in
+  margin_outer: 18mm
+##  size: B5
+  size: 176mm x 229mm
 base:
   # ORG
   # align: justify
@@ -52,7 +56,8 @@ base:
   #line_height_length: 18
   #font_size: 11.2
   #line_height_length: 16
-  font_size: 10.5
+##  font_size: 10.5
+  font_size: 10
   #line_height_length: 15
   # correct line height for Noto Serif metrics
   # ORG
@@ -69,7 +74,8 @@ base:
   font_style: normal
   border_color: EEEEEE
   border_radius: 4
-  border_width: 0.5
+##  border_width: 0.5
+  border_width: 0.3
 role:
   line-through:
     text_decoration: line-through
@@ -125,7 +131,7 @@ heading:
   font_style: bold
   # h1 is used for part titles (book doctype) or the doctitle (article doctype)
 #  h1_font_size: floor($base_font_size * 2.6)
-  h1_font_size: floor($base_font_size * 4.8)
+  h1_font_size: floor($base_font_size * 4.5)
   # h2 is used for chapter titles (book doctype only)
   h2_font_size: floor($base_font_size * 2.15)
   h3_font_size: round($base_font_size * 1.7)
@@ -246,8 +252,8 @@ code:
   align: left
   font_color: $base_font_color
   font_family: $literal_font_family
-  font_size: ceil($base_font_size)
-  padding: $code_font_size
+  font_size: ceil($base_font_size_small)
+  padding: $code_font_size * 0.6
   line_height: 1.25
   # line_gap is an experimental property to control how a background color is applied to an inline block element
   line_gap: 3.8
@@ -274,7 +280,7 @@ example:
   # FIXME reenable padding bottom once margin collapsing is implemented
   # padding: [$vertical_rhythm, $horizontal_rhythm, 0, $horizontal_rhythm]
   padding: [-5, 0, -15, 10]
-  font_size: $base_font_size
+  font_size: $base_font_size_small
   font_family: $literal_font_family
 image:
   align: left
@@ -326,8 +332,9 @@ table:
   # cell_padding: 3
   # 20221012 KaiGenGothicTW ADD
   # HACK accounting for line-height
-  # 20221012 KaiGenGothicTW ADD  
-  cell_padding: [3, 3, 6, 3]  
+  # 20221012 KaiGenGothicTW ADD
+##  cell_padding: [3, 3, 6, 3]
+  cell_padding: [2, 2, 3, 3]
   head:
     font_style: bold
     border_bottom_width: $base_border_width * 2.5
@@ -381,4 +388,4 @@ footer:
       # 20221012 KaiGenGothicTW ADD        
       content: '{page-number}'
     right:
-      content: '電腦上試跑 Linux'
+      content: '電腦上試跑 LINUX'

@@ -23,10 +23,10 @@ Linux 相容性測試人員是指在資訊系統硬體製造的公司中，
 做為範例的檔案內容，則在縮排的區塊中襯以淺色背景顯示。
 
 本書的指令主要是在 Fedora Linux 系統中進行測試，同時參考了一些來自 Ubuntu Linux 系統的使用經驗。
-撰寫內容時依照 ASCIIDoc 的格式，藉由 `joe` 或 `gedit` 編輯器輸入後，
-以 `asciidoctor` 軟體搭配其 `pdf` 與 `pdf-cjk` 模組產生 PDF 檔案。
-內嵌的圖表則是先在 LibreOffice 繪製，再匯出為圖片檔案。
-數位輸出時使用的字型是「Google Noto Serif」、「Google Noto Sans Mono」、「Liberation Mono」以及「芫荽(iansui)」。
+撰寫內容時依照 ASCIIDoc 的格式，藉由 `joe` 編輯器輸入後，以 `asciidoctor` 軟體搭配其 `pdf` 與 `pdf-cjk` 模組產生 PDF 檔案。
+雖然它的排版效果目前比不上「所見即所得」的文書處理軟體，但是十分適合個人出版或網路協力形式的書籍寫作。
+封面與封底的背景是藉助 ChatGPT 所產生，書皮與內嵌的圖表則是先在 LibreOffice 繪製，再匯出為圖片檔案。
+數位輸出時的字型使用了「Google Noto Serif」、「Google Noto Sans Mono」、「Liberation Mono」以及「芫荽(iansui)」。
 電子書檔案以及排版前的內容，將會在紙本出版之後公開，提供有興趣的自由寫作者參考。
 
 <<<

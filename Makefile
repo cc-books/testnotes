@@ -15,5 +15,9 @@ orig:
 test:
 	asciidoctor-pdf -a pdf-style=default-notoserif-cjk-tc-pdf-1 -r asciidoctor-pdf-cjk -r ./remove-section-trailing-dot.rb test.adoc -o /tmp/main.pdf
 
+cover:
+	magick data/cover.png -crop 663x865+0+0 image/cover-back.png
+	magick data/cover.png -crop 663x865+724+0 image/cover-front.png
+
 show:
 	mupdf /tmp/main.pdf || evince /tmp/main.pdf &

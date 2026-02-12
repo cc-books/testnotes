@@ -1,22 +1,23 @@
 :author: 趙惟倫
-:version-label: 第
-:revnumber: 〇 版
-:revremark: 預印本
+:version-label: 初
+:revnumber: 版
+//:revremark: 試印
 :revdate: {docdate}
 :email: bluebat@member.fsf.org
-:homepage: https://github.com/co-books/testnotes
+:homepage: https://github.com/cc-books/testnotes
 :copyright: CC BY-SA 4.0
 :doctype: book
-:doctitle: 電腦上試跑 Linux: ──── 硬體測試筆記
+:doctitle: 電腦上試跑 LINUX: ──── 硬體測試筆記
 :producer: 中華民國軟體自由協會
 //:creator: 趙惟倫 編著
-//:description: Linux 硬體測試筆記
+//:description: GNU/Linux 硬體相容性測試筆記
 :keywords: linux, hardware, compatibility
-:imagesdir: {docdir}/data
+:imagesdir: {docdir}/image
 //:codedir: {docdir}/data
 //:datadir: {docdir}/data
-//:front-cover-image: data/front-cover.png
-:title-logo-image: data/slat-name.png
+:front-cover-image: image/cover-front.png
+:back-cover-image: image/cover-back.png
+:title-logo-image: image/slat-name.png
 :lang: cmn
 :encoding: utf-8
 :toc: macro
@@ -45,9 +46,8 @@
 :media: prepress
 :pdf-fontsdir: {docdir}/face
 :pdf-stylesdir: {docdir}/face
-//:pdf-style: KaiGenGothicTW
 //:pdf-style: default-notoserif-cjk-tc-pdf-1
-:pdf-page-size: 184mm x 230mm
+:pdf-page-size: 176mm x 229mm
 :mathematical-format: svg
 //:page-numbering-start-at: 10
 //:running-content-start-at: body

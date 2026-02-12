@@ -585,6 +585,7 @@ root# *hdparm -t /dev/_mmcblk0_* +
 ====
 user$ *dd if=/dev/urandom of=_暫時檔_ bs=4M count=256 oflag=direct*
 ====
+其中的 `urandom` 假擬裝置如果換成 `zero`，可能會得到較高的速度值。
 而測試讀取速度的指令，就可以利用剛剛寫入的檔案：
 ====
 user$ *dd if=_暫時檔_ of=/dev/null bs=4M iflag=direct*
