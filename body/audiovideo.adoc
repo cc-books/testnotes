@@ -1,24 +1,24 @@
 == 影音裝置
-電腦系統影音裝置的輸入與輸出介面，就是做為使用者利用影像及聲音，與系統產生互動的方式。
+電腦系統影音裝置的輸入與輸出介面，就是做為使用者透過影像及聲音，與系統產生互動的方式。
 其中重要的影像輸出部分，已經在〈顯示裝置〉一章中介紹，以下將說明測試其餘裝置時的相關事項。
 
 === 攝影裝置
-數位相機與電腦系統中的攝影裝置，都是利用 *CCD*(電荷耦合裝置) 做為感光元件，一般是採用主機板上的 USB 介面。
-測試影像輸入裝置時，除了攝影功能之外，還要注意附屬的指示燈運作是否正確，以及運作時溫度是否過高。
+數位相機與電腦系統中的攝影裝置，都是利用 *CCD*(電荷耦合裝置) 做為感光元件，一般都採用主機板上的 USB 介面。
+測試影像輸入裝置時，除了必要的攝影與拍照功能外，還要注意附屬的指示燈運作是否正確，以及運作時溫度是否過高。
 
 ==== 內核模組
 內核支援的 USB 影像裝置硬體驅動模組，一般位於系統目錄 `/usr/lib/modules/$(uname -r)/kernel/drivers/media/usb/` 之中。
-複雜的裝置大多支援 *V4L2*(Linux 視訊二代) 框架，由內核中相關的一組模組負責驅動。
+複雜的裝置大多支援 *V4L2*(Linux 視訊二代) 框架，由內核中相關的一群模組負責驅動。
 
 如果是屬於符合 *UVC*(USB 視訊裝置類別) 規格的**網路攝影機**(webcam) 裝置，內核就會以 `uvcvideo` 模組來驅動。
 同時產生一到多個 `/dev/video__N__` 形式的資料裝置，以及 `/dev/media__N__` 形式的控制裝置（_N_ 均由 0 起算）。
-萬一裝置確實有支援 UVC 卻沒有被內核辨認出來，可以利用 `lsusb` 找出它的**裝置識別碼**（參看〈系統裝置：USB：裝置資訊〉小節），然後嘗試輸入：
+萬一裝置確實有支援 UVC 卻沒有被內核辨認出來，可以利用 `lsusb` 找出它的**裝置識別碼**（參看〈系統裝置：通用序列匯流排：裝置資訊〉小節），然後嘗試輸入：
 ====
-root# *echo _VID_ _PID_ > /sys/bus/usb/drivers/uvcvideo/new_id*
+root# *echo _供應商識別碼_ _產品識別碼_ > /sys/bus/usb/drivers/uvcvideo/new_id*
 ====
 
 ==== 應用函式庫
-函式庫 `libcamera` 向使用攝影機功能的軟體，提供了統一的應用程式介面。
+函式庫 `libcamera` 給使用攝影機功能的軟體，提供了統一的應用程式介面。
 攝影機軟體可以方便地透過 `libcamera`，呼叫整合後的硬體功能以及延伸的軟體函式庫。
 其他類似的函式庫還包括：`libwebcam`, `libuvc`...等等。
 
@@ -42,14 +42,14 @@ footnote:[python-pam 的 GitHub 頁面 <https://github.com/FirefighterBlu3/pytho
 如果系統中缺乏能夠存取網路攝影機的應用軟體，仍然可以利用一些網站
 footnote:[Webcam Tests 網站 <https://webcamtests.com/>]
 footnote:[ONLINE MIC TEST 網站 <https://www.onlinemictest.com/zh/webcam-test/>]
-來測試網路攝影機。
+或是視訊會議服務，透過瀏覽器來測試網路攝影機。
 
 === 蜂鳴裝置
 在還沒有音訊裝置的終端機時代，就有配備**蜂鳴器**(buzzer) 做為發出警示音(beep) 的方式。
 蜂鳴器的硬體構造可以分為壓電式與電磁式兩種，而驅動方式則分為通電後就可以發出內建單一音調的有源蜂鳴器，以及還需要提供頻率信號的無源蜂鳴器。
 
 舊式通用的內核模組是 `pcspkr` ，而 `snd_pcsp` 則是較新的模組。
-標準的工具程式是 `beep` ，但是需要先手動以 `modprobe` 命令載入上述的模組。
+標準的工具程式是 `beep` ，但是需要先手動以 `modprobe` 命令載入上述的模組，
 因為內核預設不會自動將蜂鳴器驅動為一般的音訊裝置，以免得到令人難以接受的播放音樂效果。
 
 === 音訊裝置
@@ -60,19 +60,19 @@ footnote:[ONLINE MIC TEST 網站 <https://www.onlinemictest.com/zh/webcam-test/>
 晶片內音訊控制器與**轉碼器**(Codec) 之間的通訊，一般是依據 *AC97*(音訊編解碼 1997) 規範。
 在系統韌體設定中可能出現的 Azalia 啟用項目，則是 Intel 新的內建音訊規格代號，做為取代 AC97 的 *HDA*(高解析音訊) 標準。
 
-**混音器**(mixer) 是由轉碼器上的硬體或軟體所實作出來，而 *PCM*(脈波編碼調變) 則是類比轉數位所用的技術名稱，由轉碼器負責執行。
+**混音器**(mixer) 是由轉碼器上的硬體或驅動軟體所實作出來，而 *PCM*(脈波編碼調變) 則是類比轉數位所用的技術名稱，由轉碼器負責執行。
 
 ==== 內核模組
-內核會以 `soundcore` 與 `snd` 模組做為基礎，再搭配系統硬體平臺的模組進行驅動。
+內核會以 `soundcore` 與 `snd` 模組做為基礎，再搭配符合系統硬體平臺的模組進行驅動。
 後續層級是與 HDA-Intel 規格相容的 `snd_hda_intel` 通用模組，從 `lspci` 命令的輸出就可以看到整合的音訊控制器。
 在嵌入式系統中可能會以 SOC 類型取代 HDA 類型，相應載入的基礎模組則改為 `snd_soc_core` 。
-HDA-Intel 裝置還分為類比與數位兩種模式，當驅動模組發生了誤判，就需要參考下一小節的設定，透過 `snd_hda_intel` 模組的 `model=` 參數來指定模式。
+HDA-Intel 裝置還分為類比與數位兩種模式，當驅動模組發生誤判，就需要參考下一小節的設定，透過 `snd_hda_intel` 模組的 `model=` 參數來指定模式。
 
 個別版本的內核模組，針對不同晶片編解碼器的支援程度也不相同。
 例如來自 Realtek 廠商的各類 ALC__NNN__ 型號，都需要 `snd_hda_codec_realtek` 內核模組。
 想要找到編解碼器的型號，需要透過命令 `dmesg` 而非 `lspci` 的篩選輸出：
 ====
-root# *dmesg | grep codec | sed 's/[^:]*: //'* +
+root# *dmesg | grep codec | sed ++'s/[^:]*: //'++* +
 autoconfig for ALC888-VD: line_outs=1 (0x14/0x0/0x0/0x0/0x0) type:speaker +
 　 speaker_outs=0 (0x0/0x0/0x0/0x0/0x0) +
 　 hp_outs=1 (0x1b/0x0/0x0/0x0/0x0) +
@@ -81,25 +81,26 @@ autoconfig for ALC888-VD: line_outs=1 (0x14/0x0/0x0/0x0/0x0) type:speaker +
 　　 Mic=0x19
 ====
 以上可以看到編解碼器的型號是 ALC888-VD，輸出介面的線路類型則為 speaker。
-如果名稱出現 Generic 就表示內核雖然偵測到編解碼器，但無法辨識出晶片型號，也許可以藉由模組參數來調整，讓部分的功能仍然可用。
+如果名稱出現 Generic 就表示內核雖然偵測到編解碼器，但無法辨識出晶片型號，也許還能藉由模組參數來調整，讓部分的功能仍然可用。
 
 由於有些顯示器規格（HDMI, DisplayPort）也包含了聲音輸出，因此音訊裝置常常附屬於支援此類顯示器規格的晶片組，並且大多會進一步整合於單晶片系統之中。
 除了需要像是 `snd_hda_codec_hdmi` 之類的編解碼器驅動模組之外，音訊功能的開啟也會受到顯示驅動模組的影響。
 某些 AMD 平臺會預設停用外部 HDMI 音訊裝置，可能會需要類似 `radeon.audio=1` 的內核參數來開啟，但新版的 `amdgpu` 模組已經預設提供支援。
-如果預設顯示器音訊為啟用，卻想在系統啟動時期就關閉它，則可以利用將負責的內核模組（例如 `snd_hda_codec_hdmi` ）列入黑名單來達成。
+如果預設顯示器音訊為啟用，卻想在系統啟動時期就關閉它，則可以藉由將負責的內核模組（例如 `snd_hda_codec_hdmi` ）列入黑名單來達成。
 
 HDMI 的音訊功能，還可能受到 *IOMMU*(輸入輸出主記憶體管理單元) 的影響。
 出現問題的時候，可以考慮選用下列的內核參數： `intel_iommu=on`, `amd_iommu=off`, `iommu=pt`, `iommu=soft`, `iommu=off`。
 對於某些舊型的 HDMI，可能需要設定 `snd_intel_dspcfg` 的模組參數 `dsp_driver=1` 後才會有聲音。
 
-面對出於某種原因而無法存取內建音訊裝置的系統，也可以使用 USB 介面的可攜式音訊裝置，通常會直接附帶音訊的輸入輸出插座。
+面對出於某種原因而無法存取內建音訊裝置的系統，也可以使用 USB 介面的可攜式音訊
+裝置，通常會直接附帶音訊的輸入輸出插座。
 藉由 `lsusb -t` 指令可以看到，它與整合式網路攝影機附帶的音訊輸入相同，被歸為 USB 的 Audio 類型裝置。
 在內核模組方面則是由 `snd_usb_audio` 負責，而大多數用於 `snd_hda_intel` 的模組參數也都適用。
 測試時需要注意：系統的預設音訊輸出入裝置編號，是否會隨著外接裝置的插拔而變動，以及系統音量的調整是否也會與之連動。
 
 ==== 模組參數
 大部分可調整的模組參數是針對內核模組 `snd_hda_intel` ，例如在自行建立的 `/etc/modprobe.d/snd-hda-intel.conf` 檔案中，
-會出現類似 `options snd_hda_intel model=auto` 的內容，其中 `model=` 項目的可選值眾多，提供使用者依情況採用。
+會出現類似 `options snd_hda_intel model=auto` 的內容，其中 `model=` 項目的可選值眾多，提供使用者依情況採用，
 例如 `basic`, `generic`, `genericx`, `ref`, `ideapad`, `3stack-dig`, `3stack-6ch`, `3stack-6ch-dig`, `6stack-hp`,
 `laptop`, `laptop-amic`, `laptop-dmic`, `headset-mic`, `dell-headset-dock`, `dell-headset-multi`, `acer-headset-multi` …等等。
 除此之外，模組 `snd_hda_intel` 還有許多可設定的參數，使用者可以取消註解後參考選用：
@@ -109,7 +110,7 @@ HDMI 的音訊功能，還可能受到 *IOMMU*(輸入輸出主記憶體管理單
 #options snd_hda_intel id=Generic index=1
 #options snd_hda_intel dmic_detect=0
 #options snd_hda_intel position_fix=2
-#options snd_hda_intel patch=,clevo
+#options snd_hda_intel patch=clevo-hda-patch
 #options snd_hda_intel single_cmd=1
 #options snd_hda_intel probe_mask=1
 #options snd_hda_intel enable_msi=1
@@ -119,18 +120,18 @@ HDMI 的音訊功能，還可能受到 *IOMMU*(輸入輸出主記憶體管理單
 #options snd_hda_intel align_buffer_size=1
 ....
 
-如果想要避免每次開機後的編號都會受到內建裝置影響而不固定，可以使用像是 `snd_usb_audio.index=0` 的內核參數。
-在內建與外接裝置混用的情況下，則能藉由內核參數 `snd.cards_limit=1` 或 `snd.slots=snd_usb_audio,snd_hda_intel` ，分別來強制設定裝置插槽的數量或順位。
+如果想避免每次開機後的外接裝置編號都會受到內建裝置影響而不固定，可以使用像是 `snd_usb_audio.index=0` 的內核參數。
+在內建與外接裝置混用的情況下，還能藉由內核參數 `snd.cards_limit=1` 或 `snd.slots=snd_usb_audio,snd_hda_intel` ，分別來強制設定裝置插槽的數量或順位。
 
 ==== 內部介面
-*I^2^S*(音訊晶片整合介面) 的簡單接線方式，衹會用到三或五個腳位，用來在晶片之間傳遞數位聲音訊號。
+*I^2^S*(音訊晶片整合介面) 衹會用到三或五個腳位的簡單接線方式，用來在晶片之間傳遞數位聲音訊號。
 常常整合於 M.2 介面之中，需要再接上 *DAC*(數位類比轉換器) 才能做為音訊輸出。
-DAC 的輸入腳位通常稱為 AIN(analog input)，輸出腳位則是 Vout(analog output)。 
+DAC 的輸入腳位稱為 AIN(類比輸入)，輸出腳位則是 Vout(類比輸出)。 
 
 ==== 主機接頭
-如果喇叭或嘜筒是內建的型式，就衹會在主機板上留有插槽，而不會有對外的接頭。
+如果喇叭或嘜筒(microphone) 是內建的型式，就衹會在主機板上留有插槽，而不會有對外的接頭。
 音訊接頭的顏色是由**個人電腦設計規範**（俗稱 PC97/PC2001）所定義。
-接頭形式如果是輸入輸出合併的**複合插孔**(combo jack)，即在立體聲之外加上了嘜筒的功能，而插孔外殼圖示將改為附嘜筒的耳機。
+接頭形式如果是輸入輸出合併的**複合插孔**(combo jack)，即在立體聲之外加上了嘜筒的功能，插孔外殼圖示就應改為附嘜筒的耳機。
 
 與 DAC 接腳的層級互相對應，外部的直接輸入介面稱為 *Line-in* ，純粹輸出而沒有額外功率放大的外部介面稱為 *Line-out* 。
 由於功率較小的嘜筒可能無法驅動 Line-in，通常都會設置成為調整過的 *Mic-in* ，而同樣經過放大以適合耳機的介面則稱為 *Phone-out* 或 *Speaker-out* 。
@@ -166,7 +167,7 @@ Linux 的音訊次系統**堆疊**(stack)，如同顯示次系統一樣，是以
 這是因為目前的開發活動雖然集中於 PipeWire，但是支援 PulseAudio 的軟體還是佔大多數。
 
 ==== X 視窗系統
-支援音訊的顯示介面（HDMI/DP），其音訊組態會隨著 EDID 資料回傳給系統，並會影響到 X 視窗系統的顯示模組行為。
+支援音訊的顯示介面（HDMI/DP），其音訊組態會隨著 EDID 區段回傳給系統，並會影響到 X 視窗系統的顯示模組行為。
 正常情況下預設為啟用，而使用 DP 螢幕的**多重串流傳輸**(MST) 功能時，有可能會預設關閉音訊功能，此時就需要手動開啟：
 ====
 root# *xrandr --output _HDMI-A-0_ --set audio on*
@@ -182,18 +183,19 @@ root# *xrandr --output _HDMI1_ --set audio force-dvi*
 
 === 工具程式
 每一代的堆疊都有各自的伺服程式與工具程式，而新一代的堆疊則會取代舊堆疊所用的服務行程與應用程式介面。
-考慮到操作的相容性，系統通常也會提供舊式堆疊的虛擬介面，以便能繼續使用舊式的硬體、驅動模組、工具程式與應用軟體。
+考慮到操作的相容性，系統通常也會提供舊式堆疊的模擬介面，以便能繼續使用舊式的硬體、驅動模組、工具程式與應用軟體。
 
 ==== 組態
-ALSA 音訊驅動堆疊的原始組態檔位於 `/usr/share/alsa/alsa.conf` ，初始化各裝置的組態檔則在 `/usr/share/alsa/init/` 目錄中。
-如果系統想變更音訊驅動服務的組態，則要增添項目到 `/etc/asound.conf` 檔案。
-例如想要動態設定預設音效卡號及裝置編號（萬一桌面環境沒有做到的話），就可以建立一個符合 UDEV 的規則檔：
+ALSA 音訊驅動堆疊的原始組態檔位於 `/usr/share/alsa/alsa.conf` ，初始化各裝置的組態檔則在 `/usr/share/alsa/init/` 目錄中。如果系統想變更音訊驅動服務的
+組態，則要增添項目到 `/etc/asound.conf` 檔案。
+例如想要動態設定預設音效卡號及裝置編號（萬一桌面環境沒有做到的話），就可以建立一個符合 UDEV 的規則檔（含有兩條規則）：
 
 ./etc/udev/rules.d/90-usb-soundcard.rules
 ....
 KERNEL=="pcmC[D0-9cp]*", ACTION=="add", PROGRAM="/bin/sh -c 'K=%k; K=$${K#pcmC};
   K=$${K%%D*}; echo defaults.ctl.card $$K > /etc/asound.conf;
   echo defaults.pcm.card $$K >>/etc/asound.conf'"
+
 KERNEL=="pcmC[D0-9cp]*", ACTION=="remove", PROGRAM="/bin/sh -c 'echo defaults.ctl.card 0 > /etc/asound.conf;
   echo defaults.pcm.card 0 >> /etc/asound.conf; echo defaults.pcm.device 0 >> /etc/asound.conf'"
 ....
@@ -201,8 +203,8 @@ KERNEL=="pcmC[D0-9cp]*", ACTION=="remove", PROGRAM="/bin/sh -c 'echo defaults.ct
 另外與之配合的 *UCM*(用例管理器) 格式，是在 `/usr/share/alsa/ucm*/*` 各目錄中儲存其組態檔。
 較新的散佈版將其分出為套件 `alsa-ucm` 或 `alsa-ucm-conf` ，多用於低階或內嵌於 CPU 的音訊晶片。
 
-PulseAudio 音訊驅動堆疊的組態檔位於 `/etc/pulse/` 目錄內，其中的 `client.conf` 是客戶端軟體的設定。
-如果有修改的需求，可刪去列首的分號以取消備註後再變更內容：
+PulseAudio 音訊驅動堆疊的組態檔位於 `/etc/pulse/` 目錄，其中的 `client.conf` 是客戶端軟體的設定檔案。
+如果有修改的需求，可以刪去列首的分號以取消備註後再變更內容：
 
 ./etc/pulse/client.conf
 ....
@@ -215,7 +217,7 @@ PulseAudio 音訊驅動堆疊的組態檔位於 `/etc/pulse/` 目錄內，其中
 ....
 
 服務程式啟動時的組態檔則是 `/etc/pulse/default.pa` ，但衹用於個別使用者模式下啟動的服務。
-其中例如調整 `module-udev-detect` 模組，以減少初始播放時聲音的跳動；
+例如調整其中的 `module-udev-detect` 模組，以減少初始播放時聲音的跳動；
 預設載入 `module-switch-on-port-available` 模組，以配合插拔耳機時應有的切換輸出動作；
 或是安裝了套件 `webrtc-audio-processing` 之後，就可以預設載入減少背景回聲的模組：
 
@@ -223,9 +225,7 @@ PulseAudio 音訊驅動堆疊的組態檔位於 `/etc/pulse/` 目錄內，其中
 ....
 ...
 load-module module-udev-detect tsched=0
-#
 load-module module-switch-on-port-available
-#
 load-module module-echo-cancel source_name=echosource aec_method=webrtc
 set-default-source echosource
 ...
@@ -294,7 +294,8 @@ user$ *pactl info* +
 預設輸入來源：alsa_input.pci-0000_00_1f.3.analog-stereo +
 訊餅：9985:3cc1
 ====
-引數 `list` 則可列出音訊次系統的詳細資訊，或是附加第二引數來限定組成的類型，例如代表輸入來源的 sources 或是代表輸出槽點的 sinks 。
+引數 `list` 能夠列出音訊次系統的詳細資訊，或是附加第二引數來限定組成的類型，
+例如代表輸入來源的 sources 或是代表輸出槽點的 sinks 。
 其中輸入來源或輸出槽點的編號，就是做為設定時指定類型的命令引數。
 
 ==== 設定
@@ -303,12 +304,12 @@ user$ *pactl info* +
 由於歷經了多種驅動堆疊的更迭，系統為了相容性而留下許多類似功能的工具程式，從命令名稱的前幾個字母就可以猜到它們的來源。
 同樣的設定常常可以經由不同的指令達成，但是各自引數中的編號、名稱、選項命令與選項值格式並不一定會相同。
 
-針對音訊裝置有一些常用的傳統工具，例如全螢幕文字介面的 `alsamixer` ，可以調整放音裝置與錄音裝置的個別音量以及總音量。
-音訊裝置的設定中有所謂的**推進**(boost)/**過放**(overamplification) 選項，可以用來將裝置的音量放大為超過建議的安全值。
-萬一推進選項造成了音訊裝置的**反饋**(feedback) 效果，則有另一項**自動靜音**(auto-mute) 功能可以用來自動過濾尖銳聲音。
+針對音訊裝置有一些常用的傳統工具，例如全螢幕文字介面的 `alsamixer` ，方便調整放音裝置與錄音裝置的個別音量以及總音量。
+音訊裝置的設定中有所謂的**推進**(boost)╱**過放**(overamplification) 選項，是用來將裝置的音量放大為超過建議的安全值。
+萬一推進選項導致了音訊裝置的**反饋**(feedback) 效果，則有另一項**自動靜音**(auto-mute) 功能可以做為自動過濾尖銳聲音的對策。
 
-相對應的命令列介面指令是 `amixer` ，同樣由 `alsa-utils` 套件所提供。
-例如設定預設的輸出槽點可用：
+與 `alsamixer` 相對應的命令列介面指令是 `amixer` ，同樣由 `alsa-utils` 套件所提供。
+例如設定預設的輸出槽點可用下列指令之一：
 ====
 root# *amixer cset numid=3 0* \#auto +
 root# *amixer cset numid=3 1* \#headphones +
@@ -316,17 +317,17 @@ root# *amixer cset numid=3 2* #hdmi
 ====
 
 當 `amixer` 命令要指定裝置時，主要是利用 `-c` 選項加上音效卡（音訊晶片）的編號。
-就以打開裝置的靜音功能（停用該裝置）來說，相關的指令範例如下：
+就以打開裝置的靜音功能（停用裝置）來說，相關的指令範例如下：
 ====
 root# *amixer set Master mute* +
 root# *amixer -c _0_ sset Speaker mute* +
 root# *amixer set Capture nocap* +
 root# *amixer -c _0_ sset Mic nocap*
 ====
-使用者應該參考指令 `amixer scontents` 輸出的簡化混音器名稱與內容，依照需求選擇適合的指令。
+使用者應該參考指令 `amixer scontents` 輸出的混音器簡化名稱與內容，依照需求選擇適合的指令。
 如果要取消裝置的靜音功能（啟用裝置），必須將上述指令中的 `mute` 改為 `unmute` 、 `nocap` 改為 `cap` ，
 而要設定裝置的音量時，直接將該參數替換為 0%~100% 的百分比值即可。
-另外，停用**自動靜音模式**(auto-mute mode) 也可能對於減少噪音有點幫助：
+另外如前段所述，停用**自動靜音模式**(auto-mute mode) 也會對於減少噪音有點幫助：
 ====
 root# *amixer -c _0_ sset "Auto-Mute Mode" Disabled*
 ====
@@ -347,7 +348,7 @@ root# *pactl unload-module module-device-manager*
 root# *pactl set-source-port _3_ analog-input-mic* +
 root# *pactl set-default-source _3_*
 ====
-或是與輸入來源音量相關的設定：
+或是進行與輸入來源音量相關的設定：
 ====
 root# *pactl set-source-mute _53_ 1* \#mute +
 root# *pactl set-source-mute _53_ 0* \#unmute +
@@ -355,14 +356,14 @@ root# *pactl set-source-volume _53_ 50%*
 ====
 
 套件 `pavucontrol` 包含了同名的圖形介面設定程式，適合進行一般的項目操作。
-雖然看起來衹是單純的設定程式，但是安裝或移除的動作，仍然有可能會影響音訊次系統的行為。
+雖然看起來衹是單純的設定程式，但是安裝或移除套件的動作，仍然有可能會影響音訊次系統的行為。
 
 ==== 測試
 單純測試喇叭功能可以用 `speaker-test` 命令：
 ====
 user$ *speaker-test --device hw:CARD=Generic_1,DEV=0 --channels 2 --rate 48000*
 ====
-或是藉由 `alsa-utils-alsabat` 套件提供的 `alsabat` 命令。
+或是藉助 `alsa-utils-alsabat` 套件提供的 `alsabat` 命令。
 
 最簡單的測試方法，可以經由 `arecord` 與 `aplay` 兩個命令來完成。
 其中裝置名稱的寫法可以參考 `-L` 選項的輸出，或是簡化為形似 `hw:0` 的模式，做為命令 `aplay` 與 `arecord` 等命令的 `-D` 指定選項值。

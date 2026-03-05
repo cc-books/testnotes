@@ -13,6 +13,7 @@ A
 *ACPI*　　Advanced Configuration and Power Interface +
 *ACS*　　 Advanced Card Systems +
 *AHCI*　　Advanced Host Controller Interface +
+*AIN*　　 Analog INput +
 *AIO*　　 All-In-One +
 *ALSA*　　Advanced Linux Sound Architecture +
 *AMD*　　 Advanced Micro Devices, inc. +
@@ -43,6 +44,8 @@ C
 *CDMA*　　Code-Division Multiple Access +
 *CF*　　　Compact Flash +
 *CFET*　　Complementary Field-Effect Transistor +
+====
+====
 *CIFS*　　Common Internet File System +
 *CISC*　　Complex Instruction Set Computer +
 *CLI*　　 Command-Line Interface +
@@ -69,6 +72,7 @@ D
 *DIMM*　　Dual In-line Memory Module +
 *DM*　　　Display Manager +
 *DMA*　　 Direct Memory Access +
+*DMAR*　　Direct Memory Access Remapping +
 *DMI*　　 Direct Media Interface +
 *DNS*　　 Domain Name System +
 *DOM*　　 Disk On Module +
@@ -93,13 +97,13 @@ E
 *EDID*　　Extended Display Identification Data +
 *eDP*　　 embedded DisplayPort +
 *EEPROM*　Electrically-Erasable Programmable Read-Only Memory +
-*EETI*　　eGalax_eMPIA Technology Inc. +
+*EETI*　　EGalax_EMPIA Technology Inc. +
 *EFI*　　 Extensible Firmware Interface +
 *EHCI*　　Enhanced Host Controller Interface +
-*eMMC*　　embedded Multi Media Card +
+*eMMC*　　embedded Multi-Media Card +
 *ErP*　　 Energy-related Products +
 *ESC*　　 Epson Standard Code +
-*ESP*　　 EFI system partition +
+*ESP*　　 EFI System Partition +
 *eTT*　　 effectively TesTed +
 *eUFS*　　embedded Universal Flash Storage +
 ====
@@ -141,6 +145,8 @@ H
 *HDMI*　　High Definition Multimedia Interface +
 *HID*　　 Human Interface Device +
 *HPD*　　 Hot Plug Detect +
+*HSDPA*　 H-Speed Downlink Packet Access +
+*HTML*　　HyperText Markup Language +
 *HTTP*　　HyperText Transfer Protocol +
 *HTTPS*　 HyperText Transfer Protocol Secure +
 ====
@@ -165,18 +171,25 @@ I
 *ISO*　　 International Organization for Standardization +
 ====
 
+J
+====
+*JSON*　　JavaScript Object Notation +
+====
+
 K
 ====
 *KMS*　　 Kernel Mode-Setting +
 *KVM*　　 Kernel-based Virtual Machine +
 ====
+{empty} +
 
 L
 ====
 *LCD*　　 Liquid-Crystal Display +
 *LED*　　 Light-Emitting Diode +
 *LILO*　　LInux LOader +
-*LPC*　　 Low Pin Count Bus +
+*LPC*　　 Low Pin Count bus +
+*LPD*　　 Line Printer Daemon +
 *LPT*　　 Line Printer Terminal +
 *LTE*　　 Long-Term Evolution +
 *LTS*　　 Long-Term Support +
@@ -192,7 +205,7 @@ M
 *MFA*　　 Multi-Factor Authentication +
 *ME*　　　intel Management Engine +
 *MIME*　　Multipurpose Internet Mail Extensions +
-*MMC*　　 Multi Media Card +
+*MMC*　　 Multi-Media Card +
 *MMIO*　　Memory-Mapped Input/Output +
 *MODEM*　 MOdulator-DEModulator +
 *MOSFET*　Metal-Oxide-Semiconductor Field-Effect Transistor +
@@ -212,6 +225,7 @@ N
 *NVMe*　　Non-Volatile Memory express +
 *NVRAM*　 Non-Volatile Random-Access Memory +
 ====
+{empty} +
 
 O
 ====
@@ -220,6 +234,7 @@ O
 *OMTP*　　Open Mobile Terminal Platform +
 *OS*　　　Operating System +
 *OSD*　　 On-Screen Display +
+*OSI*　　 Open System Interconnection +
 *OSS*　　 Open Sound System +
 *OTG*　　 On-The-Go +
 ====
@@ -232,6 +247,7 @@ P
 *PCM*　　 Pulse-Code Modulation +
 *PC/SC*　 Personal Computer/Smart Card +
 *PDF*　　 Portable Document Format +
+*PDT*　　 Portable Data Terminal +
 *PHP*　　 PHP: Hypertext Preprocessor +
 *PID*　　 Process IDentifier | Product IDentifier +
 *PIO*　　 Programmable Input/Output +
@@ -254,6 +270,7 @@ Q
 *QEMU*　　Quick EMUlator +
 *QR-Code* Quick-Response Code +
 ====
+{empty} +
 
 R
 ====
@@ -284,6 +301,7 @@ S
 *SDRAM*　 Synchronous Dynamic Random-Access Memory +
 *SELinux* Security-Enhanced Linux +
 *SFP*　　 Small Form-factor Pluggable +
+*SHA*　　 Secure Hash Algorithm +
 *SIM*　　 Subscriber Identity Module +
 *SMB*　　 Server Message Block +
 *SMBIOS*　System Management BIOS +
@@ -337,15 +355,18 @@ V
 *VA*　　　Video Acceleration +
 *VBE*　　 VESA BIOS Extensions +
 *VCP*　　 Virtual COM Port +
+*VCS*　　 Version Control System +
 *VESA*　　Video Electronics Standards Association +
 *VFD*　　 Vacuum Fluorescent Display +
 *VFS*　　 Virtual File System +
 *VGA*　　 Video Graphics Array +
+====
+====
 *VID*　　 Vendor IDentifier +
 *VMD*　　 Volume Management Device +
 *VNC*　　 Virtual Network Computing +
 *VT*　　　Virtual Terminal +
-*VT-d*　　Virtualization Technology for Directed i/o +
+*VT-d*　　Virtualization Technology for directed i/o +
 ====
 
 W
@@ -362,5 +383,7 @@ X
 *XDG*　　 X Desktop Group +
 *XDMCP*　 X Display Manager Control Protocol +
 *XHCI*　　eXtensible Host Controller Interface +
+*XML*　　 eXtensible Markup Language +
 *XPM*　　 X PixMap +
+*Xvfb*　　X virtual frame buffer +
 ====

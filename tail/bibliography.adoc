@@ -9,12 +9,11 @@
 [big]*前言* +
 [small]*https://github.com/asciidoctor/asciidoctor-pdf* +
 [small]*https://github.com/chloerei/asciidoctor-pdf-cjk* +
-[small]*https://www.vicsys.com.tw/zh-hant/tech/winlin/adoc-syntax.html* +
 [small]*https://www.huanlintalk.com/2018/01/hello-asciidoctor-pdf-with-cjk.html* +
 [small]*https://github.com/asciidoctor/asciidoctor-pdf/issues/858* +
 
 [big]*準備工作* +
-[small]*https://saucelabs.com/amp/blog/simulators-vs-emulators-whats-the-difference-anyway* +
+[small]*https://saucelabs.com/resources/blog/simulators-vs-emulators-whats-the-difference-anyway* +
 [small]*https://ostechnix.com/understanding-common-port-numbers/* +
 [small]*https://blog.mozilla.org/security/2021/07/20/stopping-ftp-support-in-firefox-90/* +
 [small]*https://www.cbtnuggets.com/common-ports/what-is-port-5900* +
@@ -28,6 +27,7 @@
 [big]*系統韌體* +
 [small]*https://blog.thomasmarcussen.com/unified-extensible-firmware-interface-uefi/* +
 [small]*https://unix.stackexchange.com/questions/636263/how-to-verify-signed-uefi-binaries* +
+[small]*https://docs.kernel.org/filesystems/efivarfs.html* +
 
 [big]*作業系統安裝* +
 [small]*https://www.tecmint.com/su-vs-sudo-and-how-to-configure-sudo-in-linux/* +
@@ -44,17 +44,14 @@
 
 [big]*命令列模式* +
 [small]*https://speakerdeck.com/bluebat/bash-basics* +
-[small]*https://www.gnu.org/software/bash/manual/bash.html* +
 
 [big]*檔案與目錄* +
 [small]*https://talk.ltn.com.tw/article/paper/1445039* +
 
 [big]*軟體安裝* +
-[small]*https://www.gnu.org/software/make/manual/html_node/index.html* +
 [small]*https://makefiletutorial.com/* +
 
 [big]*系統裝置* +
-[small]*https://developer.technexion.com/docs/using-gpio-from-a-linux-shell* +
 [small]*https://wiki.t-firefly.com/Core-3568J/driver_gpio.html* +
 [small]*https://www.tecmint.com/reset-usb-device-linux/* +
 [small]*https://www.daniloaz.com/en/differences-between-physical-cpu-vs-logical-cpu-vs-core-vs-thread-vs-socket/* +
@@ -69,12 +66,9 @@
 [small]*https://docs.voidlinux.org/config/ssd.html* +
 
 [big]*顯示裝置* +
-[small]*http://www.playtool.com/pages/dvicompat/dvi.htm* +
 [small]*https://www.kernel.org/doc/Documentation/fb/modedb.txt* +
-[small]*https://www.osadl.org/Single-View.111+M57253e83fd1.0.html* +
 [small]*https://wiki.archlinux.org/index.php/Intel_graphics* +
 [small]*https://en.wikipedia.org/wiki/Framebuffer* +
-[small]*https://askubuntu.com/questions/150066/split-monitor-in-two/998435#998435* +
 [small]*https://discussion.fedoraproject.org/t/plymouth-boot-screen-with-three-dots* +
 
 [big]*輸入裝置* +
@@ -84,7 +78,6 @@
 [big]*影音裝置* +
 [small]*https://wiki.archlinux.org/index.php/Advanced_Linux_Sound_Architecture* +
 [small]*https://www.kernel.org/doc/html/latest/sound/hd-audio/notes.html* +
-[small]*https://forums.raspberrypi.com/viewtopic.php?t=276782* +
 [small]*https://askubuntu.com/questions/615550/on-reboot-headphones-are-muted* +
 [small]*https://www.tanstaafl.co.uk/2013/11/linux-support-for-imaging-source-usb-ccd-astronomy-cameras/* +
 [small]*https://faq.yamaha.com/tw/s/article/000027826* +
@@ -94,9 +87,9 @@
 [small]*https://askubuntu.com/questions/337775/how-do-i-get-a-rt2800usb-wireless-device-working* +
 [small]*https://stackoverflow.com/questions/62864421/toggling-the-wi-fi-with-xf86wlan-and-script* +
 [small]*https://askubuntu.com/questions/909213/ethernet-fails-to-initialize* +
+[small]*https://www.hiyun.com.tw/news/blog/what-is-osi-model* +
 
 [big]*電力供應* +
-[small]*https://www.phoenixcontact.com/zh-tw/company/all-electric-society/zhi-liu-dian* +
 [small]*https://bbs.archlinux.org/viewtopic.php?pid=1953760#p1953760* +
 [small]*https://discourse.ubuntu.com/t/disable-screen-dimming-ubuntu-unity-24-04/60615* +
 [small]*https://www.techbang.com/posts/17396-power-states-know-how-many-g-p-t-s-c-read* +
