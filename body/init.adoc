@@ -40,7 +40,7 @@
 一般而言，達到圖形介面目標需要啟動以下軟體：
 
 . **顯示管理程式**(display manager)：GDM, SDDM 或 LightDM
-. **視窗系統**(window system)：X（X.org 或 XWayland）
+. **視窗系統**(window system)：X（X.Org 或 XWayland）
 . **接待程式**(greeter)：GDM Greeter 或 LightDM GTK Greeter
 . **桌面環境**(desktop environment)：GNOME, KDE 或 MATE
 . **作業階段管理程式**(session manager)：GNOME Session 或 KDE Session
@@ -111,12 +111,12 @@ fi
 ./etc/systemd/system/自訂.service
 ....
 [Unit]
-Description=自訂 Service
+Description=自訂服務
 After=network-online.target
 
 [Service]
 Type=forking
-ExecStart=/usr/bin/自訂
+ExecStart=/usr/bin/自訂服務
 KillMode=process
 Restart=on-failure
 
@@ -168,11 +168,11 @@ alias joe='joe --wordwrap'   <4>
 在 systemd 的系統初始模式中，是由 `graphical.target` 代表圖形階段的執行目標，並且會啟動顯示管理程式。
 Linux 系統提供許多不同的顯示管理程式，而使用者所選用的就會以符號鏈結到 `display-manager.service` 服務。
 顯示管理程式接著執行 `X` 伺服器命令（通常是 `Xorg` 或 `Xwayland` 的符號鏈結），以建立 **X 視窗系統**，
-並執行 `/etc/X11/xinit/xinitrc` 去呼叫 `/etc/X11/xinit/xinitrc.d/` 中的命令稿程式，用以初始化圖形階段。
+並執行 `/etc/X11/xinit/xinitrc` 去呼叫 `/etc/X11/xinit/xinitrc.d/` 中的命令稿程式，用來初始化圖形階段。
 
-使用者在圖形階段下從登入到登出的操作過程，稱之為一次 **X 作業階段**(X session)。
+使用者在圖形階段從登入到登出的操作過程，稱之為一次 **X 作業階段**(X session)。
 當顯示管理程式所呼叫的**接待程式**(greeter) 處理完使用者的登入之後，顯示管理程式就會執行登入命令殼，然後在圖形階段的基礎上建立使用者的 X 作業階段。
-最陽春的 X 作業階段畫面上，可能除了 X 形狀的滑鼠游標與終端機仿真視窗之外空無一物，但一般的使用者還是期望看見一個能滿足各種需求的**桌面環境**(desktop environment)。
+最陽春的 X 作業階段畫面中，可能除了 X 形狀的滑鼠游標與終端機仿真視窗之外空無一物，但一般的使用者還是期望看見一個能滿足各種需求的**桌面環境**(desktop environment)。
 
 適用於桌面環境的程式，通常會有一個對應的組態檔(`*.desktop`)，用來指明軟體的名稱、路徑、描述、圖示、分類、綁定檔案類型等資料。
 安裝好的 X 作業階段在 `/usr/share/xsessions` 目錄中會有對應的組態檔，做為承接顯示管理程式的呼叫，並且後續呼叫其他的組態檔。
@@ -195,17 +195,17 @@ image::thiny-session.png[width=80%,align="center"]
 為了解決軟體在不同的桌面環境之間的**互操作性**(interoperability)，多數的流行桌面環境都會遵循由 freedesktop.org 組織所倡議的 *XDG*(X 桌面工作群組) 標準：
 包括了一些共用的環境變數，以及標準化的檔案名稱與路徑。
 例如 `/etc/xdg/autostart/` 目錄存放了套用於所有桌面環境的自動啟動組態檔，個別的桌面環境還會讀取類似 `/usr/share/_gnome_/autostart/*.desktop` 檔案的內容，
-而使用者自訂的自動啟動組態檔則可以放在 `$HOME/.config/autostart/` 之中。
+而使用者自訂的自動啟動組態檔則可以存放在 `$HOME/.config/autostart/` 之中。
 
-另外 XDG 標準也建議了一些通行於不同散佈版或桌面環境的命令，例如 `xdg-user-dirs-gtk-update` 就是用來管理個人家目錄中，常用的子目錄名稱，
+另外，XDG 標準也建議了一些通行於不同散佈版或桌面環境的命令，例如 `xdg-user-dirs-gtk-update` 是用來管理個人家目錄中常用的子目錄名稱；
 而指令 `xdg-settings set default-web-browser _firefox_.desktop` ，會將個人 X 作業階段中預設的網頁瀏覽器，設定為 `firefox.desktop` 所指定的軟體（此處即為 Firefox）。
 
 若是跳過圖形階段目標與顯示管理程式，直接從文字模式經由 `startx` -> `xinit` -> `X` 的方式進入圖形環境，
-有的散佈版會讀取執行 `/etc/X11/Xsession` 以及 `/etc/X11/Xsession.d/` 目錄中的檔案，
+多數的散佈版會讀取執行 `/etc/X11/Xsession` 以及 `/etc/X11/Xsession.d/` 目錄中的檔案，
 然後接續使用者家目錄中的 `.xinitrc` 、 `.xsession` 或是 `.Xclients` 命令稿檔案。
 某些散佈版的 X 作業階段，還支援讀取並執行 `$HOME/.xprofile` 的內容。
 
-使用者需要在以上檔案中自行啟動已安裝的桌面環境，或是手動執行自訂桌面環境所需的個別程式。
+使用者可以在上述檔案中自行啟動已安裝的桌面環境，或是手動執行自訂桌面環境所需的個別程式。
 個人圖形環境自動執行命令稿的內容舉例如下：
 
 .$HOME/.xprofile
@@ -216,11 +216,11 @@ rxvt -fg white -bg black -fn xft:size=20 &   <3>
 Telegram -noupdate &   <4>
 ....
 <1> 有些特殊的螢幕配置，無法利用桌面環境的圖形設定介面達成。
-<2> 有些個人化的守護程式，沒有提供方便的執行方法。
-<3> 萬一桌面環境沒有提供執行終端機仿真器的方法，需要至少呼叫一個出來。
+<2> 有些個人化的守護程式，沒有提供方便的執行前端。
+<3> 萬一桌面環境沒有預設執行終端機仿真器的組態，需要至少呼叫一個出來。
 <4> 呼叫第三方軟體的執行命令。
 
-如果第三方軟體安裝後沒有提供啟動組態檔，當然也可以自製一個組態檔，放在個人的自動啟動目錄。
+如果某個軟體安裝後沒有提供啟動組態檔，當然也可以自製一個組態檔，放在個人的自動啟動目錄。
 以傳訊軟體 Telegram 為例：
 
 .$HOME/.config/autostart/telegram.desktop
@@ -248,7 +248,7 @@ MimeType=x-scheme-handler/tg;   <5>
 
 ==== 語區初始化
 豐富的**語區**(locale) 支援是自由軟體的特色之一，同樣一套系統就可以依照不同的語言與地區做出介面的改變。
-語區的名稱長度並非是固定的，從最原始的代號 `C` 到複雜的 `cmn_TW.UTF-8` 都有可能，而個別軟體的支援程度也不相同。
+語區的名稱長度並非是固定的，從最原初的代號 `C` 到複雜的 `cmn_TW.UTF-8` 都有可能，而個別軟體的支援程度也不相同。
 雖然基本的硬體測試都是以 *en_US*(英語－美國) 為標準，但是因為對使用者體驗有顯著的影響，因此還是需要稍微有所了解。
 
 開機管理程式 GRUB 雖然接受組態檔中的 `grub_lang` 做為語區的變數，但是一般並未特別予以設定。
@@ -262,7 +262,7 @@ root# *localectl set-locale LANG=__en_US.UTF-8__*
 初始化階段可能具有影響力的檔案包括 `/etc/environment`, `/etc/locale.conf`, `/etc/default/locale`, `/etc/sysconfig/i18n` 。
 部分顯示管理程式也可能會讀取諸如 `/var/cache/_lightdm_/dmrc/$USER.dmrc` 以及 `$HOME/.dmrc` 檔案中的設定。
 即時的語區設定值，則是由主要變數 `LANG` 配合以 `LC_` 為名稱起始的一群環境變數所記錄，
-因此對於國際化支援不佳的較舊程式，可以在執行前單獨設定語區為原始值試試：
+因此對於國際化支援不佳的老舊程式，可以在執行前單獨設定語區為原初值試試：
 ====
 user$ *LC_ALL=C _xload_*
 ====
@@ -277,15 +277,15 @@ user$ *LC_ALL=C _xload_*
 export LANG=cmn_TW.UTF-8
 fbterm
 ....
-同樣方式也適合使用較新顯示機制的 `kmscon` 套件，但要注意並非是在使用者空間中直接呼叫，而是以 `kmsconvt@` 服務來替代 `getty@` 服務。
+同樣方式也適合使用了較新顯示機制的 `kmscon` 套件，但要注意並非在使用者空間中直接呼叫，而是以 `kmsconvt@` 服務來替代更上層的 `getty@` 服務。
 
 
 === 自動登入設定
-基於測試的需求，例如要進行長時間的重複開關機測試，就會需要將系統設定為不需詢問密碼而自動登入。
+基於某些測試的需求，例如要進行長時間的重複開關機測試，就會需要將系統設定為不需詢問密碼而自動登入。
 
 ==== 空密碼限制
 有些散佈版預設不允許直接以超級使用者身分登入，因此安裝時並未設定 `root` 的密碼。
-如果想要以 `root` 身分自動登入，就必須先設定好密碼，否則可能會被其他的機制所阻擋：
+如果想要以 `root` 身分自動登入，就必須先完成設定密碼，否則可能會被安全的機制所阻擋：
 ====
 root# *passwd* +
 更改使用者 root 的密碼。 +
@@ -340,13 +340,13 @@ ExecStart=-/sbin/agetty -a autouser --noclear - $TERM
 ....
 
 ==== PAM 限制
-以上提到的各種限制，也可能會受到隨插式認證模組所管控。
-模組的組態檔案是位於 `/etc/pam.d/` 目錄中的文字檔，通常由各個軟體分別讀取名稱相關的固定檔案。
+以上提到的各種限制，也可能會受到**隨插式認證模組**所管控。
+模組的組態檔案位於 `/etc/pam.d/` 目錄中的文字檔，通常由各個軟體分別讀取名稱相關的固定檔案。
 例如 `lightdm`, `lightdm-autologin`, `lightdm-greeter` 等檔案，負責控管顯示管理程式 LightDM 的認證過程。
-另外還有一些常被軟體組態檔所匯入，因而對於整個系統都有作用的組態檔，像是 `system-auth`, `password-auth` 等等。
+另外還有一些常被其他軟體參照匯入，因而對於整個系統都有作用的組態檔，像是 `system-auth`, `password-auth` 等等。
 
 如果想要設定成以 `root` 身分自動登入，而本章前述的限制都已解除，但是系統仍然拒絕通過，就有可能是受到 PAM 機制所阻擋。
-可以在 `/etc/pam.d/*` 中搜尋以下條目，並且於列首加上註解符號(#) 後再試試：
+可以在 `/etc/pam.d/*` 中搜尋以下條目，並且於列首加上註解符號(`#`) 後再試試：
 ....
 #auth required pam_succeed_if.so user != root quiet_success
 ....

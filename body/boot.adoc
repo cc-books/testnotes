@@ -165,7 +165,7 @@ root# *grub2-install --target=i386-pc --root-directory=/mnt --force _/dev/sda_*
 
 ==== SYSLINUX
 曾經流行的開機載入程式為 LILO，而較新的 rEFInd 雖然支援 UEFI 但仍很少人使用。
-systemd 系統初始模式本身有提供一個簡易開機載入軟體 `systemd-boot` ，但是並未受到一般使用者的注意。
+systemd 系統初始模式本身有提供一個簡易開機載入軟體 `systemd-boot` ，不過並未受到一般使用者的注意。
 SYSLINUX 則是目前足以與 GRUB 並稱的多用途開機載入軟體家族，其中適用於 BIOS 模式的稱為 EXTLINUX。
 如果想要換用 EXTLINUX，安裝步驟的範例如下：
 ====
@@ -175,7 +175,7 @@ root# *cd /usr/share/syslinux* +
 root# *dd bs=440 count=1 conv=notrunc if=mbr.bin of=/dev/sda* +
 ====
 接著還要編輯在 `/boot/extlinux/` 目錄下，檔案 `extlinux.conf` 與 `linux.conf` 的內容。
-在 UEFI 模式下也有 `syslinux.efi` 可以用來代替 `grubx64.efi` 的功能，但是使用情況並不普遍，同時也要注意儲存裝置的驅動支援程度。
+在 UEFI 模式下也有 `syslinux.efi` 可以用來代替 `grubx64.efi` 的功能，但是使用情況更不普遍，同時也要注意儲存裝置的驅動支援程度。
 
 === 載入內核
 如果開機管理程式設定了多重開機選項，而且沒有設定為隱藏，就會在運行時顯示開機選單。
@@ -254,7 +254,7 @@ root# *dd bs=440 count=1 conv=notrunc if=mbr.bin of=/dev/sda* +
 裝置韌體版本愈新愈好，至少應該等於現用的內核；可以直接上內核網站下載，或是嘗試安裝散佈版提供的新版裝置韌體套件。
 
 ==== 編譯模組
-有些內核模組並未隨附內核而散佈：也許是衹存在於開發者原始碼儲存庫中，尚未被內核所接受；更有可能是由廠商提供的裝置驅動程式，其中包含了不適合匯入內核開發分支的部分。
+有些內核模組並未隨附內核而散佈：也許是衹存在於開發者原始碼儲存庫中，尚未被內核專案所接受；更有可能是由廠商提供的裝置驅動程式，其中包含了不適合匯入內核開發分支的部分。
 一般來說，測試人員需要將這類軟體下載後，自行編譯成外掛模組的形式再使用。
 
 自行編譯內核模組除了基本的 `gcc`, `make` 等編譯工具之外，還需要先安裝內核的開發套件 `kernel-devel` ，以及內核的標頭檔套件 `kernel-headers` 。
