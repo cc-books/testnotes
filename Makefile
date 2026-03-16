@@ -1,4 +1,4 @@
-all: date cover pdf show
+all: cover pdf show
 
 date:
 	touch main.adoc
