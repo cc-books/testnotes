@@ -284,8 +284,8 @@ fbterm
 基於某些測試的需求，例如要進行長時間的重複開關機測試，就會需要將系統設定為不需詢問密碼而自動登入。
 
 ==== 空密碼限制
-有些散佈版預設不允許直接以超級使用者身分登入，因此安裝時並未設定 `root` 的密碼。
-如果想要以 `root` 身分自動登入，就必須先完成設定密碼，否則可能會被安全的機制所阻擋：
+有些散佈版預設不允許直接以超級使用者身分登入，因此安裝時並未設定 root 的密碼。
+如果想要以 root 身分自動登入，就必須先完成設定密碼，否則可能會被安全的機制所阻擋：
 ====
 root# *passwd* +
 更改使用者 root 的密碼。 +
@@ -301,7 +301,7 @@ passwd：所有認證符記都已成功更新。
 root# *passwd -d _使用者賬號_*
 ====
 
-假設希望固定以使用者 `autouser` 的身分自動登入，那麼依照顯示管理程式的不同，需要修改各自的組態檔：
+假設希望固定以使用者 _autouser_ 的身分自動登入，那麼依照顯示管理程式的不同，需要修改各自的組態檔：
 
 ./etc/gdm3/custom.conf
 ....
@@ -324,12 +324,12 @@ autologin=autouser
 ....
 
 ==== 文字登入限制
-如果之前執行過 `systemctl set-default multi-user` 指令，系統啟動後就會停留在文字登入畫面。
-由於虛擬終端機的畫面是基於影格緩衝區裝置，由 `/usr/lib/systemd/system/getty@.service` 服務所控制，
+如果之前執行過 `systemctl set-default multi-user` 指令來變更預設目標，系統啟動後就會停留在文字登入畫面。
+由於虛擬終端機的畫面是基於影格緩衝區裝置，受 `/usr/lib/systemd/system/getty@.service` 服務所控制，
 並非開機後最優先呼叫的軟體，因此需要等待一下才會執行完成。
 
 通常想要修改系統服務時，不會去直接編輯系統目錄下的檔案。
-因此可以先將原來的檔案拷貝到 `/etc/systemd/system/getty@.service` ，
+因此可先將原來的檔案拷貝到 `/etc/systemd/system/getty@.service` ，
 然後再搜尋其中執行 `agetty` 的指令，並加入 `-a _autouser_` 的引數：
 
 ./etc/systemd/system/getty@.service
@@ -340,12 +340,12 @@ ExecStart=-/sbin/agetty -a autouser --noclear - $TERM
 ....
 
 ==== PAM 限制
-以上提到的各種限制，也可能會受到**隨插式認證模組**所管控。
+以上提到的各種限制，也可能會受到**隨插式認證模組**(PAM) 所管控。
 模組的組態檔案位於 `/etc/pam.d/` 目錄中的文字檔，通常由各個軟體分別讀取名稱相關的固定檔案。
 例如 `lightdm`, `lightdm-autologin`, `lightdm-greeter` 等檔案，負責控管顯示管理程式 LightDM 的認證過程。
 另外還有一些常被其他軟體參照匯入，因而對於整個系統都有作用的組態檔，像是 `system-auth`, `password-auth` 等等。
 
-如果想要設定成以 `root` 身分自動登入，而本章前述的限制都已解除，但是系統仍然拒絕通過，就有可能是受到 PAM 機制所阻擋。
+如果想要設定成以 root 身分自動登入，而本章前述的限制都已解除，但是系統仍然拒絕通過，就有可能是受到 PAM 機制所阻擋。
 可以在 `/etc/pam.d/*` 中搜尋以下條目，並且於列首加上註解符號(`#`) 後再試試：
 ....
 #auth required pam_succeed_if.so user != root quiet_success

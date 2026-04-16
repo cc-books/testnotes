@@ -254,11 +254,12 @@ P
 *PLC*　　 Programmable Logic Controller +
 *PMIO*　　Port-Mapped Input/Output +
 *PoE*　　 Power over Ethernet +
-*POS*　　 Point of Sale +
+*POS*　　 Point Of Sale +
 *POSIX*　 Portable Operating System Interface +
 *POST*　　Power On Self Test +
 *PPD*　　 Postscript Printer Description +
 *PPI*　　 Pixels Per Inch +
+*PSR*　　 Panel Self Refresh +
 *PSU*　　 Power Supply Unit +
 *PS/2*　　Personal System/2 +
 *PWD*　　 Print Working Directory +
@@ -336,6 +337,7 @@ U
 *UDMA*　　Ultra Direct Memory Access +
 *UEFI*　　Unified Extensible Firmware Interface +
 *UFS*　　 Universal Flash Storage +
+*UHCI*　　Universal Host Controller Interface +
 *UMA*　　 Unified Memory Architecture +
 *UNDI*　　Universal Network Driver Interface +
 *URI*　　 Uniform Resource Identifier +
@@ -359,9 +361,9 @@ V
 *VESA*　　Video Electronics Standards Association +
 *VFD*　　 Vacuum Fluorescent Display +
 *VFS*　　 Virtual File System +
+====
+====
 *VGA*　　 Video Graphics Array +
-====
-====
 *VID*　　 Vendor IDentifier +
 *VMD*　　 Volume Management Device +
 *VNC*　　 Virtual Network Computing +

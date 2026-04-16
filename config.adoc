@@ -17,7 +17,7 @@
 //:datadir: {docdir}/data
 :front-cover-image: image/cover-front.png
 :back-cover-image: image/cover-back.png
-:title-logo-image: image/slat-name.png
+:title-logo-image: image/slat_name.svg
 :lang: cmn
 :encoding: utf-8
 :toc: macro

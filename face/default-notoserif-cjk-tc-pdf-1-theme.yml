@@ -28,7 +28,7 @@ page:
   layout: portrait
   initial_zoom: FitH
 ##  margin: [0.5in, 0.67in, 0.67in, 0.67in]
-  margin: [16mm, 0mm, 18mm, 0mm]
+  margin: [15mm, 0mm, 19mm, 0mm]
   # margin_inner and margin_outer keys are used for recto/verso print margins when media=prepress
 ##  margin_inner: 0.75in
   margin_inner: 22mm
@@ -99,9 +99,6 @@ horizontal_rhythm: $base_line_height_length
 vertical_spacing: $vertical_rhythm
 link:
   font_color: 428BCA
-mark:
-  font_color: FFFFFF
-  background_color: 000000  
 # literal is currently used for inline monospaced in prose and table cells
 literal:
   font_color: B12146
@@ -118,8 +115,9 @@ key:
   font_family: $literal_font_family
   separator: "\u202f+\u202f"
 mark:
-  background_color: FFFF00
-  border_offset: 1
+  font_color: 888888
+  background_color: FFFFFF
+#  border_offset: 1
 menu:
   caret_content: " <font size=\"1.15em\"><color rgb=\"b12146\">\u203a</color></font> "
 heading:
@@ -367,9 +365,9 @@ footer:
   # 20221012 KaiGenGothicTW ADD  
   font_color: $base_font_color  
   # NOTE if background_color is set, background and border will span width of page
-  border_color: DDDDDD
+  border_color: 999999
   border_width: 0.25
-  height: $base_line_height_length * 2.5
+  height: $base_line_height_length * 3
   line_height: 1
   padding: [$base_line_height_length / 2, 1, 0, 1]
   vertical_align: top

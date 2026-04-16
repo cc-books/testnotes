@@ -253,7 +253,7 @@ label dos
 如果想要依個別的網路卡號分別設定，還可以在 `pxelinux.cfg/` 目錄中建立像是 `_nn-xx-xx-xx-xx-xx-xx_` 的檔案。
 檔名中的 _nn_ 是以數字表示的優先順序，_xx-xx-xx-xx-xx-xx_ 則是小寫的網路卡號，內容格式則與 `default` 檔案相同。
 
-UEFI 模式的 `grubx64.efi` 預設會讀取同一目錄中的 `grub.cfg` 做為組態檔，而不同網卡的設定可以放在 `grub.cfg-_nn-xx-xx-xx-xx-xx-xx_` 名稱格式的檔案中。
+UEFI 模式的 `grubx64.efi` 預設會讀取同一目錄中的 `grub.cfg` 做為組態檔，而不同網路卡的設定可以放在 `grub.cfg-_nn-xx-xx-xx-xx-xx-xx_` 名稱格式的檔案中。
 
 ./var/lib/tftpboot/uefi/grub.cfg
 ....
@@ -311,7 +311,7 @@ menuentry 'TinyCore 16.1' {
 
 不過，有些散佈版的標準初始記憶體檔案系統組態並不支援網路開機，這可以藉由 `lsinitrd -m` 指令的輸出來確認，因此必須先在原系統中重建初始記憶體檔案系統：
 ====
-root# *dracut -a "network nfs" --add-drivers "_r8169_ nfsv4" initramfs.img $(uname -r)*
+root# *dracut -a "network nfs" --add-drivers "_r8169_ nfsv4" initramfs.img "$(uname -r)"*
 ====
 
 製作前要確認是否已安裝 `dracut-network` 與 `nfs-utils` 套件，也要包含無碟系統的網路卡內核驅動模組，這樣新產生出來的 `initramfs.img` 才能用於網路開機。

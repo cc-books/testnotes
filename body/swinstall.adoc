@@ -195,7 +195,7 @@ root# *install -d /lib/modules/$(uname -r)/updates* +
 root# *install -m644 _模組名稱_.ko /lib/modules/$(uname -r)/updates*
 ====
 
-依照 Make 組建管理機制，習慣會以 `uninstall` 目標參數來呼叫解除安裝的動作：
+依照 Make 組建管理機制，習慣會以 `uninstall` 目標參數來呼叫解除安裝的規則：
 ====
 user$ *make uninstall*
 ====
