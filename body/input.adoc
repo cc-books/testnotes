@@ -57,8 +57,8 @@ Select the device event number [0-9]: ▊
 雖然 USB 介面一般都有向下相容性，但是有些系統韌體仍然需要額外開啟舊式 USB 的支援選項。
 
 除了可以透過相關模組參數來設定裝置的**輪詢間隔**(polling interval)，或是加入共通的 `drm_kms_helper.poll=0` 之外，
-有時仍要利用內核參數 `usbhid.quirks=` 來提供一些設定值，以滿足某些裝置未被自動識別出來的**怪癖**(quirk)。藉由 `lsusb` 命令可以
-辨識出來，鍵盤通常被系統視為一種**人機介面裝置**(HID)，並由內核模組 `usbhid` 負責驅動，較特別的硬體還需要搭配額外的 `hid_*` 模組。
+有時仍要利用內核參數 `usbhid.quirks=` 來提供一些設定值，以滿足某些裝置未被自動識別出來的**怪癖**(quirk)。
+藉由 `lsusb` 命令可以辨識出來，鍵盤通常被系統視為一種**人機介面裝置**(HID)，並由內核模組 `usbhid` 負責驅動，較特別的硬體還需要搭配額外的 `hid_*` 模組。
 對於使用藍牙介面的輸入裝置， `hidp` 則是相應的內核模組。
 如果想要傾印 HID 裝置的描述或串流資料，可以參考 `usbhid-dump` 命令的使用說明。
 
@@ -82,8 +82,8 @@ WARNING: PS/2 介面的非標準鍵盤經過 PS2USB 轉換後，某些掃描碼�
 按下或放開按鍵時，分別會產生一個像是 `e05f` 與 `e0df` 的掃描碼（少數按鍵放開時不產生），兩者之間固定相差 `0x80` 。
 對於未知而無法轉換為內核鍵碼的掃描碼，內核會將其過濾掉，而使用內核參數 `atkbd.softraw=0` 能夠取回部分掃描碼。
 
-指令 `showkey --scancodes` 會顯示後續按鍵的掃描碼，而預設的選項 `--keycodes` 用來顯示內核鍵碼，相關的資料位於 `/usr/include/linux/input.h`。內核鍵碼所
-對應的按鍵事件，請參考 `/usr/include/linux/input-event-codes.h` 的檔案內容。
+指令 `showkey --scancodes` 會顯示後續按鍵的掃描碼，而預設的選項 `--keycodes` 用來顯示內核鍵碼，相關的資料位於 `/usr/include/linux/input.h`。
+內核鍵碼所對應的按鍵事件，請參考 `/usr/include/linux/input-event-codes.h` 的檔案內容。
 掃描碼與內核鍵碼的匹配列表，可以藉由 `kbd` 套件中的 `dumpkeys` 命令列出，變更時則要用到 `setkeycodes` 命令。
 
 鍵碼都是以 255 之內的整數來表示，但同一個按鍵的內核鍵碼與 X 鍵碼並不會相同。
@@ -96,11 +96,12 @@ X 鍵符通常是代表按鍵意義的英文單字或組合詞，其中的英文
 鍵盤上的一般按鍵直接按下就會產生作用，像是送出英數字元或標點符號，以及常見的功能按鍵。
 以下列出部分代表的 X 鍵符與事件代碼：
 
-[.center,width="50%",cols="3,2,4",options="header"]
+[.center,width="55%",cols="3,2,4",options="header"]
 |====
 |按鍵意義|X 鍵符|事件代碼
 |字母 A|A|KEY_A
 |數字 0|0|KEY_0
+|數字鍵盤 +|KP_Add|KEY_PAD_PLUS
 |空白鍵|space|KEY_SPACE
 |功能鍵 F12|F12|KEY_F12
 |螢幕快照|Print|KEY_SYSRQ
@@ -286,7 +287,8 @@ footnote:[鍵盤測試網站 <https://keyboard-tester.com/> 或 <https://key-tes
 user$ *xbindkeys --defaults > _xbindkeysrc_* +
 user$ *xbindkeys -f _xbindkeysrc_ --key*
 ====
-隨即按下想要設定的按鍵，就可以利用文字編輯器來修改檔案 `_xbindkeysrc_` 中該按鍵的對應命令。然後以：
+隨即按下想要設定的按鍵，就可以利用文字編輯器來修改檔案 `_xbindkeysrc_` 中該按鍵的對應命令。
+然後以：
 ====
 user$ *xbindkeys -f _xbindkeysrc_*
 ====
@@ -316,7 +318,7 @@ RFID 讀卡機介面傳統上接在序列埠，或是轉換後的 USB2COM(VCP)�
 `rfdump` 是圖形介面的 RFID 標籤讀取軟體，可以讀取內容符合標準的卡片，但某些測試軟體衹能識別特定的硬體介面。
 
 ==== 接觸式讀卡機
-內嵌晶片的**晶片卡**(IC card) 或稱**智慧卡**(smart card)，是用途相當廣泛的一種識別卡片。
+內嵌晶片的**晶片卡**(IC card) 或稱**靈巧卡**(smart card)，是用途相當廣泛的一種識別卡片。
 接觸式的晶片**讀卡機**(card reader)，是藉由實體針腳接觸來讀取晶片中的資訊。
 
 舊型機種仍有可能使用 PS/2 或 RS-232 接頭，但多數的讀卡機已經藉由 USB 介面連接到主機板，因此可以利用 `lsusb` 命令看到它的廠商、產品識別號。
@@ -345,8 +347,8 @@ root# *dnf install opensc pcsc-lite pcsc-lite-ccid pcsc-tools*
 有些讀卡機的規格支援 `libccid` 卻無法驅動，是因為尚未登錄於裝置列表，
 可以自行修改 `/usr/lib64/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist` ：
 純文字的 XML 檔案包含了廠商識別碼、產品識別碼、產品名稱。
-衹需要將相關資料修改或加入 `ifdVendorID`, `ifdProductID`, `ifdFriendlyName` 三個鍵值段中，
-成為同樣次序的陣列項目，也許就能順利驅動讀卡機。如果測試成功，不妨順便依照 CCID 網站
+衹需要將相關資料修改或加入 `ifdVendorID`, `ifdProductID`, `ifdFriendlyName` 三個鍵值段中，成為同樣次序的陣列項目，也許就能順利驅動讀卡機。
+如果測試成功，不妨順便依照 CCID 網站
 footnote:[CCID Unix 驅動程式專案 <https://ccid.apdu.fr/>]
 中的說明提出登錄要求。
 
@@ -403,8 +405,8 @@ NOTE: 同一套件中還有 `scriptor` 程式，是用來輸出讀卡機指令�
 另外還可以安裝 `esc` 套件，試用一下圖形介面的晶片卡管理程式。
 
 對於某些比較舊的型號，仍然有機會透過調整系統來成功驅動。
-舊型的讀卡機有可能同時受到 `libccid` 與廠商軟體的支援，若是同時安裝兩份驅動函式庫，
-反而容易互相干擾。此時可以移除 `libccid` 套件，衹留下廠商的驅動函式庫試試。
+舊型的讀卡機有可能同時受到 `libccid` 與廠商軟體的支援，若是同時安裝兩份驅動函式庫，反而容易互相干擾。
+此時可以移除 `libccid` 套件，衹留下廠商的驅動函式庫試試。
 
 WARNING: 有些較舊的散佈版與 `pcscd` 搭配的**中介軟體**(middleware) 是 `openct` 而非 `opensc` ，
 其對應 `opensc-tool` 的測試程式則為 `openct-tool` ，但可能不支援新的驅動函式庫。

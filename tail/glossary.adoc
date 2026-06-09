@@ -29,6 +29,8 @@ A
 B
 ====
 *BASH*　　Bourne-Again SHell +
+*BCC*　　 Blind Carbon Copy +
+*BGA*　　 Ball Grid Array +
 *BIOS*　　Basic Input/Output System +
 *BOM*　　 Byte-Order Mark +
 *bpc*　　 bits per component +
@@ -44,8 +46,6 @@ C
 *CDMA*　　Code-Division Multiple Access +
 *CF*　　　Compact Flash +
 *CFET*　　Complementary Field-Effect Transistor +
-====
-====
 *CIFS*　　Common Internet File System +
 *CISC*　　Complex Instruction Set Computer +
 *CLI*　　 Command-Line Interface +
@@ -54,6 +54,7 @@ C
 *COM*　　 COMmunication port +
 *CPIO*　　CoPy In and Out +
 *CPU*　　 Central Processing Unit +
+*CRB*　　 Customer Reference Board +
 *CRC*　　 Cyclic Redundancy Check +
 *CRLF*　　Carriage Return & Line Feed +
 *CRT*　　 Cathode Ray Tube +
@@ -181,7 +182,6 @@ K
 *KMS*　　 Kernel Mode-Setting +
 *KVM*　　 Kernel-based Virtual Machine +
 ====
-{empty} +
 
 L
 ====
@@ -202,6 +202,7 @@ M
 ====
 *MAC*　　 Media Access Control +
 *MBR*　　 Master Boot Record +
+*mDNS*　　multicast Domain Name System +
 *MFA*　　 Multi-Factor Authentication +
 *ME*　　　intel Management Engine +
 *MIME*　　Multipurpose Internet Mail Extensions +
@@ -225,7 +226,6 @@ N
 *NVMe*　　Non-Volatile Memory express +
 *NVRAM*　 Non-Volatile Random-Access Memory +
 ====
-{empty} +
 
 O
 ====
@@ -271,7 +271,6 @@ Q
 *QEMU*　　Quick EMUlator +
 *QR-Code* Quick-Response Code +
 ====
-{empty} +
 
 R
 ====
@@ -361,8 +360,6 @@ V
 *VESA*　　Video Electronics Standards Association +
 *VFD*　　 Vacuum Fluorescent Display +
 *VFS*　　 Virtual File System +
-====
-====
 *VGA*　　 Video Graphics Array +
 *VID*　　 Vendor IDentifier +
 *VMD*　　 Volume Management Device +
