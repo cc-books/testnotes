@@ -312,6 +312,7 @@ S
 *SPI*　　 Serial Peripheral Interface +
 *SPICE*　 Simple Protocol for Independent Computing Environments +
 *SSD*　　 Solid-State Drive +
+*SSID*　　Service Set IDentifier +
 *SSH*　　 Secure SHell +
 *SVG*　　 Scalable Vector Graphics +
 ====

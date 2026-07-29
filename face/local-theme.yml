@@ -25,7 +25,7 @@ font:
   fallbacks: [Noto Sans Mono]
 page:
   margin: [15mm, 0mm, 19mm, 0mm]
-  margin_inner: 22mm
+  margin_inner: 23mm
   margin_outer: 18mm
   size: 176mm x 229mm
 base:
@@ -110,6 +110,8 @@ block:
   padding: [$vertical_rhythm, $vertical_rhythm * 1.25, $vertical_rhythm, $vertical_rhythm * 1.25]
 caption:
   font_size: $base_font_size * 0.95
+admonition:
+  border-width: 0.5
 quote:
   font_family: Iansui Regular
   font_color: $base_font_color
@@ -137,14 +139,13 @@ code:
   font_size: ceil($base_font_size_small)
   padding: $code_font_size * 0.6
   line_height: 1.25
-  line_gap: 3.8
   background_color: F5F5F5
   border_color: CCCCCC
   border_radius: $base_border_radius
   border_width: 0.75
 conum:
-  font_family: $literal_font_family
-  font_color: $literal_font_color
+  font_family: $codespan_font_family
+  font_color: $codespan_font_color
   font_size: $base_font_size
   line_height: 4 / 3
   glyphs: circled
@@ -154,9 +155,9 @@ example:
   border_radius: $base_border_radius
   border_width: 0.0
   background_color: transparent  
-  padding: [-5, 0, -5, 10]
+  padding: [-8, 0, -5, 10]
   font_size: $base_font_size_small
-  font_family: $literal_font_family
+  font_family: $codespan_font_family
 image:
   align: left
   scaled_width_default: 0.5
@@ -191,7 +192,7 @@ table:
   background_color: $page_background_color
   border_color: DDDDDD
   border_width: $base_border_width
-  cell_padding: [2, 2, 3, 3]
+  cell_padding: [2, 2, 2, 3]
   head:
     font_style: bold
     border_bottom_width: $base_border_width * 2.5
@@ -199,6 +200,7 @@ table:
     stripe_background_color: F9F9F9
     even_row_background_color: F9F9F9
     odd_row_background_color: F9F9F9
+  font_size: $base_font_size_small
   foot:
     background_color: F0F0F0
 toc:
