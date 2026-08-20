@@ -19,5 +19,5 @@ cover:
 	mupdf /tmp/cover.pdf || evince /tmp/cover.pdf &
 
 pdf:
-	asciidoctor-pdf -a scripts=cjk -a pdf-theme=face/local-theme.yml -r ./remove-section-trailing-dot.rb main.adoc -o /tmp/book.pdf
+	asciidoctor-pdf -a scripts=cjk -a pdf-theme=local-theme.yml -r ./remove-section-trailing-dot.rb main.adoc -o /tmp/book.pdf
 	mupdf /tmp/book.pdf || evince /tmp/book.pdf &

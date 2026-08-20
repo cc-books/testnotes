@@ -235,7 +235,7 @@ root# *nmcli dev wifi connect _服務集識別碼_ password _密碼_* +
 Device 'wlan0' successfully activated with _UUID_.
 ====
 
-`iwgetid`, `iwlist` 與 `iwconfig` 則是另一組不同的命令，來自於較舊的第三方套件 `wireless_tools` ，也是用來列出或設定無線裝置的組態。`iwpriv` 同樣是包含在其中的命令，做為執行個別網路驅動程式特有的功能，通常應用於供應商發布的專有驅動程式。
+`iwgetid`, `iwlist` 與 `iwconfig` 則是另一組不同的命令，來自於較舊的第三方套件 `wireless_tools` ，也是用來列出或設定無線裝置的組態。`iwpriv` 同樣是包含在其中的命令，做為執行個別網路驅動程式特有的功能，通常應用於供應商發佈的專有驅動程式。
 
 ==== 效能測試
 想要測試網際網路的頻寬時，可以安裝並執行 `speedtest-cli` 命令，就能利用網路主機 speedtest.net 提供的服務，或是直接以瀏覽器在它的網頁中測試。

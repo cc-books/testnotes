@@ -258,7 +258,7 @@ user$ *growisofs -M /dev/sr0 -J -R data/*
 
 許多測試軟體公司也提供適用於 Linux X64 的套裝測試軟體，甚至有免費的試用版本。例如 PassMark Software 出品的燒機測試軟體 BurnInTest footnote:[BurnInTest 燒機測試軟體 <https://www.passmark.com/support/bitlinux_faq.php>]，與效能測試軟體 PerformanceTest footnote:[PerformanceTest 效能測試軟體 <https://www.passmark.com/support/pt_linux_faq.php>]。下載檔案並解開、安裝之後，執行時可能會出現找不到函式庫的訊息，需要依照指示先安裝相關套件。
 
-其他像是 Greeks3D 釋出的 GPU 壓力測試軟體 FurMark 2 footnote:[FurMark GPU 壓力測試軟體 <https://www.geeks3d.com/furmark/>] 與版本較舊的 GpuTest footnote:[GpuTest GPU 壓力測試軟體 <https://www.geeks3d.com/gputest/>]。還有由 Primate Labs Inc. 所製作的處理基準測試軟體 Geekbench footnote:[Geekbench 處理基準測試軟體 <https://www.geekbench.com/download/linux/>] ，會將評測結果上傳發布於網頁，方便和不同平臺、不同組態的系統比較。另外還有 UNIGINE 3D 繪圖引擎軟體開發商，提供了多種不同的 3D 場景評測軟體 footnote:[UNIGINE 3D 場景評測軟體 <https://benchmark.unigine.com/>] ，讓使用者測試整機硬體在運轉壓力下的繪圖表現。
+其他像是 Greeks3D 釋出的 GPU 壓力測試軟體 FurMark 2 footnote:[FurMark GPU 壓力測試軟體 <https://www.geeks3d.com/furmark/>] 與版本較舊的 GpuTest footnote:[GpuTest GPU 壓力測試軟體 <https://www.geeks3d.com/gputest/>]。還有由 Primate Labs Inc. 所製作的處理基準測試軟體 Geekbench footnote:[Geekbench 處理基準測試軟體 <https://www.geekbench.com/download/linux/>] ，會將評測結果上傳發佈於網頁，方便和不同平臺、不同組態的系統比較。另外還有 UNIGINE 3D 繪圖引擎軟體開發商，提供了多種不同的 3D 場景評測軟體 footnote:[UNIGINE 3D 場景評測軟體 <https://benchmark.unigine.com/>] ，讓使用者測試整機硬體在運轉壓力下的繪圖表現。
 
 
 === 個人準備
