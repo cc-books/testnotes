@@ -1,7 +1,7 @@
 :author: 趙惟倫
-:version-label: 二
+:version-label: 初
 :revnumber: 版
-//:revremark: 一修
+//:revremark: 二修
 :revdate: {docdate}
 :email: bluebat@member.fsf.org
 :homepage: https://github.com/cc-books/testnotes

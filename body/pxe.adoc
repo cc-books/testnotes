@@ -15,12 +15,12 @@ PXE 實際上是一項網路技術，提供此項技術的軟體稱為「PXE 伺
 為了建置 PXE 網路技術，需要安裝以下套件：（不同的散佈版所使用的套件名稱可能不同，有些還會載入其他依存的套件，可以藉由搜尋重點檔案是否包含來確認。）
 
 [square]
-* `dhcp-server`: 提供 DHCP(動態主機組態協定) 服務，重點檔案為 `dhcpd`, `dhcpd.service` 與 `dhcpd6.service` 。
-* `tftp-server`: 提供 TFTP(簡易檔案傳輸協定) 服務，重點檔案為 `in.tftpd`, `tftp.socket` 與 `tftp.service` 。
-* `httpd`: 提供 HTTP(超文字傳輸協定) 服務，重點檔案為 `httpd`, `httpd.socket` 與 `httpd.service` 。
-* `nfs-utils`: 提供 NFS(網路檔案系統) 服務，重點檔案為 `nfs-server.service` 。
-* `syslinux`: 提供 BIOS PXE 開機載入程式，重點檔案為 `pxelinux.0` 。
-* `grub2-efi-x64`: 提供 UEFI PXE 開機載入程式，重點檔案為 `grubx64.efi` 。
+* `dhcp-server`: 提供 DHCP(動態主機組態協定) 服務，重點檔案為 `dhcpd`, `dhcpd.service` 與 `dhcpd6.service`。
+* `tftp-server`: 提供 TFTP(簡易檔案傳輸協定) 服務，重點檔案為 `in.tftpd`, `tftp.socket` 與 `tftp.service`。
+* `httpd`: 提供 HTTP(超文字傳輸協定) 服務，重點檔案為 `httpd`, `httpd.socket` 與 `httpd.service`。
+* `nfs-utils`: 提供 NFS(網路檔案系統) 服務，重點檔案為 `nfs-server.service`。
+* `syslinux`: 提供 BIOS PXE 開機載入程式，重點檔案為 `pxelinux.0`。
+* `grub2-efi-x64`: 提供 UEFI PXE 開機載入程式，重點檔案為 `grubx64.efi`。
 
 ==== 伺服端網路設定
 首先賦予 PXE 伺服器一個自訂的主機名稱：
@@ -34,7 +34,7 @@ NAME　　UUID　　　　　　　　　　　　　　　　　　　　TYPE�
 eth0　　92225193-b020-3257-9c4c-d0fa2a06cadf　ethernet　eno1 +
 lo　　　e36fa446-245d-454c-962e-97a0e1e9327e　loopback　lo
 ====
-指令中的 `connection` 可以簡寫為 `c` ，而輸出的第一欄 `NAME` 或第二欄 `UUID` 的值，可以做為其他指令中用來指定裝置的參數名稱。接著設定為固定 IP：
+指令中的 `connection` 可以簡寫為 `c`，而輸出的第一欄 `NAME` 或第二欄 `UUID` 的值，可以做為其他指令中用來指定裝置的參數名稱。接著設定為固定 IP：
 ====
 root# *nmcli c modify _eth0_ ipv4.address _192.168.0.1/24_* +
 root# *nmcli c modify _eth0_ ipv4.gateway _192.168.0.254_* +
@@ -193,7 +193,7 @@ root# *cd /usr/share/syslinux* +
 root# *cp pxelinux.0 memdisk *.c32 /var/lib/tftpboot/* +
 ====
 
-在 UEFI 模式下與本地開機類似，PXE 開機載入功能也可由 `grubx64.efi` 這個檔案提供，有時依情況藉助 `BOOTx64.efi` 或是支援安全啟動的 `shimx64.efi` 等檔案間接引入。雖然 SYSLINUX 軟體家族也有提供相應的 `syslinux.efi` （或稱 `pxelinux.efi` ），但是一般來說使用並不普遍。如果 PXE 伺服主機同樣以 UEFI 模式開機，那麼所需檔案可以直接從 `/boot/efi/EFI/_散佈版_/` 目錄中拷貝過來。在之前的 DHCP 組態檔範例中，相關的檔案是放在 TFTP 根目錄下的 `uefi/` 子目錄內。
+在 UEFI 模式下與本地開機類似，PXE 開機載入功能也可由 `grubx64.efi` 這個檔案提供，有時依情況藉助 `BOOTx64.efi` 或是支援安全啟動的 `shimx64.efi` 等檔案間接引入。雖然 SYSLINUX 軟體家族也有提供相應的 `syslinux.efi`（或稱 `pxelinux.efi`），但是一般來說使用並不普遍。如果 PXE 伺服主機同樣以 UEFI 模式開機，那麼所需檔案可以直接從 `/boot/efi/EFI/_散佈版_/` 目錄中拷貝過來。在之前的 DHCP 組態檔範例中，相關的檔案是放在 TFTP 根目錄下的 `uefi/` 子目錄內。
 
 PXE 開機檔案也可以是具有自我完備功能的單一檔案，例如 BIOS 模式下可開機的 `\*.iso` 檔案，或是 UEFI 模式下可獨立運作的 `*.efi` 檔案。不過由於需要將整個檔案載入記憶體，因而導致開機時間可能過長或者軟體功能有所限制。
 
@@ -238,7 +238,7 @@ menuentry 'UEFI Shell 2.2' {
 }
 ...
 ....
-在 IPv6 的網路環境中，需要修改相應的網路位址，亦即將上例中的 `192.168.0.1` 改為 `fd::1` 。
+在 IPv6 的網路環境中，需要修改相應的網路位址，亦即將上例中的 `192.168.0.1` 改為 `fd::1`。
 
 ==== 載入光碟映像檔
 PXELINUX 利用軟體隨附的 `memdisk` 程式扮演簡化的內核角色，直接將初始記憶體磁碟指定為要載入的映像檔路徑，但並不適用於大容量的檔案：
@@ -277,7 +277,7 @@ root# *dracut -a "network nfs" --add-drivers "_r8169_ nfsv4" initramfs.img "$(un
 
 製作前要確認是否已安裝 `dracut-network` 與 `nfs-utils` 套件，也要包含無碟系統的網路卡內核驅動模組，這樣新產生出來的 `initramfs.img` 才能用於網路開機。假設給 PXE 的傳送檔案想要放在 TFTP 根目錄下的 `linux/` 子目錄中，就要將網路寄存系統的 `vmlinuz` 與 `initramfs.img` 檔案拷貝過來，並且記得設為所有人可讀。如果有多個內核與初始記憶體檔案系統同時存在，就要在檔名加上版本號碼或是其他可供區分的標示。另外最好在原系統中就停用 `selinux`, `firewalld`, `auditd` 等功能或服務。
 
-首先以外部的作業系統（例如安裝於隨身碟上的 Linux），將想要寄存的整個檔案系統打包出來（假設原系統的根目錄位於 `/dev/sda2` ，而 `/dev/sdb` 是外部的隨身碟裝置）：
+首先以外部的作業系統（例如安裝於隨身碟上的 Linux），將想要寄存的整個檔案系統打包出來（假設原系統的根目錄位於 `/dev/sda2`，而 `/dev/sdb` 是外部的隨身碟裝置）：
 ====
 root# *mount /dev/_sda2_ /mnt* +
 root# *cd /mnt* +
@@ -313,7 +313,7 @@ menuentry 'Linux Diskless System' {
 }
 ...
 ....
-在 IPv6 的網路環境中需要修改相應的值，也就是範例中的 `dhcp` 改為 `dhcp6` 、 `192.168.0.1` 改為 `[fd::1]` 。載入內核時，除了網路檔案系統必要的參數之外，還要參考原系統的開機載入設定，決定是否需要附上特殊的內核參數。另外，由於網路傳輸速度與本機的落差，可能還要加上 `rootwait` 或 `rootdelay=5` 等參數。
+在 IPv6 的網路環境中需要修改相應的值，也就是範例中的 `dhcp` 改為 `dhcp6` 、 `192.168.0.1` 改為 `[fd::1]`。載入內核時，除了網路檔案系統必要的參數之外，還要參考原系統的開機載入設定，決定是否需要附上特殊的內核參數。另外，由於網路傳輸速度與本機的落差，可能還要加上 `rootwait` 或 `rootdelay=5` 等參數。
 
 === 補充方案
 PXE 技術對於伺服端與客戶端都有一定的配置要求，如果伺服端提供的硬體資源或網路服務無法滿足，或是客戶端的系統韌體無法支援網路開機，那麼就要尋求一些補充方案，才有可能達到網路開機的效果。
@@ -361,7 +361,7 @@ dhcp-boot=tag:uefi,grubx64.efi
 ==== iPXE
 PXE 應用需要系統韌體與網路卡韌體的同時支援，而對於達不到這項要求的系統，還可以利用混合本地與網路開機的替代方案：例如 iPXE 專案 footnote:[iPXE - 開放原始碼開機韌體 <https://ipxe.org/>] 就是從本地或網路的儲存裝置，先載入精簡且特化的內核，包括網路卡與網路協定的驅動程式，再由內核空間發出客戶端的請求，接著從各種網路服務（不限於 TFTP）連鎖載入開機檔案。
 
-所需的檔案可以從 `ipxe-bootimgs` 套件中取得，但舊版套件庫收錄的名稱也許是 `gpxe` 或 `etherboot` 。可以利用 `linux16` 與 `initrd16` 指令載入，將它做為 BIOS GRUB 組態檔中的選項之一：
+所需的檔案可以從 `ipxe-bootimgs` 套件中取得，但舊版套件庫收錄的名稱也許是 `gpxe` 或 `etherboot`。可以利用 `linux16` 與 `initrd16` 指令載入，將它做為 BIOS GRUB 組態檔中的選項之一：
 
 ./etc/grub2.cfg
 ....
@@ -416,7 +416,7 @@ sanboot --no-describe --drive 0x80
 iPXE> *dhcp* +
 iPXE> *chain _\http://192.168.0.1/ipxe/menu.ipxe_*
 ====
-來讀取網路上的組態檔，進一步達到網路開機的效果。另一種應用方式則是在組態檔案 `dhcpd.conf` 或 `dhcpd6.conf` 的 UEFI 段落中呼叫 `ipxe.efi` ：
+來讀取網路上的組態檔，進一步達到網路開機的效果。另一種應用方式則是在組態檔案 `dhcpd.conf` 或 `dhcpd6.conf` 的 UEFI 段落中呼叫 `ipxe.efi`：
 
 .dhcpd.conf
 ....

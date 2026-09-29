@@ -93,7 +93,7 @@ image::sys-hier.png[width=55%,align="center"]
 有些時候網路服務無法使用，是由於本機時間與伺服器相差太大，應該先確認來源機器的網路位址，並且與目標機器之間有網路相連（可用 `iputils` 套件中的 `ping` 命令測試）。發生問題的原因也可能與以下設定相關：兩端的語區設定、協定的主動╱被動模式、SELinux、防火牆、磁碟空間使用配額。
 
 ==== 檔案服務
-由於 FTP 規格的傳輸安全性較低，因此網路上有逐漸減少這類服務的趨勢。常用的伺服軟體套件是 `vsftpd` ，提供同名的 systemd 類型服務，預設的資料根目錄則位於 `/var/ftp/` 。服務組態檔中比較重要的部分包括：
+由於 FTP 規格的傳輸安全性較低，因此網路上有逐漸減少這類服務的趨勢。常用的伺服軟體套件是 `vsftpd`，提供同名的 systemd 類型服務，預設的資料根目錄則位於 `/var/ftp/`。服務組態檔中比較重要的部分包括：
 
 ./etc/vsftpd/vsftpd.conf
 ....
@@ -104,9 +104,9 @@ write_enable=YES
 local_umask=022
 ...
 ....
-其他可選的 FTP 伺服軟體，還有 `proftpd` 與 `pure-ftpd` 。搭配的客戶端程式則能選用文字介面的 `ftp`, `lftp`，或是圖形介面的 `gftp`, `filezilla` 。
+其他可選的 FTP 伺服軟體，還有 `proftpd` 與 `pure-ftpd`。搭配的客戶端程式則能選用文字介面的 `ftp`, `lftp`，或是圖形介面的 `gftp`, `filezilla`。
 
-標準的 HTTP/HTTPS 伺服器安裝，請參考下一章〈開機前執行環境〉中相關的說明。如果衹是為了一般測試的目的，不妨考慮安裝 `lighttpd` 套件。它的組態檔案位於 `/etc/lighttpd/lighttpd.conf` ，相較於標準網頁伺服器會簡單許多。另外想要測試網站是否支援 TLS 1.2 的話，可以試試：
+標準的 HTTP/HTTPS 伺服器安裝，請參考下一章〈開機前執行環境〉中相關的說明。如果衹是為了一般測試的目的，不妨考慮安裝 `lighttpd` 套件。它的組態檔案位於 `/etc/lighttpd/lighttpd.conf`，相較於標準網頁伺服器會簡單許多。另外想要測試網站是否支援 TLS 1.2 的話，可以試試：
 ====
 user$ *openssl s_client -connect __網路位址__:443 -tls1_2*
 ====
@@ -117,7 +117,7 @@ user$ *wget http://_網路位址_:8000/_檔案名稱_* +
 user$ *wget -r -nH http://_網路位址_:8000/*
 ====
 
-源自 Windows 作業系統的 SMB(網路芳鄰) 服務，新版內核已經提供了一個 `ksmbd` 模組，可以部分取代傳統使用者空間中的 Samba 伺服軟體。不過，大多數的 Linux 系統衹需要扮演客戶端的角色，可以利用 `gvfs-smb` 或 `samba-client` 套件來達成。而藉由 `cifs-utils` 套件中的 `mount.cifs` ，以及自動載入的 `cifs` 內核模組，也能掛載並存取到 SMB 服務所分享的檔案：
+源自 Windows 作業系統的 SMB(網路芳鄰) 服務，新版內核已經提供了一個 `ksmbd` 模組，可以部分取代傳統使用者空間中的 Samba 伺服軟體。不過，大多數的 Linux 系統衹需要扮演客戶端的角色，可以利用 `gvfs-smb` 或 `samba-client` 套件來達成。而藉由 `cifs-utils` 套件中的 `mount.cifs`，以及自動載入的 `cifs` 內核模組，也能掛載並存取到 SMB 服務所分享的檔案：
 ====
 user$ *mount.cifs //_網路位址_/_分享名稱_ _掛載點_ -o username=_使用者賬號_,password=_使用者密碼_*
 ====
@@ -162,7 +162,7 @@ Enable=true
 Port=177
 ...
 ....
-並且可能要刪除檔案 `/usr/share/polkit-1/org.freedesktop.color.policy` ，以避免連線時要求建立色彩描述檔。客戶端的連線指令範例如下：
+並且可能要刪除檔案 `/usr/share/polkit-1/org.freedesktop.color.policy`，以避免連線時要求建立色彩描述檔。客戶端的連線指令範例如下：
 ====
 user$ *Xephyr :1 -fullscreen -br -bs -render default -dpi 96 +xinerama -reset -terminate -query _伺服端網路位址_*
 ====
@@ -212,7 +212,7 @@ user$ *vncviewer -DotWhenNoCursor -passwd _密碼檔案_ _網路位址_*
 網路組態中的**防火牆**(firewall) 設置，主要在日常使用的開放環境系統中，負責阻斷未經允許的網路輸入輸出。但是在封閉的測試環境下，有可能因為疏忽反而造成其他伺服程式的不便。防火牆的軟體服務名稱為 `firewalld` 或 `ufw`，在 systemd 系統初始模式下可以依照一般使用 `systemctl` 命令的方式，搭配 `stop` 或 `disable` 選項分別予以停止或停用。即使確定之後不會用到防火牆功能，但由於套件依存關係而不適合直接移除，仍然可以利用 `systemctl` 命令的 `mask` 選項，來阻止其他軟體去啟動它。
 
 ==== 檔案傳送
-偶爾需要拷貝別臺電腦中的檔案時，通常是以**隨身碟**(USB stick) 做為交換的媒介，因為臨時要啟用一個檔案分享服務，或是先將檔案上傳到伺服器再下載，都似乎稍嫌麻煩。如果需要互相傳輸檔案的機器位於同一個內部網路，其實還有更簡便的方法：使用 `netcat` 套件中的命令 `nc` ，就可以實現互傳檔案的功能。先在接收端輸入以下命令：
+偶爾需要拷貝別臺電腦中的檔案時，通常是以**隨身碟**(USB stick) 做為交換的媒介，因為臨時要啟用一個檔案分享服務，或是先將檔案上傳到伺服器再下載，都似乎稍嫌麻煩。如果需要互相傳輸檔案的機器位於同一個內部網路，其實還有更簡便的方法：使用 `netcat` 套件中的命令 `nc`，就可以實現互傳檔案的功能。先在接收端輸入以下命令：
 ====
 user$ *nc -l > _檔案名稱_*
 ====
@@ -230,7 +230,7 @@ user$ *tar -cvf - _目錄路徑_ | nc _網路位址_ 31337*
 ====
 如果命令與輸入資料都正確，卻發生了無法連線，有可能是被接收端的防火牆所阻擋。
 
-有些散佈版還會提供工具軟體 `croc` ，可以更方便地在區域網路中傳檔，而且是由發送端先啟動。輸入指令 `croc send --code _臨時密碼_ _檔案或目錄_` 之後，發送端就進入等待傳輸狀態，然後再由接收端輸入 `croc _臨時密碼_` 即會開始發送與接收。
+有些散佈版還會提供工具軟體 `croc`，可以更方便地在區域網路中傳檔，而且是由發送端先啟動。輸入指令 `croc send --code _臨時密碼_ _檔案或目錄_` 之後，發送端就進入等待傳輸狀態，然後再由接收端輸入 `croc _臨時密碼_` 即會開始發送與接收。
 
 
 === 外部測試系統
@@ -239,7 +239,7 @@ user$ *tar -cvf - _目錄路徑_ | nc _網路位址_ 31337*
 ==== 自活系統
 最簡單的方式是利用各種散佈版所提供的自活系統，通常已經和散佈版的安裝系統整合在一起。將下載來的 ISO 檔案燒錄到光碟上，或是以 `dd` 命令寫入隨身碟後，就能以其做為外部系統開機。如果手上有多個 ISO 檔案，還可以先製作一支 Ventoy footnote:[Ventoy: 新的可開機 USB 解決方案 <https://www.ventoy.net/>] 隨身碟，用來將所有的可開機 ISO 檔案收集、整合在一起。
 
-如果想利用自活系統簡單、快速的特性，來執行特定的開機後單一動作，也可以嘗試進行自活系統的客製化。以常見的工具自活系統 SystemRescue footnote:[SystemRescue: 系統救援工具箱 <https://www.system-rescue.org/>] 為例：首先準備好 `systemrescue-12.01-amd64.iso` 並編輯所需的 `data/autorun` 與 `data/datafile` 檔案；然後利用十六進位編輯程式（ `hexedit` 或 `ghex` ），將 ISO 檔案中的 `timeout=90` 字串改為 `timeout=00` ；接著執行指令：
+如果想利用自活系統簡單、快速的特性，來執行特定的開機後單一動作，也可以嘗試進行自活系統的客製化。以常見的工具自活系統 SystemRescue footnote:[SystemRescue: 系統救援工具箱 <https://www.system-rescue.org/>] 為例：首先準備好 `systemrescue-12.01-amd64.iso` 並編輯所需的 `data/autorun` 與 `data/datafile` 檔案；然後利用十六進位編輯程式（`hexedit` 或 `ghex`），將 ISO 檔案中的 `timeout=90` 字串改為 `timeout=00`；接著執行指令：
 ====
 user$ *growisofs -Z /dev/sr0=systemrescue-12.01-amd64.iso* +
 user$ *growisofs -M /dev/sr0 -J -R data/*

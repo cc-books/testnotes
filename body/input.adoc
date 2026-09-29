@@ -8,7 +8,7 @@
 使用者輸入裝置雖然依功能可分為鍵盤裝置與指標裝置，但在使用者空間都會受到 `libevdev` 與 `libinput` 函式庫的控制。`libevdev` 透過系統守護程式 `systemd-udevd` 來管理裝置事件，參考檔案位於 `/usr/lib/udev/hwdb.d/\*.hwdb`（或是 `/lib/udev/keymaps/*`）。如果想要即時更新，可以執行 `systemd-hwdb update` 指令以取得最新的硬體資料庫。對於本機專有硬體裝置的特殊設定項目，可以自行編輯 `/etc/udev/hwdb.d/_local_.hwdb` 來加入。命令 `udevadm` 的選項提供了許多的子命令，用來顯示(`info`)、控制(`control`)、觸發(`trigger`) 或是測試(`test`) 裝置事件。
 
 ==== 工具程式
-從 `/proc/bus/input/devices` 的內容中，可以看到所有輸入裝置的一些資料。其中一項 Handlers: 顯示出的裝置代號，表示系統是以這些處理常式來對應它。例如滑鼠的處理常式可能是 `mouse0` 和 `event2` ，代表系統會以 `/dev/input/mouse0` 和 `/dev/input/event2` 做為與裝置溝通的介面，因此可以利用指令 `od -x /dev/input/event2` 來監看輸出訊號。第三方套件 `input-utils` 中，也包含了一些基於 `libinput` 的工具程式。
+從 `/proc/bus/input/devices` 的內容中，可以看到所有輸入裝置的一些資料。其中一項 Handlers: 顯示出的裝置代號，表示系統是以這些處理常式來對應它。例如滑鼠的處理常式可能是 `mouse0` 和 `event2`，代表系統會以 `/dev/input/mouse0` 和 `/dev/input/event2` 做為與裝置溝通的介面，因此可以利用指令 `od -x /dev/input/event2` 來監看輸出訊號。第三方套件 `input-utils` 中，也包含了一些基於 `libinput` 的工具程式。
 
 命令 `evtest` 適合用來測試各種輸入事件，附加的 `--grab` 選項可以避免想要測試的事件去觸發其他的應用軟體。執行命令後會出現所有輸入裝置的列表，例如在筆記型電腦上的結果像是：
 ====
@@ -38,7 +38,7 @@ Select the device event number [0-9]: ▊
 
 目前除了部分筆記型電腦的內建鍵盤還會使用 PS/2 介面之外，大部分的新產品都採用 USB 介面。由於鍵盤不需要快速的傳輸速度，因此大多衹符合舊式的 USB 1.x 頻寬。雖然 USB 介面一般都有向下相容性，但是有些系統韌體仍然需要額外開啟舊式 USB 的支援選項。
 
-除了可以透過相關模組參數來設定裝置的**輪詢間隔**(polling interval)，或是加入共通的 `drm_kms_helper.poll=0` 之外，有時仍要利用內核參數 `usbhid.quirks=` 來提供一些設定值，以滿足某些裝置未被自動識別出來的**怪癖**(quirk)。藉由 `lsusb` 命令可以辨識出來，鍵盤通常被系統視為一種**人機介面裝置**(HID)，並由內核模組 `usbhid` 負責驅動，較特別的硬體還需要搭配額外的 `hid_*` 模組。對於使用藍牙介面的輸入裝置， `hidp` 則是相應的內核模組。如果想要傾印 HID 裝置的描述或串流資料，可以參考 `usbhid-dump` 命令的使用說明。
+除了可以透過相關模組參數來設定裝置的**輪詢間隔**(polling interval)，或是加入共通的 `drm_kms_helper.poll=0` 之外，有時仍要利用內核參數 `usbhid.quirks=` 來提供一些設定值，以滿足某些裝置未被自動識別出來的**怪癖**(quirk)。藉由 `lsusb` 命令可以辨識出來，鍵盤通常被系統視為一種**人機介面裝置**(HID)，並由內核模組 `usbhid` 負責驅動，較特別的硬體還需要搭配額外的 `hid_*` 模組。對於使用藍牙介面的輸入裝置，`hidp` 則是相應的內核模組。如果想要傾印 HID 裝置的描述或串流資料，可以參考 `usbhid-dump` 命令的使用說明。
 
 鍵盤的硬體動作轉化為電子訊號送出時，會經過輸入子系統並觸發它的按鍵事件。一般電腦的電源、重置按鈕以及筆記型電腦的上蓋，則會觸發 ACPI 的按鍵事件。另外某些具有額外按鍵的非標準鍵盤，如果出現沒有輸出訊號的狀況，可以加入內核參數 `noapic`, `nolapic`, `iommu=soft` 試試。萬一不得已必須透過介面轉接頭，即使選用了主動式的轉接頭，仍然要注意某些按鍵也許會失去作用。
 
@@ -51,7 +51,7 @@ NOTE: X 還有一個類似名稱的 `xinputrc` 命令稿，用於視窗系統初
 
 WARNING: PS/2 介面的非標準鍵盤經過 PS2USB 轉換後，某些掃描碼會被排除掉。一般的轉接頭衹有轉換線路，需要主動式晶片才能進行較完整的訊號轉換。
 
-按下或放開按鍵時，分別會產生一個像是 `e05f` 與 `e0df` 的掃描碼（少數按鍵放開時不產生），兩者之間固定相差 `0x80` 。對於未知而無法轉換為內核鍵碼的掃描碼，內核會將其過濾掉，而使用內核參數 `atkbd.softraw=0` 能夠取回部分掃描碼。
+按下或放開按鍵時，分別會產生一個像是 `e05f` 與 `e0df` 的掃描碼（少數按鍵放開時不產生），兩者之間固定相差 `0x80`。對於未知而無法轉換為內核鍵碼的掃描碼，內核會將其過濾掉，而使用內核參數 `atkbd.softraw=0` 能夠取回部分掃描碼。
 
 指令 `showkey --scancodes` 會顯示後續按鍵的掃描碼，而預設的選項 `--keycodes` 用來顯示內核鍵碼，相關的資料位於 `/usr/include/linux/input.h`。內核鍵碼所對應的按鍵事件，請參考 `/usr/include/linux/input-event-codes.h` 的檔案內容。掃描碼與內核鍵碼的匹配列表，可以藉由 `kbd` 套件中的 `dumpkeys` 命令列出，變更時則要用到 `setkeycodes` 命令。
 
@@ -96,7 +96,7 @@ user$ *xmodmap -e "keycode 132 = NoSymbol NoSymbol yen bar"*
 |鎖定捲動|Scroll_Lock|KEY_SCROLLLOCK
 |====
 
-`xmodmap` 的預設選項 `-pm` 即為顯示目前修飾鍵的定義狀況，如果要顯示一般按鍵的定義狀況則須使用 `-pk` ：
+`xmodmap` 的預設選項 `-pm` 即為顯示目前修飾鍵的定義狀況，如果要顯示一般按鍵的定義狀況則須使用 `-pk`：
 ====
 user$ *xmodmap* +
 xmodmap:  up to 4 keys per modifier, (keycodes in parentheses): +
@@ -177,14 +177,14 @@ PowerKeyIgnoreInhibited=no
 HandlePowerKey=poweroff
 ...
 ....
-電源按鈕的其他處理方式，還包括 `ignore` 或 `reboot` ，都必須要重啟服務才會生效。
+電源按鈕的其他處理方式，還包括 `ignore` 或 `reboot`，都必須要重啟服務才會生效。
 
 ==== 鍵盤佈局
 系統會藉由偵測鍵盤的硬體資訊（例如供應商識別號或產品識別號），來判定使用何種按鍵配置。即使按鍵配置的規格相同，為了支援不同語言而進行的調整，在系統設定中稱之為鍵盤佈局(layout)。雖然不同的語言佈局具有不同的鍵面印刷，但是硬體訊號仍然相同，而需要依靠軟體設定來解釋按鍵意義。
 
 測試其他語言的鍵盤佈局時，最好利用客戶實際在使用的單一語言鍵盤，而不要以可切換多種語言佈局的裝置做為測試工具。如果沒有非英語的實體鍵盤可以測試時，簡便的方法是將英語佈局調成德語，就會發現其中的 Y 與 Z 兩鍵位置發生了互換。
 
-舊式 BIOS 系統韌體僅包含英語的鍵盤佈局，而 UEFI 已具備支援多語言的能力。內核的鍵盤佈局相關檔案是由 `kbd-misc` 套件所提供，虛擬終端機的鍵盤語言設定則位於 `vconsole.conf` ：
+舊式 BIOS 系統韌體僅包含英語的鍵盤佈局，而 UEFI 已具備支援多語言的能力。內核的鍵盤佈局相關檔案是由 `kbd-misc` 套件所提供，虛擬終端機的鍵盤語言設定則位於 `vconsole.conf`：
 
 ./etc/vconsole.conf
 ....
@@ -266,7 +266,7 @@ root# *dnf install opensc pcsc-lite pcsc-lite-ccid pcsc-tools*
 
 其中 `pcsc-lite` 套件的 `pcscd` 守護程式提供讀取服務，而在 `lsusb -t` 的指令輸出可以看到歸類於 Chip/SmartCard 類別，並以 `usbfs` 軟體模組負責驅動。如果系統支援熱插拔功能，`pcscd` 服務於讀卡機連接時就會自動啟用，參數 `--auto-exit` 也同時預設附加。
 
-`libccid` 是 Linux 系統內建的標準驅動函式庫，支援大多數的讀卡機型號。有些讀卡機的規格支援 `libccid` 卻無法驅動，是因為尚未登錄於裝置列表，可以自行修改 `/usr/lib64/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist` ：純文字的 XML 檔案包含了廠商識別碼、產品識別碼、產品名稱。衹需要將相關資料修改或加入 `ifdVendorID`, `ifdProductID`, `ifdFriendlyName` 三個鍵值段中，成為同樣次序的陣列項目，也許就能順利驅動讀卡機。如果測試成功，不妨順便依照 CCID 網站 footnote:[CCID Unix 驅動程式專案 <https://ccid.apdu.fr/>] 中的說明提出登錄要求。
+`libccid` 是 Linux 系統內建的標準驅動函式庫，支援大多數的讀卡機型號。有些讀卡機的規格支援 `libccid` 卻無法驅動，是因為尚未登錄於裝置列表，可以自行修改 `/usr/lib64/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist`：純文字的 XML 檔案包含了廠商識別碼、產品識別碼、產品名稱。衹需要將相關資料修改或加入 `ifdVendorID`, `ifdProductID`, `ifdFriendlyName` 三個鍵值段中，成為同樣次序的陣列項目，也許就能順利驅動讀卡機。如果測試成功，不妨順便依照 CCID 網站 footnote:[CCID Unix 驅動程式專案 <https://ccid.apdu.fr/>] 中的說明提出登錄要求。
 
 要是手上的型號無法以 `libccid` 驅動，請先在散佈版的套件庫中搜尋，也許已經有打包好的特定型號驅動套件。例如 `libacsccid` 是基於 `libccid` 的衍生驅動函式庫，同樣內建於大多數的 Linux 系統，它的裝置列表專門收錄 ACS 公司所生產的讀卡機型號。萬一套件庫中找不到，就需要去讀卡機廠商的網站，看看是否有提供 Linux 的驅動函式庫。下面以安裝 Castles EZ100PU 的驅動程式為例：
 ====
@@ -313,9 +313,9 @@ NOTE: 同一套件中還有 `scriptor` 程式，是用來輸出讀卡機指令�
 
 對於某些比較舊的型號，仍然有機會透過調整系統來成功驅動。舊型的讀卡機有可能同時受到 `libccid` 與廠商軟體的支援，若是同時安裝兩份驅動函式庫，反而容易互相干擾。此時可以移除 `libccid` 套件，衹留下廠商的驅動函式庫試試。
 
-WARNING: 有些較舊的散佈版與 `pcscd` 搭配的**中介軟體**(middleware) 是 `openct` 而非 `opensc` ，其對應 `opensc-tool` 的測試程式則為 `openct-tool` ，但可能不支援新的驅動函式庫。
+WARNING: 有些較舊的散佈版與 `pcscd` 搭配的**中介軟體**(middleware) 是 `openct` 而非 `opensc`，其對應 `opensc-tool` 的測試程式則為 `openct-tool`，但可能不支援新的驅動函式庫。
 
-舊式具備 RS-232 介面的讀卡機，仍然需要序列埠（例如 `/dev/ttyS0` 或 `/dev/ttyUSB0`），還可能需要手動將其符號鏈結至 `/dev/pcsc/1` 。而組態檔案另外位於 `/etc/reader.conf.d/` ，其中衹有內建一個使用 `ccidtwin` 驅動程式的範例檔。如果想要使用特殊的機型，就必須自行準備驅動程式，並修改出適當的組態檔。
+舊式具備 RS-232 介面的讀卡機，仍然需要序列埠（例如 `/dev/ttyS0` 或 `/dev/ttyUSB0`），還可能需要手動將其符號鏈結至 `/dev/pcsc/1`。而組態檔案另外位於 `/etc/reader.conf.d/`，其中衹有內建一個使用 `ccidtwin` 驅動程式的範例檔。如果想要使用特殊的機型，就必須自行準備驅動程式，並修改出適當的組態檔。
 
 NOTE: 某些讀卡機有支援 *SAM*(安全存取模組)，通常是以 SIM 卡的型式存在，用來進行異動作業的加密與驗證。因此在讀寫特殊卡片時，還需要安裝額外的軟體，才能存取到實際儲存的資料。
 
@@ -373,7 +373,7 @@ user$ *inputattach --daemon --always _--mtouch_ _/dev/ttyS4_*
 ====
 範例中假設裝置的協定相容於 MicroTouch 的機型，而連接的介面為 `/dev/ttyS4`(COM3)。對於使用 USB 連接介面的裝置，通常會自動完成裝置驅動的程序。另外在嵌入式系統中，也可能利用 I^2^C 介面來連接觸控螢幕。
 
-觸控螢幕的系統層級驅動函式庫，基於適用機型以及歷史的演變而利用過不同的機制，例如 `tslib`, `evdev`, `libinput`…等等。X 視窗系統則以 `xorg-x11-drv-evdev`, `xorg-x11-drv-libinput` 做為調用介面，其中 `libinput` 仍在穩定開發中，多用於較新的輸入裝置。有些廠商提供的專屬驅動程式，能夠額外支援多點觸控、滑鼠右鍵模擬等功能，但是會在系統驅動函式庫之外多產生一個新裝置，需要注意是否應該停用原本的標準裝置以避免衝突，以及自動選擇的裝置介面是否正確。例如使用 EETI eGTouch 觸控螢幕，就需要自行下載 `eGTouch_v2.5.5814.L-x.tar.gz` 軟體包，其中安裝後的 `eGTouchD` 即為驅動執行程式， `eGTouchU` 則負責螢幕校正作業。
+觸控螢幕的系統層級驅動函式庫，基於適用機型以及歷史的演變而利用過不同的機制，例如 `tslib`, `evdev`, `libinput`…等等。X 視窗系統則以 `xorg-x11-drv-evdev`, `xorg-x11-drv-libinput` 做為調用介面，其中 `libinput` 仍在穩定開發中，多用於較新的輸入裝置。有些廠商提供的專屬驅動程式，能夠額外支援多點觸控、滑鼠右鍵模擬等功能，但是會在系統驅動函式庫之外多產生一個新裝置，需要注意是否應該停用原本的標準裝置以避免衝突，以及自動選擇的裝置介面是否正確。例如使用 EETI eGTouch 觸控螢幕，就需要自行下載 `eGTouch_v2.5.5814.L-x.tar.gz` 軟體包，其中安裝後的 `eGTouchD` 即為驅動執行程式，`eGTouchU` 則負責螢幕校正作業。
 
 多螢幕環境下設定觸控螢幕時，必須先將螢幕設定調整至所需組態，然後再以 `xinput` 的 `map-to-output` 選項，綁定觸控螢幕與對應的顯示輸出裝置：
 ====

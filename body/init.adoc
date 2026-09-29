@@ -5,9 +5,9 @@
 等到內核成功掛載實際的根目錄檔案系統之後，便會卸載前面階段所用的初始記憶體檔案系統，並且依照 `/etc/fstab` 檔案中的設定，掛載其他指定的儲存裝置，建構實際運行時的檔案系統階層。
 
 ==== 一號行程
-內核運行進入第二階段後，第一個執行的外部命令為 `init` ，同時也獲得了**行程編號**(PID) 1。此種傳統 SysV 作業系統沿續下來的 Init 系統初始模式，會呼叫一連串、分門別類的 rc(run commands) 檔案，其中內容由命令稿組成。目前較流行的實作，是將檔案 `/usr/sbin/init` 鏈結到 `/usr/lib/systemd/systemd` 這個**守護程式**(daemon)，然後觸發各類型的**單元**(unit) 檔案，包括**服務**(service)、**目標**(target)、**插口**(socket)…等等。相對於 Init 系統初始模式，systemd 模式還提供了許多的工具程式。例如 `systemd-analyze blame` 這個指令，可以顯示開機時各服務啟動所消耗的時間，做為改進系統開機效能的參考。
+內核運行進入第二階段後，第一個執行的外部命令為 `init`，同時也獲得了**行程編號**(PID) 1。此種傳統 SysV 作業系統沿續下來的 Init 系統初始模式，會呼叫一連串、分門別類的 rc(run commands) 檔案，其中內容由命令稿組成。目前較流行的實作，是將檔案 `/usr/sbin/init` 鏈結到 `/usr/lib/systemd/systemd` 這個**守護程式**(daemon)，然後觸發各類型的**單元**(unit) 檔案，包括**服務**(service)、**目標**(target)、**插口**(socket)…等等。相對於 Init 系統初始模式，systemd 模式還提供了許多的工具程式。例如 `systemd-analyze blame` 這個指令，可以顯示開機時各服務啟動所消耗的時間，做為改進系統開機效能的參考。
 
-每項服務大致對應之前的 rc 檔案，呼叫一到多個能夠共同完成特定任務的程式。舊式的服務控制命令，則被導向並轉換為新式版本的 `systemctl` 命令。例如啟動網站伺服器的 `service _httpd_ start` 指令，在 systemd 模式下的寫法為 `systemctl start _httpd_` ；而設定成自動啟用的 `chkconfig _httpd_ on` 指令，則需要改為執行 `systemctl enable _httpd_` 以達到相同效果。
+每項服務大致對應之前的 rc 檔案，呼叫一到多個能夠共同完成特定任務的程式。舊式的服務控制命令，則被導向並轉換為新式版本的 `systemctl` 命令。例如啟動網站伺服器的 `service _httpd_ start` 指令，在 systemd 模式下的寫法為 `systemctl start _httpd_`；而設定成自動啟用的 `chkconfig _httpd_ on` 指令，則需要改為執行 `systemctl enable _httpd_` 以達到相同效果。
 
 ==== 目標狀態
 傳統的 Init 模式將系統狀態分為不同的**執行層級**(runlevel)，而在 systemd 模式的軟體架構下則稱之為**目標**(target)。兩者之間的對應關係與代表意義如下：
@@ -36,7 +36,7 @@
 
 如果想要進入文字介面，開機前可以利用舊式的內核參數單一數字 `3` 來暫時變更此次的執行層級。如果之後都衹想要進入文字介面，就需要執行 `systemctl set-default multi-user` 指令。下次啟動時，系統就會停留在**虛擬終端機**(VT) 中的**電傳打字機**(TTY) 管理程式 `agetty`，並執行文字登入命令 `login`，登入成功後再由命令殼提供命令列操作模式。
 
-大多數的 Linux 系統預設支援多個虛擬終端機，但是整體的數量與之後替換為圖形介面的數量與位置，仍然會因散佈版而異。使用者能夠在 `/etc/systemd/logind.conf` 檔案中設定 `NAutoVTs=` 項目的值，來決定自動生成的虛擬終端機數量。以常見的 6 個虛擬終端機為例，可以透過按下組合鍵 kbd:[Ctrl]+kbd:[Alt]+kbd:[F1] ~ kbd:[F6] 之一的方式進入，而其背後代表虛擬終端機的裝置節點則是 `/dev/tty1` ~ `/dev/tty6` 。
+大多數的 Linux 系統預設支援多個虛擬終端機，但是整體的數量與之後替換為圖形介面的數量與位置，仍然會因散佈版而異。使用者能夠在 `/etc/systemd/logind.conf` 檔案中設定 `NAutoVTs=` 項目的值，來決定自動生成的虛擬終端機數量。以常見的 6 個虛擬終端機為例，可以透過按下組合鍵 kbd:[Ctrl]+kbd:[Alt]+kbd:[F1] ~ kbd:[F6] 之一的方式進入，而其背後代表虛擬終端機的裝置節點則是 `/dev/tty1` ~ `/dev/tty6`。
 
 === 初始化檔案
 系統各階段都有許多的初始化檔案，大部分是受系統內部機制所控制，並不適合由使用者直接修改。另外有一小部分的檔案，預設會在系統各階段自動執行，比較適合進行客製化的編輯：
@@ -58,7 +58,7 @@
 * `$HOME/.config/autostart/*.desktop`: 由桌面環境的啟動程式讀取執行
 
 ==== rc-local 服務
-`rc-local.service` 是 systemd 基本內建的服務，主要為了相容 Init 系統初始模式中，本機自動執行命令稿 `rc.local` 的功能。系統在文字模式初始化後期，會啟動 `rc-local.service` 服務來嘗試執行 `/etc/rc.d/rc.local`（或是 `/etc/rc.local` ）外部命令中的內容。以下的範例是依據檔案 `/etc/counts` 內容的次數，自動重複重新開機的控制程式：
+`rc-local.service` 是 systemd 基本內建的服務，主要為了相容 Init 系統初始模式中，本機自動執行命令稿 `rc.local` 的功能。系統在文字模式初始化後期，會啟動 `rc-local.service` 服務來嘗試執行 `/etc/rc.d/rc.local`（或是 `/etc/rc.local`）外部命令中的內容。以下的範例是依據檔案 `/etc/counts` 內容的次數，自動重複重新開機的控制程式：
 
 ./etc/rc.d/rc.local
 ....
@@ -115,7 +115,7 @@ export HISTSIZE HISTCONTROL HISTIGNORE
 ....
 
 ==== 使用者初始化
-當使用者進入命令列互動模式時，會先讀取並執行使用者家目錄中的 `.bashrc` 。至於使用者登入系統所用的**登入命令殼**(login shell)，則會讀取並執行 `.bash_profile` （有些散佈版是 `.profile` ）檔案。雖然傳統上會區分適合放在不同檔案中的命令，但是由於散佈版預設 `.bash_profile` 前段會先讀取並執行 `.bashrc` 的內容，因此衹需要將命令寫在個人的命令殼規範命令稿 `.bash_profile` 內即可。
+當使用者進入命令列互動模式時，會先讀取並執行使用者家目錄中的 `.bashrc`。至於使用者登入系統所用的**登入命令殼**(login shell)，則會讀取並執行 `.bash_profile`（有些散佈版是 `.profile`）檔案。雖然傳統上會區分適合放在不同檔案中的命令，但是由於散佈版預設 `.bash_profile` 前段會先讀取並執行 `.bashrc` 的內容，因此衹需要將命令寫在個人的命令殼規範命令稿 `.bash_profile` 內即可。
 
 .$HOME/.bash_profile
 ....
@@ -153,7 +153,7 @@ image::thiny-session.png[width=80%,align="center"]
 
 為了解決軟體在不同的桌面環境之間的**互操作性**(interoperability)，多數的流行桌面環境都會遵循由 freedesktop.org 組織所倡議的 *XDG*(X 桌面工作群組) 標準：包括了一些共用的環境變數，以及標準化的檔案名稱與路徑。例如 `/etc/xdg/autostart/` 目錄存放了套用於所有桌面環境的自動啟動組態檔，個別的桌面環境還會讀取類似 `/usr/share/_gnome_/autostart/*.desktop` 檔案的內容，而使用者自訂的自動啟動組態檔則可以存放在 `$HOME/.config/autostart/` 之中。
 
-另外，XDG 標準也建議了一些通行於不同散佈版或桌面環境的命令，例如 `xdg-user-dirs-gtk-update` 是用來管理個人家目錄中常用的子目錄名稱；而指令 `xdg-settings set default-web-browser _firefox_.desktop` ，會將個人 X 作業階段中預設的網頁瀏覽器，設定為 `firefox.desktop` 所指定的軟體（此處即為 Firefox）。
+另外，XDG 標準也建議了一些通行於不同散佈版或桌面環境的命令，例如 `xdg-user-dirs-gtk-update` 是用來管理個人家目錄中常用的子目錄名稱；而指令 `xdg-settings set default-web-browser _firefox_.desktop`，會將個人 X 作業階段中預設的網頁瀏覽器，設定為 `firefox.desktop` 所指定的軟體（此處即為 Firefox）。
 
 若是跳過圖形階段目標與顯示管理程式，直接從文字模式經由 `startx` -> `xinit` -> `X` 的方式進入圖形環境，多數的散佈版會讀取執行 `/etc/X11/Xsession` 以及 `/etc/X11/Xsession.d/` 目錄中的檔案，然後接續使用者家目錄中的 `.xinitrc` 、 `.xsession` 或是 `.Xclients` 命令稿檔案。某些散佈版的 X 作業階段，還支援讀取並執行 `$HOME/.xprofile` 的內容。
 
@@ -192,7 +192,7 @@ MimeType=x-scheme-handler/tg;   <5>
 ....
 <1> `Telegram` 可執行程式應該安裝於環境變數值 `$PATH` 所含的目錄中，否則須使用絕對路徑。
 <2> 做為圖示的圖片檔案 `telegram.*` 應該安裝於系統會去搜尋的圖示目錄中，否則須使用絕對路徑。
-<3> 如果要執行的程式是文字介面，這裡就應該設為 `Terminal=true` 。
+<3> 如果要執行的程式是文字介面，這裡就應該設為 `Terminal=true`。
 <4> 軟體出現於啟動選單中的位置，分類層級應該由小到大排列。
 <5> 定義應由**多用途網際網路郵件擴展**(MIME) 標準中的何種 URI 首字所觸發。
 
@@ -204,13 +204,13 @@ MimeType=x-scheme-handler/tg;   <5>
 root# *localectl set-locale LANG=__en_US.UTF-8__*
 ====
 
-初始化階段可能具有影響力的檔案包括 `/etc/environment`, `/etc/locale.conf`, `/etc/default/locale`, `/etc/sysconfig/i18n` 。部分顯示管理程式也可能會讀取諸如 `/var/cache/_lightdm_/dmrc/$USER.dmrc` 以及 `$HOME/.dmrc` 檔案中的設定。即時的語區設定值，則是由主要變數 `LANG` 配合以 `LC_` 為名稱起始的一群環境變數所記錄，因此對於國際化支援不佳的老舊程式，可以在執行前單獨設定語區為原初值試試：
+初始化階段可能具有影響力的檔案包括 `/etc/environment`, `/etc/locale.conf`, `/etc/default/locale`, `/etc/sysconfig/i18n`。部分顯示管理程式也可能會讀取諸如 `/var/cache/_lightdm_/dmrc/$USER.dmrc` 以及 `$HOME/.dmrc` 檔案中的設定。即時的語區設定值，則是由主要變數 `LANG` 配合以 `LC_` 為名稱起始的一群環境變數所記錄，因此對於國際化支援不佳的老舊程式，可以在執行前單獨設定語區為原初值試試：
 ====
 user$ *LC_ALL=C _xload_*
 ====
 要獲得完整的使用者體驗，還需要輸入部分（輸入法伺服程式、輸入法引擎、輸入法模組）以及輸出部分（字型、本地化介面翻譯）的支援。
 
-登入文字模式時，有些散佈版會直接或間接讀取並執行 `/etc/profile.d/lang.sh` 的內容，其中可能將一些無法完全以 ASCII 字元編碼顯示的語區設定改回 `en_US` 。如果在個人的規範命令稿中執行了 `fbterm` 之類的程式，想讓虛擬終端機能夠顯示萬國碼字元，就必須要將語區環境變數的值再修改回來：
+登入文字模式時，有些散佈版會直接或間接讀取並執行 `/etc/profile.d/lang.sh` 的內容，其中可能將一些無法完全以 ASCII 字元編碼顯示的語區設定改回 `en_US`。如果在個人的規範命令稿中執行了 `fbterm` 之類的程式，想讓虛擬終端機能夠顯示萬國碼字元，就必須要將語區環境變數的值再修改回來：
 
 .$HOME/.bash_profile
 ....
@@ -266,7 +266,7 @@ autologin=autouser
 ==== 文字登入限制
 如果之前執行過 `systemctl set-default multi-user` 指令來變更預設目標，系統啟動後就會停留在文字登入畫面。由於虛擬終端機的畫面是基於影格緩衝區裝置，受 `/usr/lib/systemd/system/getty@.service` 服務所控制，並非開機後最優先呼叫的軟體，因此需要等待一下才會執行完成。
 
-通常想要修改系統服務時，不會去直接編輯系統目錄下的檔案。因此可先將原來的檔案拷貝到 `/etc/systemd/system/getty@.service` ，然後再搜尋其中執行 `agetty` 的指令，並加入 `-a _autouser_` 的引數：
+通常想要修改系統服務時，不會去直接編輯系統目錄下的檔案。因此可先將原來的檔案拷貝到 `/etc/systemd/system/getty@.service`，然後再搜尋其中執行 `agetty` 的指令，並加入 `-a _autouser_` 的引數：
 
 ./etc/systemd/system/getty@.service
 ....

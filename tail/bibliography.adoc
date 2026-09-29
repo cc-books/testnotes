@@ -91,5 +91,5 @@
 
 [big]*電力供應* +
 [small]*https://bbs.archlinux.org/viewtopic.php?pid=1953760#p1953760* +
-[small]*https://discourse.ubuntu.com/t/disable-screen-dimming-ubuntu-unity-24-04/60615* +
+[small]*https://discourse.ubuntu.com/t/disable-screen-dimming-ubuntu-unity-24-04/* +
 [small]*https://www.techbang.com/posts/17396-power-states-know-how-many-g-p-t-s-c-read* +
