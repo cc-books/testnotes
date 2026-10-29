@@ -169,7 +169,7 @@ UEFI 中用來替代 VBIOS 的部分稱為 *GOP*(圖形輸出協定) 驅動器�
 ==== 開機訊息
 載入內核的初始階段，預設會在**主控臺**(console) 上輸出大量的執行記錄。不同的散佈版會利用不同的內核參數，例如 `rhgb`(redhat graphical boot) 或 `splash`，來啟用開機時的圖形畫面。如此就會改為顯示作業系統內建或來自系統韌體的標章(logo)，同時配合內核參數 `quiet` 來掩蓋對於一般使用者不太友善的技術訊息。
 
-想要改變訊息輸出位置或裝置，可以使用內核參數 `fbcon=map:1` 或 `console=ttyS0` 來變更主控臺的對應。目錄 `/usr/lib/kbd/consolefonts/` 包括了可用於主控臺的字型，需要藉由像是 `fbcon=font:TER16x32` 的內核參數，或是使用者空間的 `setfont` 命令來指定。萬一遇到了直式螢幕，還可以利用 `fbcon=rotate:1` 內核參數來旋轉文字輸出的方向。
+想要改變訊息輸出位置或裝置，可以使用內核參數 `fbcon=map:1` 或 `console=ttyS0` 來變更主控臺的對應。目錄 `/usr/lib/kbd/consolefonts/` 包括了可用於主控臺的字型，需要藉由像是 `fbcon=font:TER16x32` 的內核參數、`/etc/vconsole.conf` 的檔案內容，或是使用者空間的 `setfont` 命令來指定。萬一遇到了直式螢幕，還可以利用 `fbcon=rotate:1` 內核參數來旋轉文字輸出的方向。
 
 標章如果無法顯示，可能是內核驅動程式無法識別繪圖晶片，或是螢幕具有固定的解析度而導致使用了不當的模式。如果沒有顯示標章，又不想看到駁雜的開機記錄畫面，還可以利用以下組態檔案去阻擋一些訊息：
 
@@ -190,7 +190,7 @@ kernel.printk = 3 4 1 7
 
 
 === 顯示函式庫
-對於裝置的驅動，在韌體與內核模組以外的部分，都屬於使用者空間軟體，通常是以函式庫的形式出現，方便應用軟體動態呼叫。例如內核的 DRM 次系統實作了 KMS 的 *API*(應用程式介面) 後，再透過 `libdrm` 函式庫提供匯出。後續的高階繪圖與計算函式庫，包括由 Mesa 3D 專案所實作的 OpenGL 與 Vulkan API ，則提供給其他軟體應用。
+對於裝置的驅動，在韌體與內核模組以外的部分，都屬於使用者空間軟體，通常是以函式庫的形式出現，方便應用軟體動態呼叫。例如內核的 DRM 次系統實作了 KMS 的 *API*(應用程式介面) 後，再透過 `libdrm` 函式庫提供匯出。後續的高階繪圖與潤算函式庫，包括由 Mesa 3D 專案所實作的 OpenGL 與 Vulkan API ，則提供給其他軟體應用。
 
 另外還有負責驅動**繪圖加速**(VA) 的 `libva` 函式庫（適用於 Intel 繪圖晶片），以及 `libvdpau` 函式庫（適用於 AMD 與 NVIDIA 繪圖晶片）。前者可用 `libva-utils` 套件中的 `vainfo` 命令取得資訊，後者相應則是 `vdpauinfo` 套件中的 `vdpauinfo` 命令。在 `/usr/lib64/dri/` 目錄下名稱結尾是 `*_drv_video.so` 的檔案，就是不同類型裝置的 VA 驅動函式庫，目前較為常用者名稱前綴為 `iHD` 與 `radeonsi`。通常散佈版會利用 `libva-vdpau-driver` 套件，來安裝以 `libvdpau` 做為 `libva` 後端的驅動程式，如此其他的軟體衹需要呼叫 `libva` 的應用程式介面，就能適用於大多數的繪圖晶片。
 
@@ -213,7 +213,7 @@ ATTENTION: default value of option vblank_mode overridden by environment. +
 
 image::glxgears.png[width=40%,align="center"]
 
-想要結束執行時，可以關閉齒輪視窗或按下 kbd:[Esc] ，也可以在終端機中按下 kbd:[Ctrl]+kbd:[C] 來強制終止程式。另外，相對於 OpenGL 還可以選擇的 `glmark2` 之外，Vulkan 也有 `vkcube` 程式可供測試應用。
+想要結束執行時，可以關閉齒輪視窗或按下 kbd:[Esc]，也可以在終端機中按下 kbd:[Ctrl]+kbd:[C] 來強制終止程式。另外，相對於 OpenGL 還可以選擇的 `glmark2` 之外，Vulkan 也有 `vkcube` 程式可供測試應用。
 
 與顯示相關的函式庫堆疊中，與一般應用軟體關係最接近的是多媒體框架（例如 GStreamer, FFmpeg, OpenCV）。如果前段所述硬體驅動程式有支援的話，套件 `gstreamer1-vaapi` 就可以讓 `gstreamer` 使用到 `libva` 的 API。
 
@@ -452,7 +452,7 @@ user$ *xdpyinfo | grep resolution:* +
 user$ *xrdb -query | grep dpi* +
 Xft.dpi:	96
 ====
-衹是經過硬體的熱插拔或桌面環境的縮放之後，顯示的結果未必是當前的實際值，還需要參考 `xrandr` 命令的輸出來進行計算。與字型顯示相關的問題，可以嘗試利用 `xrandr` 命令中的 `--dpi` 選項以及選項值來調整看看，可能的值包括 90, 96, 100, 120 或更高。螢幕的物理尺寸除了從 EDID 內容取得之外，也可由長寬點數與 DPI 值計算而出，或是被 `xrandr` 命令的 `--fbmm` 選項值所覆寫。
+衹是經過硬體的熱插拔或桌面環境的縮放之後，顯示的結果未必是當前的實際值，還需要參考 `xrandr` 命令的輸出來進行計算。與字型顯示相關的問題，可以嘗試利用 `xrandr` 命令中的 `--dpi` 選項以及選項值來調整看看，可能的值包括 90, 96, 100, 120 或更高。螢幕的物理尺寸除了從 EDID 內容取得之外，也可由長寬點數與 DPI 值計算而出，或是被 `xrandr` 命令 `--fbmm` 的選項值所覆寫。
 
 ==== 掃描範圍
 當以電視螢幕做為顯示器時，有時會發生畫面出現黑邊或是邊緣被切掉的狀況。除了在電腦部分調整解析度之外，電視螢幕自己的顯示模式可能也需要調整（16:9, 16:10 或全螢幕），尤其注意與**過掃描**(overscan) 相關的設定。軟體層面的對策可以試試幾個 `xrandr` 的命令選項，例如 `--scale 0.95x0.95`, `--set underscan on` 或是 `--set "scaling mode" Full`。

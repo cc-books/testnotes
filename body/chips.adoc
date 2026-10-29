@@ -69,7 +69,7 @@ options ec_sys write_support=1
 主機板上的 *Super I/O*(超級輸入輸出) 晶片，用來做為低頻寬設備的介面，以往需要透過 ISA 匯流排，目前則常併入 EC 而透過南橋晶片上的 LPC 匯流排與 CPU 連接。`coreboot-utils` 套件中有 `superiotool` 程式，可以偵測並提供暫存器內容。如果在啟動時期被 ACPI 佔住資源，可以利用內核參數 `acpi_enforce_resources=lax` 來排除問題。除了常用來提供平行埠、序列埠，以及監測溫度、風扇速度之外，有些型號還具備看門狗計時器的功能（參看〈輸入輸出介面〉一章）。
 
 ==== TPM
-*TPM*(信賴平臺模組) 是安全密碼的處理裝置。由專用晶片所提供的 TPM 功能稱為 dTPM(離散 TPM)，而由系統韌體所模擬提供的則為 fTPM(韌體 TPM)，不論何者通常都可以透過韌體設定啟用或停用。版本 2.0 是安裝新的 Windows 作業系統時所要求的規格，並且僅適用於 UEFI 開機環境。
+*TPM*(信賴平臺模組) 是安全密碼的處理裝置。由專用晶片所提供的 TPM 功能稱為 dTPM(離散 TPM)，而由系統韌體所模擬提供的則為 fTPM(韌體 TPM)，不論何者通常都可以透過韌體設定啟用或停用。版本 2.0 是安裝新版 Windows 作業系統時所要求的規格，並且僅適用於 UEFI 開機環境。
 
 內核偵測到 TPM 之後，就會啟動內建的 `tpm` 驅動模組，並且產生 `/dev/tpm0` 與 `/dev/tpmrm0` 裝置。從命令 `systemd-analyze has-tpm2` 的輸出，可以確認系統中 TPM 的狀況。測試時還可以使用套件 `tpm2-tools` 中的工具程式 `tpm2`：
 ====
@@ -93,7 +93,9 @@ root# *tpm2 getrandom --hex _8_* +
 
 如果以 `mem_encrypt=on` 內核參數啟用了記憶體的加密功能，也有可能因此在初始化其他裝置時宕機。萬一開機過程中出現了類似「Memory corruption detected in low memory」的錯誤訊息，導致無法啟動作業系統卻又不適合更換記憶體的情況，可以先試試加入內核參數 `memory_corruption_check=0` 的變通方案，希望能爭取到進入系統補救與檢測的機會。
 
-許多散佈版的安裝光碟都包含了 `memtest86+` 這個 UEFI 的應用軟體，用來做為測試記憶體的工具，而進入系統後則有 `memtester` 套件提供的同名命令可以使用。基礎外部命令 `free` 整理了 `/proc/meminfo` 中的資訊：
+著名的 Memtest86+ footnote:[Memtest86+ 記憶體測試工具 <https://www.memtest.org/>] 是類似 PassMark Software 的免費 MemTest86 footnote:[MemTest86 記憶體測試軟體 <https://www.passmark.com/support/bitlinux_faq.php>] 軟體，提供完整的記憶體測試開放原始碼工具。兩者都是 UEFI 應用軟體，設計為開機後直接執行而無須先載入作業系統，因此 Memtest86+ 亦常見於各類開機光碟的選單之中。
+
+進入系統後有 `memtester` 簡單套件提供的同名命令可以使用，而基礎外部命令 `free` 則整理了 `/proc/meminfo` 中的資訊：
 ====
 user$ *free -h* +
 　　　　 total　　used　　free　　shared　buff/cache　available +

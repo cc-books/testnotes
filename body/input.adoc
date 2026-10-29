@@ -206,7 +206,7 @@ EndSection
 其中未特別指明 `Driver` 項目，而會自動依情況選擇 `kdb`, `evdev`, `libinput` 之一。新式的系統需要修改 `/etc/default/keyboard` 中的 `XKBLAYOUT="us"` 項目，或是利用 `localectl` 命令來變更它。許多用來組態鍵盤佈局的檔案，都可以在 `xkeyboard-config` 套件中找到。
 
 ==== 按鍵模擬
-X11 視窗系統下的 `xdotool` 命令能夠模擬按鍵動作，可惜與 Wayland 不太相容。假設想要模擬開關觸控板的特殊按鍵，可以輸入：
+X 視窗系統下的 `xdotool` 命令能夠模擬鍵盤、滑鼠與視窗的動作，注意新版才有支援 XWayland。假設想要模擬開關觸控板的特殊按鍵，可以輸入：
 ====
 user$ *xdotool key XF86TouchpadToggle*
 ====
@@ -266,7 +266,7 @@ root# *dnf install opensc pcsc-lite pcsc-lite-ccid pcsc-tools*
 
 其中 `pcsc-lite` 套件的 `pcscd` 守護程式提供讀取服務，而在 `lsusb -t` 的指令輸出可以看到歸類於 Chip/SmartCard 類別，並以 `usbfs` 軟體模組負責驅動。如果系統支援熱插拔功能，`pcscd` 服務於讀卡機連接時就會自動啟用，參數 `--auto-exit` 也同時預設附加。
 
-`libccid` 是 Linux 系統內建的標準驅動函式庫，支援大多數的讀卡機型號。有些讀卡機的規格支援 `libccid` 卻無法驅動，是因為尚未登錄於裝置列表，可以自行修改 `/usr/lib64/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist`：純文字的 XML 檔案包含了廠商識別碼、產品識別碼、產品名稱。衹需要將相關資料修改或加入 `ifdVendorID`, `ifdProductID`, `ifdFriendlyName` 三個鍵值段中，成為同樣次序的陣列項目，也許就能順利驅動讀卡機。如果測試成功，不妨順便依照 CCID 網站 footnote:[CCID Unix 驅動程式專案 <https://ccid.apdu.fr/>] 中的說明提出登錄要求。
+`libccid` 是 Linux 系統內建的標準驅動函式庫，支援大多數的讀卡機型號。有些讀卡機的規格支援 `libccid` 卻無法驅動，是因為尚未登錄於裝置列表，可以自行修改 `/usr/lib64/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist`（純文字的 XML 檔案包含了廠商識別碼、產品識別碼、產品名稱）。衹需要將相關資料修改或加入 `ifdVendorID`, `ifdProductID`, `ifdFriendlyName` 三個鍵值段中，成為同樣次序的陣列項目，也許就能順利驅動讀卡機。如果測試成功，不妨順便依照 CCID 網站 footnote:[CCID Unix 驅動程式專案 <https://ccid.apdu.fr/>] 中的說明提出登錄要求。
 
 要是手上的型號無法以 `libccid` 驅動，請先在散佈版的套件庫中搜尋，也許已經有打包好的特定型號驅動套件。例如 `libacsccid` 是基於 `libccid` 的衍生驅動函式庫，同樣內建於大多數的 Linux 系統，它的裝置列表專門收錄 ACS 公司所生產的讀卡機型號。萬一套件庫中找不到，就需要去讀卡機廠商的網站，看看是否有提供 Linux 的驅動函式庫。下面以安裝 Castles EZ100PU 的驅動程式為例：
 ====

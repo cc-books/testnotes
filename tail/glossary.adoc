@@ -23,6 +23,7 @@ A
 *ASCII*　 American Standard Code for Information Interchange +
 *AT*　　　Advanced Technology +
 *ATA*　　 Advanced Technology Attachment +
+*ATDT*　　Attention Dial Tone +
 *ATX*　　 Advanced Technology eXtended +
 ====
 
@@ -154,12 +155,13 @@ H
 
 I
 ====
+*I^2^C*　　　Inter-Integrated Circuit +
+*I^2^S*　　　Inter-Integrated circuit Sound +
 *IA-32*　 Intel Architecture, 32-bit +
 *IA-64*　 Intel Architecture, 64-bit +
 *ICMP*　　Internet Control Message Protocol +
 *IDE*　　 Integrated Drive Electronics +
-*I^2^C*　　　Inter-Integrated Circuit +
-*I^2^S*　　　Inter-Integrated circuit Sound +
+*IEEE*　　Institute of Electrical and Electronics Engineers +
 *IIO*　　 Industrial Input/Output +
 *IOMMU*　 Input–Output Memory Management Unit +
 *IP*　　　Internet Protocol +
